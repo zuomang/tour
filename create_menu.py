@@ -26,6 +26,6 @@ token = get_access_token()
 
 url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s" %token
 
-# r = requests.post(url, data = json.dumps(menu, ensure_ascii=False))
+r = requests.post(url, data = json.dumps(menu, ensure_ascii=False))
 # print r.text
-print url_info
+# print url_info
