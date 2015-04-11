@@ -6,7 +6,7 @@ import requests, json, parameter, urllib
 
 info = urllib.quote_plus('http://www.quxhuan.com/info')
 url_info = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s\
-&redirect_uri=%s&response_type=code&scope=SCOPE&state=STATE' %(parameter.appid, info)
+&redirect_uri=%s&response_type=code&scope=snsapi_base&state=STATE' %(parameter.appid, info)
 
 menu = {
     "button": [
