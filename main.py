@@ -35,5 +35,6 @@ def info():
 			return render_template('bing.html')
 		else:
 			return render_template('info.html')
+
 if __name__ == '__main__':
 	app.run()
