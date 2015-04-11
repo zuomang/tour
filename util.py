@@ -22,6 +22,4 @@ def check_bing(request):
 	result = requests.get('https://api.weixin.qq.com/sns/oauth2/access_token', params = data)
 	id = result.json().get('openid', '')
 	session['openid'] = id
-
-	if User.query.filter_by(openid=id).first() == None:
-		return render_template('bing.html')
+	return User.query.filter_by(openid=id).first()
