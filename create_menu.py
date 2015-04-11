@@ -11,12 +11,12 @@ url_info = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s\
 menu = {
     "button": [
         {
-            "name": "我",
+            "name": "menu",
             "sub_button": [
                 {
                     "type": "view",
-                    "name": "我的资料",
-                    "url": "http://82.254.158.115/info"
+                    "name": "test",
+                    "url": url_info
                 }
             ]
         }
@@ -28,5 +28,8 @@ token = get_access_token()
 url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s" %token
 
 r = requests.post(url, data = json.dumps(menu, ensure_ascii=False))
-# print r.text
+if r.json().get('errcode') == 0:
+	print "create menu success"
+else:
+	print r.json().get('errmsg')
 # print url_info
