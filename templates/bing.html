@@ -1,5 +1,5 @@
 <html>
-    <head>
+    <head lang="zh-CN">
         <!-- 新 Bootstrap 核心 CSS 文件 -->
 		<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
 		<!-- 可选的Bootstrap主题文件（一般不用引入） -->
@@ -8,27 +8,28 @@
 		<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
 		<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 		<script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<title>绑定</title>
     </head>
     <body>
         <form class="form-horizontal">
             <div class="form-group">
-                <label for="username" class="col-xs-2 control-label">用户名</label>
-                <div class="col-xs-10">
+                <label for="username" class="col-xs-offset-1 col-xs-3 control-label">用户名</label>
+                <div class="col-xs-7">
                     <input type="text" name="username" class="form-control" id="username" placeholder="请输入你的用户名">
                 </div>
             </div>
             <div class="form-group">
-                <label for="phone" class="col-xs-2 control-label">手机号</label>
-                <div class="col-xs-10">
+                <label for="phone" class="col-xs-offset-1 col-xs-3 control-label">手机号</label>
+                <div class="col-xs-7">
                     <input type="text" class="form-control" id="phone" placeholder="请输入你的手机号码">
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-xs-offset-2 col-xs-4">
+                <div class="col-xs-offset-2 col-xs-3">
                     <button type="submit" class="btn btn-default">确定</button>
                 </div>
-                <div class="col-xs-offset-2 col-xs-4">
+                <div class="col-xs-offset-2 col-xs-3">
                     <button type="submit" class="btn btn-default">重置</button>
                 </div>
             </div>
