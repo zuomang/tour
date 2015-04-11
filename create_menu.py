@@ -5,8 +5,7 @@ from access_token import get_access_token
 import requests, json, parameter, urllib
 
 info = urllib.quote_plus('http://www.quxhuan.com/info')
-url_info = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s\
-&redirect_uri=%s&response_type=code&scope=snsapi_base&state=STATE' %(parameter.appid, info)
+url_info = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=STATE' %(parameter.appid, info)
 
 menu = {
     "button": [
@@ -15,7 +14,7 @@ menu = {
             "sub_button": [
                 {
                     "type": "view",
-                    "name": "test",
+                    "name": "1",
                     "url": url_info
                 }
             ]
