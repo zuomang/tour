@@ -7,15 +7,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zmyjy1314@localhost/test'
 db = SQLAlchemy(app)
 
 
-class Token(db.Model):
-    env = db.Column(db.String(20), primary_key=True)
+class Key(db.Model):
+    token = db.Column(db.String(20), primary_key=True)
     value = db.Column(db.String(80))
-    datetime = db.Column(db.DateTime)
+    time = db.Column(db.DateTime)
 
-    def __init__(self, env, value, datetime):
-        self.env = env
+    def __init__(self, token, value, time):
+        self.token = token
         self.value = value
-        sele.datetime = datetime
+        self.time = time
 
     def __repr__(self):
-        return '<env %r>' % self.env
+        return '<token %r>' % self.token
