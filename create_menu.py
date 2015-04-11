@@ -28,7 +28,7 @@ url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s" %token
 
 r = requests.post(url, data = json.dumps(menu, ensure_ascii=False))
 if r.json().get('errcode') == 0:
-	print "create menu success"
+    print "create menu success"
 else:
 	print r.json().get('errmsg')
 # print url_info
