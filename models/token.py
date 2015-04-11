@@ -13,7 +13,7 @@ db = SQLAlchemy(app)
 class Token(db.Model):
     token = db.Column(db.String(20), primary_key=True)
     value = db.Column(db.String(80))
-    date = db.Column(db.Datetime)
+    date = db.Column(db.DateTime)
 
     def __init__(self, token, value, date):
         self.token = token
