@@ -26,7 +26,6 @@ def wechat_auth():
 @app.route('/info', methods=['GET'])
 def info():
     if request.method == 'GET':
-        util.check_bing(request)
         return 'ok'
 
 if __name__ == '__main__':
