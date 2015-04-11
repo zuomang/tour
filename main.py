@@ -7,25 +7,25 @@ from models.token import Token
 app = Flask(__name__)
 app.config.from_envvar('FLASK_TEST_SETTINGS')
 
-@app.before_request
-def after_request(*args, **keys):
-    if request.method == 'GET':
-        code = request.args.get('code', '')
-        data = {
-            'appid': parameter.appid,
-            'secret': parameter.appsecret,
-            'code': code,
-            'grant_type': 'authorization_code'
-        }
-        result = requests.get('https://api.weixin.qq.com/sns/oauth2/access_token', params = data)
-        id = result.json().get('openid', '')
-        r = Token.query.filter_by(openid = id).first()
-        if r:
-            print 'user had login'
-            return 'success'
-        else:
-            print 'user not login'
-            return 'error'
+# @app.before_request
+# def before_request(*args, **keys):
+    # if request.method == 'GET':
+        # code = request.args.get('code', '')
+        # data = {
+            # 'appid': parameter.appid,
+            # 'secret': parameter.appsecret,
+            # 'code': code,
+            # 'grant_type': 'authorization_code'
+        # }
+        # result = requests.get('https://api.weixin.qq.com/sns/oauth2/access_token', params = data)
+        # id = result.json().get('openid', '')
+        # r = Token.query.filter_by(openid = id).first()
+        # if r:
+            # print 'user had login'
+            # return 'success'
+        # else:
+            # print 'user not login'
+            # return 'error'
 
 @app.route('/', methods=['GET'])
 def wechat_auth():
