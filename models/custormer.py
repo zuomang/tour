@@ -10,17 +10,17 @@ db = SQLAlchemy(app)
 
 
 class Custormer(db.Model):
-    Openid = db.Column(db.String(80), primary_key=True)
-    Username = db.Column(db.String(20), unique=True, nullable = False)
-    Phone_Number = db.Column(db.Integer, unique=True, nullable = False)
-    QunOwner1_Phone = db.Column(db.Integer)
-    QunOwner2_Phone = db.Column(db.Integer)
-    QunOwner3_Phone = db.Column(db.Integer)
-    QunOwner4_Phone = db.Column(db.Integer)
-    QunOwner5_Phone = db.Column(db.Integer)
-    QunOwner6_Phone = db.Column(db.Integer)
-    QunOwner7_Phone = db.Column(db.Integer)
-    QunOwner8_Phone = db.Column(db.Integer)
+    openid = db.Column(db.String(80), primary_key=True)
+    username = db.Column(db.String(20), unique=True, nullable = False)
+    phone_number = db.Column(db.Integer, unique=True, nullable = False)
+    qunowner1_phone = db.Column(db.Integer)
+    qunowner2_phone = db.Column(db.Integer)
+    qunowner3_phone = db.Column(db.Integer)
+    qunowner4_phone = db.Column(db.Integer)
+    qunowner5_phone = db.Column(db.Integer)
+    qunowner6_phone = db.Column(db.Integer)
+    qunowner7_phone = db.Column(db.Integer)
+    qunowner8_phone = db.Column(db.Integer)
 
     def __init__(self, openid, username, phone):
         self.openid = openid
