@@ -9,7 +9,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zmyjy1314@localhost/test'
 db = SQLAlchemy(app)
 
 
-class T_Custormer(db.Model):
+class Custormer(db.Model):
     Openid = db.Column(db.String(80), primary_key=True)
     Username = db.Column(db.String(20), unique=True, nullable = False)
     Phone_Number = db.Column(db.Integer, unique=True, nullable = False)

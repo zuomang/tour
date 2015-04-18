@@ -5,7 +5,7 @@ from datetime import datetime
 import requests
 from flask import session, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
-from models.user import User
+from models.custormer import Custormer
 import parameter
 
 def now():
@@ -22,4 +22,4 @@ def check_bing(request):
 	result = requests.get('https://api.weixin.qq.com/sns/oauth2/access_token', params = data)
 	id = result.json().get('openid', '')
 	session['openid'] = id
-	return User.query.filter_by(openid=id).first()
+	return Custormer.query.filter_by(openid=id).first()
