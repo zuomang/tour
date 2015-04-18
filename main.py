@@ -44,11 +44,12 @@ def info():
 		else:
 			return render_template('info.html')
 
-@app.route('/bing', method=['POST'])
+@app.route('/bing', methods=['POST'])
 def bing():
     openid = session['openid']
     username = request.form('username')
     phone = request.form('phone')
+    print openid, username, phone
     db = get_db()
     user = Custormer(openid, username, phone)
     db.add(user)
