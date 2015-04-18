@@ -10,26 +10,26 @@
 {% block content %}
 	<div class="row">
 		<div class="col-xs-6">
-			<p class="text-left text-primary"><strong>昵称</strong></p>
+			<p class="text-center text-primary"><strong>昵称</strong></p>
 		</div>
 		<div class="col-xs-6">
-			<p class="text-right">{{ user.username }}</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-6">
-			<p class="text-left text-primary"><strong>手机号码</strong></p>
-		</div>
-		<div class="col-xs-6">
-			<p class="text-right">{{ user.phone_number }}</p>
+			<p class="text-center">{{ user.username }}</p>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-xs-6">
-			<p class="text-left text-primary"><strong>等级</strong></p>
+			<p class="text-center text-primary"><strong>手机号码</strong></p>
 		</div>
 		<div class="col-xs-6">
-			<p class="text-right">{{ user.rank }}</p>
+			<p class="text-center">{{ user.phone_number }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-6">
+			<p class="text-center text-primary"><strong>等级</strong></p>
+		</div>
+		<div class="col-xs-6">
+			<p class="text-center">{{ user.rank }}</p>
 		</div>
 	</div>
 {% endblock %}
