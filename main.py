@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response, render_template, g
+from flask import Flask, request, make_response, render_template, g, session
 from flask.ext.sqlalchemy import SQLAlchemy
 from models.custormer import Custormer
 import time, hashlib
