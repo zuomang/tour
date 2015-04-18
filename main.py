@@ -54,7 +54,8 @@ def bing():
 	user = Custormer(openid, username, phone_number)
 	db.add(user)
 	try:
-		temp = db.commit()
+		db.commit()
+		print user
 	except Exception, ex:
 		print 'Exception: ', ex
 		return render_template('bing.html')
