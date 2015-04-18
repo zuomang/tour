@@ -55,12 +55,11 @@ def bing():
 	db.add(user)
 	try:
 		db.commit()
-		print user
 	except Exception, ex:
 		print 'Exception: ', ex
 		return render_template('bing.html')
 	else:
-		return render_template('info.html')
+		return render_template('info.html', user = user)
 
 if __name__ == '__main__':
 	app.run()

@@ -1,12 +1,17 @@
 {% extends "base.html" %}
 {% block title %}我的信息{% endblock %}
+{% block style %}
+.info div{
+	padding : 5px
+}
+{% endblock %}
 {% block content %}
 	<div class="row">
 		<div class="col-xs-6">
 			<p class="text-left">昵称</p>
 		</div>
 		<div class="col-xs-6">
-			<p class="text-right"></p>
+			<p class="text-right">{{ user.username }}</p>
 		</div>
 	</div>
 	<div class="row">
@@ -14,7 +19,7 @@
 			<p class="text-left">手机号码</p>
 		</div>
 		<div class="col-xs-6">
-			<p class="text-right"></p>
+			<p class="text-right">{{ user.phone_number }}</p>
 		</div>
 	</div>
 	<div class="row">
@@ -22,7 +27,7 @@
 			<p class="text-left">等级</p>
 		</div>
 		<div class="col-xs-6">
-			<p class="text-right"></p>
+			<p class="text-right">{{ user.rank }}</p>
 		</div>
 	</div>
 {% endblock %}
