@@ -1,9 +1,10 @@
-from flask import Flask, request, make_response, render_template
+from flask import Flask, request, make_response, render_template, g
+from flask.ext.sqlalchemy import SQLAlchemy
+from models.custormer import Custormer
 import time, hashlib
 import parameter
 import requests
 import util
-from models.custormer import Custormer
 
 app = Flask(__name__)
 app.config.from_envvar('FLASK_TEST_SETTINGS')
