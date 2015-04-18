@@ -3,10 +3,17 @@ import time, hashlib
 import parameter
 import requests
 import util
+from models.custormer import Custormer
 
 app = Flask(__name__)
 app.config.from_envvar('FLASK_TEST_SETTINGS')
 app.secret_key = 'test'
+db = SQLAlchemy(app)
+
+def get_db():
+    if not hasattr(g, 'db_session'):
+        g.db_session = db.session
+    return g.db_session
 
 @app.before_request
 def before_request(*args, **kwargs):
@@ -35,6 +42,20 @@ def info():
 			return render_template('bing.html')
 		else:
 			return render_template('info.html')
+
+@app.route('/bing', method=['POST'])
+def bing():
+    openid = session['openid']
+    username = request.form('username')
+    phone = request.form('phone')
+    db = get_db()
+    user = Custormer(openid, username, phone)
+    db.add(user)
+    temp = db.commit()
+    if temp:
+        return 'hello, world'
+    else:
+        return render_template('bing.html')
 
 if __name__ == '__main__':
 	app.run()
