@@ -14,13 +14,16 @@ class Custormer(db.Model):
     openid = db.Column(db.String(80), primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable = False)
     phone_number = db.Column(db.Integer, unique=True, nullable = False)
-	time = db.Column(db.DateTime)
+    register_time = db.Column(db.DateTime)
+    rank = db.Column(db.Integer)
+    qun = db.relationship('Qun', backref='custormer', lazy='dynamic')
 
-    def __init__(self, openid, username, phone, register_time):
+    def __init__(self, openid, username, phone, register_time, rank):
         self.openid = openid
         self.username = username
         self.phone_number = phone
-		self.time = register_time
+        self.register_time = register_time
+        self.rank = rank
 
     def __repr__(self):
         return '<User %r>' % self.username
