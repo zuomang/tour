@@ -8,6 +8,7 @@ import util
 
 app = Flask(__name__)
 app.config.from_envvar('FLASK_TEST_SETTINGS')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zmyjy1314@localhost/test'
 app.secret_key = 'test'
 db = SQLAlchemy(app)
 
@@ -46,18 +47,19 @@ def info():
 
 @app.route('/bing', methods=['POST'])
 def bing():
-    openid = session['openid']
-    username = request.form['username']
-    phone = request.form['phone']
-    print openid, username, phone
-    db = get_db()
-    user = Custormer(openid, username, phone)
-    db.add(user)
-    temp = db.commit()
-    if temp:
-        return 'hello, world'
-    else:
-        return render_template('bing.html')
+	openid = session['openid']
+	username = request.form['username']
+	phone_number = request.form['phone']
+	db = get_db()
+	user = Custormer(openid, username, phone_number)
+	db.add(user)
+	try:
+		temp = db.commit()
+	except Exception, ex:
+		print 'Exception: ', ex
+		return render_template('bing.html')
+	else:
+		return render_template('info.html')
 
 if __name__ == '__main__':
 	app.run()

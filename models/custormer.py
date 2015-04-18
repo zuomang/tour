@@ -3,6 +3,7 @@
 
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zmyjy1314@localhost/test'
@@ -13,19 +14,13 @@ class Custormer(db.Model):
     openid = db.Column(db.String(80), primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable = False)
     phone_number = db.Column(db.Integer, unique=True, nullable = False)
-    qunowner1_phone = db.Column(db.Integer)
-    qunowner2_phone = db.Column(db.Integer)
-    qunowner3_phone = db.Column(db.Integer)
-    qunowner4_phone = db.Column(db.Integer)
-    qunowner5_phone = db.Column(db.Integer)
-    qunowner6_phone = db.Column(db.Integer)
-    qunowner7_phone = db.Column(db.Integer)
-    qunowner8_phone = db.Column(db.Integer)
+	time = db.Column(db.DateTime)
 
-    def __init__(self, openid, username, phone):
+    def __init__(self, openid, username, phone, register_time):
         self.openid = openid
         self.username = username
-        self.phone = phone
+        self.phone_number = phone
+		self.time = register_time
 
     def __repr__(self):
         return '<User %r>' % self.username
