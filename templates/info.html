@@ -3,33 +3,33 @@
 {% block style %}
 <style type="text/css">
 	.info div{
-		padding : 5px
+		margin :5px;
 	}
 </style>
 {% endblock %}
 {% block content %}
 	<div class="row info">
 		<div class="col-xs-6">
-			<p class="text-left">昵称</p>
+			<p class="text-left text-primary"><strong>昵称</strong></p>
 		</div>
 		<div class="col-xs-6">
 			<p class="text-right">{{ user.username }}</p>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row info">
 		<div class="col-xs-6">
-			<p class="text-left">手机号码</p>
+			<p class="text-left text-primary">手机号码</p>
 		</div>
 		<div class="col-xs-6">
 			<p class="text-right">{{ user.phone_number }}</p>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row info">
 		<div class="col-xs-6">
 			<p class="text-left">等级</p>
 		</div>
 		<div class="col-xs-6">
-			<p class="text-right">{{ user.rank }}</p>
+			<p class="text-right text-primary">{{ user.rank }}</p>
 		</div>
 	</div>
 {% endblock %}
