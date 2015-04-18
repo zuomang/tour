@@ -19,3 +19,6 @@ class Key(db.Model):
 
     def __repr__(self):
         return '<token %r>' % self.token
+
+if __name__ == '__main__':
+    db.create_all()
