@@ -5,7 +5,7 @@ from datetime import datetime
 import requests
 from flask import session, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
-from models.custormer import Custormer
+from models.table import Custormer
 import parameter
 
 def now():

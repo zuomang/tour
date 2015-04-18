@@ -9,6 +9,21 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zmyjy1314@localhost/test'
 db = SQLAlchemy(app)
 
+class Custormer(db.Model):
+    openid = db.Column(db.String(40), primary_key=True)
+    username = db.Column(db.String(20), unique=True, nullable = False)
+    phone_number = db.Column(db.String(11), unique=True, nullable = False)
+    register_time = db.Column(db.DateTime, default = datetime.now())
+    rank = db.Column(db.Integer, default = 1)
+    qun = db.relationship('Qun', backref='custormer', lazy='dynamic')
+
+    def __init__(self, openid, username, phone):
+        self.openid = openid
+        self.username = username
+        self.phone_number = phone
+
+    def __repr__(self):
+        return '<User %r>' % self.username
 
 class Qun(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable = False)
