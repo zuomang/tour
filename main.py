@@ -45,8 +45,8 @@ def info():
 		else:
 			openid = session['openid']
 			user = Custormer.query.filter_by(openid = session['openid']).first()
-			members = member.query.filter_by(custormer_id = openid)
-			return render_template('info.html', user = user, members = members)
+			print member.get(openid)
+			return render_template('info.html', user = user)
 
 @app.route('/bing', methods=['POST'])
 def bing():
