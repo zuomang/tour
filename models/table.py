@@ -28,7 +28,7 @@ class Custormer(db.Model):
 class Qun(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable = False)
     custormer_id = db.Column(db.String(40), db.ForeignKey('custormer.openid'))
-    name = db.Column(db.String(20), nullable = False)
+    name = db.Column(db.String(20), unique=True, nullable = False)
     phone_number = db.Column(db.Integer, unique=True, nullable = False)
     register_time = db.Column(db.DateTime, default = datetime.now())
     rank = db.Column(db.Integer, nullable = False, default = 1)
@@ -44,6 +44,12 @@ class Qun(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.name
+
+member = db.Table('member',
+    db.Column('custormer_id', db.String(40), db.ForeignKey('custormer.openid')),
+    db.Column('qun_id', db.Integer, db.ForeignKey('qun.id')),
+    db.Column('qun_name', db.String(20), db.ForeignKey('qun.name'))
+)
 
 if __name__ == '__main__':
     db.create_all()
