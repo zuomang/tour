@@ -15,7 +15,8 @@ class Custormer(db.Model):
     phone_number = db.Column(db.String(11), unique=True, nullable = False)
     register_time = db.Column(db.DateTime, default = datetime.now())
     rank = db.Column(db.Integer, default = 1)
-    qun = db.relationship('Qun', backref='custormer', lazy='dynamic')
+    quns = db.relationship('Qun', secondary=member,
+        backref = db.backref('custormer_set', lazy = 'dynamic'))
 
     def __init__(self, openid, username, phone):
         self.openid = openid
@@ -26,8 +27,7 @@ class Custormer(db.Model):
         return '<User %r>' % self.username
 
 class Qun(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    custormer_id = db.Column(db.String(40), db.ForeignKey('custormer.openid'))
+    id = db.Column(db.Integer, primary_key=True, nullable = False)
     name = db.Column(db.String(20), unique=True, nullable = False)
     phone_number = db.Column(db.Integer, unique=True, nullable = False)
     register_time = db.Column(db.DateTime, default = datetime.now())
@@ -36,6 +36,10 @@ class Qun(db.Model):
     building_fund = db.Column(db.Integer, default = 0)
     extracted_fund = db.Column(db.Integer, default = 0)
     balance_fund = db.Column(db.Integer, default = 0)
+    custormer_id = db.Column(db.String(40), db.ForeignKey('custormer.openid'))
+    # custormer = db.relationship('Custormer', backref = db.backref('quns', lazy = 'dynamic'))
+    custormers = db.relationship('Custormer', secondary=member,
+        backref = db.backref('qun_set', lazy = 'dynamic'))
 
     def __init__(self, custormer_id, name, phone_number):
         self.custormer_id = custormer_id
@@ -49,7 +53,7 @@ member = db.Table('member',
     db.Column('custormer_id', db.String(40), db.ForeignKey('custormer.openid')),
     db.Column('qun_id', db.Integer, db.ForeignKey('qun.id')),
     db.Column('qun_name', db.String(20), db.ForeignKey('qun.name'))
-    )
+)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     db.create_all()
