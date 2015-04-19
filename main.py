@@ -43,7 +43,9 @@ def info():
 		if util.check_bing(request) == None:
 			return render_template('bing.html')
 		else:
-			return render_template('info.html')
+			openid = session['openid']
+			user = User.query.filter_by(openid = session['openid']).first()
+			return render_template('info.html', user = user)
 
 @app.route('/bing', methods=['POST'])
 def bing():
