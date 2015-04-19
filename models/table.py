@@ -48,7 +48,6 @@ class Qun(db.Model):
 member = db.Table('member',
     db.Column('custormer_id', db.String(40), db.ForeignKey('custormer.openid')),
     db.Column('qun_id', db.Integer, db.ForeignKey('qun.id')),
-    db.Column('qun_name', db.String(20), db.ForeignKey('qun.name'))
 )
 
 if __name__ == '__main__':
