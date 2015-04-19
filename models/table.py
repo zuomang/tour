@@ -26,7 +26,7 @@ class Custormer(db.Model):
         return '<User %r>' % self.username
 
 class Qun(db.Model):
-    id = db.Column(db.Integer, primary_key=True, nullable = False)
+    id = db.Column(db.Integer, primary_key=True)
     custormer_id = db.Column(db.String(40), db.ForeignKey('custormer.openid'))
     name = db.Column(db.String(20), unique=True, nullable = False)
     phone_number = db.Column(db.Integer, unique=True, nullable = False)
@@ -43,12 +43,12 @@ class Qun(db.Model):
         self.phone_number
 
     def __repr__(self):
-        return '<User %r>' % self.name
+        return '<qun %r>' % self.name
 
 member = db.Table('member',
     db.Column('custormer_id', db.String(40), db.ForeignKey('custormer.openid')),
     db.Column('qun_id', db.Integer, db.ForeignKey('qun.id')),
-)
+    db.Column('qun_name', db.String(20), db.ForeignKey('qun.name'))
 
 if __name__ == '__main__':
-    db.create_all()
+	db.create_all()
