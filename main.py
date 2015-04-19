@@ -1,6 +1,6 @@
 from flask import Flask, request, make_response, render_template, g, session
 from flask.ext.sqlalchemy import SQLAlchemy
-from models.table import Custormer
+from models.table import Custormer, member
 import time, hashlib
 import parameter
 import requests
@@ -59,7 +59,8 @@ def bing():
 		print 'Exception: ', ex
 		return render_template('bing.html')
 	else:
-		return render_template('info.html', user = user)
+		members = member.query.filter_by(custormer_id = openid)
+		return render_template('info.html', user = user, members = members)
 
 if __name__ == '__main__':
 	app.run()
