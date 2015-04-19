@@ -45,23 +45,11 @@ class Qun(db.Model):
     def __repr__(self):
         return '<qun %r>' % self.name
 
-# member = db.Table('member',
-#     db.Column('custormer_id', db.String(40), db.ForeignKey('custormer.openid')),
-#     db.Column('qun_id', db.Integer, db.ForeignKey('qun.id')),
-#     db.Column('qun_name', db.String(20), db.ForeignKey('qun.name'))
-# )
-class Member(db.Model):
-    custormer_id = db.Column('custormer_id', db.String(40), db.ForeignKey('custormer.openid')),
-    qun_id = db.Column('qun_id', db.Integer, db.ForeignKey('qun.id')),
-    qun_name = db.Column('qun_name', db.String(20), db.ForeignKey('qun.name'))
-
-    def __init__(self. custormer_id, qun_id, qun_name):
-        self.custormer_id = custormer_id
-        self.qun_id = qun_id
-        self.qun_name = qun_name
-
-    def __repr__(self):
-        return '<custormer_id %r, qun_id %r>' % self.custormer_id, self.qun_id
+member = db.Table('member',
+    db.Column('custormer_id', db.String(40), db.ForeignKey('custormer.openid')),
+    db.Column('qun_id', db.Integer, db.ForeignKey('qun.id')),
+    db.Column('qun_name', db.String(20), db.ForeignKey('qun.name'))
+)
 
 if __name__ == '__main__':
     db.create_all()
