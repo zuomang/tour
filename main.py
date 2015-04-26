@@ -24,6 +24,7 @@ def get_db():
 def close_db(error):
     """Closes the database again at the end of the request."""
     if hasattr(g, 'db_session'):
+    	print "close session"
         g.db_session.close()
 
 @app.route('/', methods=['GET'])
