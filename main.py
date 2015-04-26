@@ -45,17 +45,16 @@ def info():
 		else:
 			openid = session['openid']
 			user = Custormer.query.filter_by(openid = session['openid']).first()
-			# members = member.query.filter_by(custormer_id = openid)
-			print user.custormer.all()
+			members = user.quns
 			return render_template('info.html', user = user, members = members)
 
 @app.route('/bing', methods=['POST'])
 def bing():
 	openid = session['openid']
 	username = request.form['username']
-	phone_number = request.form['phone']
+	phone = request.form['phone']
 	db = get_db()
-	user = Custormer(openid, username, phone_number)
+	user = Custormer(openid, username, phone)
 	db.add(user)
 	try:
 		db.commit()
@@ -63,7 +62,7 @@ def bing():
 		print 'Exception: ', ex
 		return render_template('bing.html')
 	else:
-		members = member.query.filter_by(custormer_id = openid)
+		members = user.quns
 		return render_template('info.html', user = user, members = members)
 
 if __name__ == '__main__':
