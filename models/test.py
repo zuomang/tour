@@ -10,17 +10,28 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zmyjy1314@localhost/test'
 db = SQLAlchemy(app)
 
 tags = db.Table('tags',
-    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id')),
-    db.Column('page_id', db.Integer, db.ForeignKey('page.id'))
+    db.Column('student_id', db.Integer, db.ForeignKey('student.id')),
+    db.Column('course_id', db.Integer, db.ForeignKey('course.id'))
 )
 
-class Page(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    tags = db.relationship('Tag', secondary=tags,
-        backref=db.backref('pages', lazy='dynamic'))
+class Student(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	name = db.Column(db.String(20))
 
-class Tag(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+	courses = db.relationship('Course', secondary = tags, 
+		backref = db.backref('students', lazy = 'dynamic'))
+
+	def __init__(self, id, name):
+		self.id = id
+		self.name = name
+
+class Course(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	teacher = db.Column(db.String(20))
+
+	def __init__(self, id, teacher):
+		self.id = id
+		self.teacher = teacher
 
 if __name__ == '__main__':
     db.create_all()
