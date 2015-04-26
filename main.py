@@ -75,7 +75,21 @@ def qun():
 
 @app.route('/qun/create', methods=['POST'])
 def create():
-	pass
+	openid = session['openid']
+	db = get_db()
+	user = Custormer.query.filter_by(openid = openid).first()
+
+	name = request.form['name']
+	build = request.form['build']
+	new_qun = Qun(name, user.phone, openid, build)
+	db.add(new_qun)
+	try:
+		db.commit()
+	except Exception, ex:
+		print 'Exception: ', ex
+		return render_template('qun.html', error = "创建群失败")
+	else:	
+		return redirect(url_for('qun'))
 
 if __name__ == '__main__':
 	app.run()
