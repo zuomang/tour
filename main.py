@@ -20,6 +20,12 @@ def get_db():
         g.db_session = db.session
     return g.db_session
 
+@app.teardown_appcontext
+def close_db(error):
+    """Closes the database again at the end of the request."""
+    if hasattr(g, 'db_session'):
+        g.db_session.close()
+
 @app.route('/', methods=['GET'])
 def wechat_auth():
     if request.method == 'GET':
