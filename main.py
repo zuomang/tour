@@ -1,6 +1,6 @@
 from flask import Flask, request, make_response, render_template, g, session
 from flask.ext.sqlalchemy import SQLAlchemy
-from models.table import Custormer, member
+from models.table import Custormer, Qun, member
 import time, hashlib
 import parameter
 import requests
