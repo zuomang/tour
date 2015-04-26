@@ -17,6 +17,7 @@ db = SQLAlchemy(app)
 
 def get_db():
     if not hasattr(g, 'db_session'):
+    	print "全局环境中，存储db session"
         g.db_session = db.session
     return g.db_session
 
