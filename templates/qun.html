@@ -19,6 +19,21 @@
 				</ul>
 			  	<div class="tab-content">
 			    	<div role="tabpanel" class="tab-pane active" id="home">
+			    		<div class="alert alert-info test" role="alert">每个用户最多只能加入8个群</div>
+			    		{% if quns %}
+						<ul class="list-group">
+							{% for q in quns %}
+							<li class="list-group-item"><span class="badge">q.member_count</span>q.name</li>
+							{% endif %}
+						</ul>
+						<div class="list-group">
+							{% for q in quns %}
+							<a href="#" class="list-group-item list-group-item-success"><span class="badge">q.member_count</span>q.name</a>
+							{% endif %}
+						</div>
+						{% elseif %}
+							<div class="alert alert-info test" role="alert">每个用户最多只能加入8个群</div>
+						{% endif %}
 			    	</div>
 			    	<div role="tabpanel" class="tab-pane" id="profile">
 			    		<div class="alert alert-info test" role="alert">每个用户只能创建一个属于自己的群</div>
@@ -65,6 +80,7 @@
 			    	</div>
 			  	</div>
 			</div>
+
 			<div class="modal fade" id="create" tabindex="-8" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 				    <div class="modal-content">
