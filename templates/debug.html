@@ -20,10 +20,10 @@
 	    <!-- // <script src="./Starter Template for Bootstrap_files/ie-emulation-modes-warning.js"></script> -->
 		
 	    <style type="text/css">
-	.info div{
-		margin :5px;
-	}
-</style>
+	    	.test {
+	    		margin-top: 5px;
+	    	}
+		</style>
 	</head>
 	<body>
 		<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -46,24 +46,59 @@
 	        	</div>
 	      	</div>
     	</nav>
-
     	<div class="container">
-	<table class="table">
-		<tbody>
-			<tr>
-				<td class="text-primary"><strong>昵称</strong></td>
-				<td>{{ user.username }}</td>
-			</tr>
-			<tr>
-				<td class="text-primary"><strong>手机号码</strong></td>
-				<td>{{ user.phone_number }}</td>
-			</tr>
-			<tr>
-				<td class="text-primary"><strong>等级</strong></td>
-				<td>{{ user.rank }}</td>
-			</tr>
-		</tbody>
-	</table>
+    		<br>
+			<div role="tabpanel">
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">已加入</a></li>
+				    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">我的群</a></li>
+				</ul>
+			  	<div class="tab-content">
+			    	<div role="tabpanel" class="tab-pane active" id="home">
+			    	</div>
+			    	<div role="tabpanel" class="tab-pane" id="profile">
+			    		<div class="alert alert-info test" role="alert">每个用户只能创建一个属于自己的群</div>
+			    		{% if not qun %}
+			    			<div class="jumbotron">
+								<p>你现在还没有创建输入你自己的群</p>
+								<p class="text-primary">只有当成群员人数超过10人，你才可以成为群主</p>
+								<p class="text-center"><button type="button" class="btn btn-primary">创建群</button></p>
+							</div>
+			    		{% else %}
+			    			<tbody>
+								<tr>
+									<td class="text-primary"><strong>群名称</strong></td>
+									<td>{{ qun.name }}</td>
+								</tr>
+								<tr class="info">
+									<td class="text-primary"><strong>创建时间</strong></td>
+									<td>{{ qun.register_time }}</td>
+								</tr>
+								<tr>
+									<td class="text-primary"><strong>等级</strong></td>
+									<td>{{ qun.rank }}</td>
+								</tr>
+								<tr class="info">
+									<td class="text-primary"><strong>总人数</strong></td>
+									<td>{{ qun.member_count }}</td>
+								</tr>
+								<tr>
+									<td class="text-primary"><strong>建设资金</strong></td>
+									<td>{{ qun.building_fund }}</td>
+								</tr>
+								<tr class="info">
+									<td class="text-primary"><strong>已提取资金</strong></td>
+									<td>{{ qun.extracted_fund }}</td>
+								</tr>
+																<tr>
+									<td class="text-primary"><strong>剩余资金</strong></td>
+									<td>{{ qun.balance_fund }}</td>
+								</tr>
+							</tbody>
+			    		{% endif %}
+			    	</div>
+			  	</div>
+			</div>
 		</div>
 	</body>
 </html>

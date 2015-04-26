@@ -61,9 +61,17 @@ def bing():
 		members = user.quns
 		return render_template('info.html', user = user, members = members)
 
-# @app.route('/qun', methods=['GET'])
-# def qun():
-# 	if request
+@app.route('/qun', methods=['GET'])
+def qun():
+    if request.method == 'GET':
+		if util.check_bing(request) == None:
+			return render_template('bing.html')
+		else:
+			openid = session['openid']
+			user = Custormer.query.filter_by(openid = openid).first()
+			my_qun = Qun.query.filter_by(openid = openid).first()
+			quns = user.quns
+			return render_template('qun.html', user = user, qun = my_qun, quns = quns)
 
 if __name__ == '__main__':
 	app.run()
