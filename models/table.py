@@ -45,8 +45,8 @@ class Qun(db.Model):
 
     def __init__(self, name, building_fund):
         self.name = name
-		self.building_fund = building_fund
- 
+        self.building_fund = building_fund
+
     def __repr__(self):
         return '<Qun %r>' % self.name
 
