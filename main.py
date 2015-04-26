@@ -41,9 +41,9 @@ def wechat_auth():
 def info():
     if request.method == 'GET':
     	print util.check_bing(request)
-		if util.check_bing(request) == None:
+        if util.check_bing(request) == None:
 			return render_template('bing.html')
-		else:
+        else:
 			openid = session['openid']
 			user = Custormer.query.filter_by(openid = openid).first()
 			members = user.quns
@@ -65,7 +65,7 @@ def bing():
 	else:
 		members = user.quns
 		return render_template('info.html', user = user, members = members)
-		
+
 @app.route('/qun', methods=['GET'])
 def qun():
     if request.method == 'GET':
