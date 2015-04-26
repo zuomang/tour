@@ -73,5 +73,9 @@ def qun():
 			quns = user.quns
 			return render_template('qun.html', user = user, qun = my_qun, quns = quns)
 
+@app.route('/qun/create', methods=['POST'])
+def create():
+	pass
+
 if __name__ == '__main__':
 	app.run()
