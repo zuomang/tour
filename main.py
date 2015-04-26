@@ -50,7 +50,7 @@ def info():
 			return render_template('bing.html')
 		else:
 			openid = session['openid']
-			user = Custormer.query.filter_by(openid = session['openid']).first()
+			user = Custormer.query.filter_by(openid = openid).first()
 			members = user.quns
 			return render_template('info.html', user = user, members = members)
 
@@ -78,11 +78,8 @@ def qun():
 			return render_template('bing.html')
 		else:
 			openid = session['openid']
-			print openid
 			user = Custormer.query.filter_by(openid = openid).first()
 			my_qun = Qun.query.filter_by(openid = openid).first()
-			if my_qun:
-				print my_qun.building_fund
 			quns = user.quns
 			return render_template('qun.html', user = user, qun = my_qun, quns = quns)
 
@@ -102,6 +99,7 @@ def create():
 		print 'Exception: ', ex
 		return render_template('qun.html', error = "创建群失败")
 	else:
+		user.quns.append(new_qun)
 		return redirect(url_for('qun'))
 
 if __name__ == '__main__':

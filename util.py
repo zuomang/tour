@@ -23,9 +23,7 @@ def check_bing(request):
 	openid = result.json().get('openid')
 	session['openid'] = openid
 	custormer = Custormer.query.filter_by(openid = openid).first()
-	type(custormer)
 	if custormer:
-		print custormer.id
 		return True
 	else:
 		return False
