@@ -9,6 +9,10 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zmyjy1314@localhost/test'
 db = SQLAlchemy(app)
 
+member = db.Table('member',
+    db.Column('custormer_id', db.String(40), db.ForeignKey('custormer.openid')),
+    db.Column('qun_id', db.Integer, db.ForeignKey('qun.id')),
+)
 class Custormer(db.Model):
     openid = db.Column(db.String(40), primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable = False)
@@ -36,7 +40,7 @@ class Qun(db.Model):
     building_fund = db.Column(db.Integer, default = 0)
     extracted_fund = db.Column(db.Integer, default = 0)
     balance_fund = db.Column(db.Integer, default = 0)
-    custormer_id = db.Column(db.String(40), db.ForeignKey('custormer.openid'))
+    openid = db.Column(db.String(40), nullable = False)
     # custormer = db.relationship('Custormer', backref = db.backref('quns', lazy = 'dynamic'))
     custormers = db.relationship('Custormer', secondary=member,
         backref = db.backref('qun_set', lazy = 'dynamic'))
@@ -48,12 +52,6 @@ class Qun(db.Model):
 
     def __repr__(self):
         return '<qun %r>' % self.name
-
-member = db.Table('member',
-    db.Column('custormer_id', db.String(40), db.ForeignKey('custormer.openid')),
-    db.Column('qun_id', db.Integer, db.ForeignKey('qun.id')),
-    db.Column('qun_name', db.String(20), db.ForeignKey('qun.name'))
-)
 
 if __name__ == '__main__':
     db.create_all()
