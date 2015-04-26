@@ -20,13 +20,6 @@ def get_db():
         g.db_session = db.session
     return g.db_session
 
-@app.teardown_appcontext
-def close_db(error):
-    """Closes the database again at the end of the request."""
-    if hasattr(g, 'db_session'):
-    	print "close session"
-        g.db_session.close()
-
 @app.route('/', methods=['GET'])
 def wechat_auth():
     if request.method == 'GET':
@@ -68,8 +61,9 @@ def bing():
 		print 'Exception: ', ex
 		return render_template('bing.html')
 	else:
-		return render_template('info.html', user = user)
-
+		members = user.quns
+		return render_template('info.html', user = user, members = members)
+		
 @app.route('/qun', methods=['GET'])
 def qun():
     if request.method == 'GET':
@@ -91,6 +85,7 @@ def create():
 	name = request.form['name']
 	build = request.form['build']
 	new_qun = Qun(name, user.phone, openid, build)
+	user.quns.append(new_qun)
 	db.add(new_qun)
 	try:
 		db.commit()
@@ -98,7 +93,6 @@ def create():
 		print 'Exception: ', ex
 		return render_template('qun.html', error = "创建群失败")
 	else:
-		user.quns.append(new_qun)
 		return redirect(url_for('qun'))
 
 if __name__ == '__main__':

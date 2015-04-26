@@ -22,8 +22,4 @@ def check_bing(request):
 	result = requests.get('https://api.weixin.qq.com/sns/oauth2/access_token', params = data)
 	openid = result.json().get('openid')
 	session['openid'] = openid
-	custormer = Custormer.query.filter_by(openid = openid).first()
-	if custormer:
-		return True
-	else:
-		return False
+	return Custormer.query.filter_by(openid = openid).first()
