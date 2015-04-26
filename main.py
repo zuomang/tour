@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
 from flask import Flask, request, make_response, render_template, g, session
 from flask.ext.sqlalchemy import SQLAlchemy
 from models.table import Custormer, Qun, member
