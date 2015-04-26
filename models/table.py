@@ -26,7 +26,7 @@ class Custormer(db.Model):
     def __init__(self, openid, username, phone):
         self.openid = openid
         self.username = username
-        self.phone_number = phone
+        self.phone = phone
 
     def __repr__(self):
         return '<User %r>' % self.username
