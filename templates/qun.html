@@ -23,6 +23,7 @@
 			    	<div role="tabpanel" class="tab-pane" id="profile">
 			    		<div class="alert alert-info test" role="alert">每个用户只能创建一个属于自己的群</div>
 			    		{% if qun %}
+			    		<table class="table">
 			    			<tbody>
 								<tr>
 									<td class="text-primary"><strong>群名称</strong></td>
@@ -53,6 +54,7 @@
 									<td>{{ qun.balance_fund }}</td>
 								</tr>
 							</tbody>
+						</table>
 			    		{% else %}
 			    			<div class="jumbotron">
 								<p><small>你现在还没有创建输入你自己的群</small></p>
