@@ -22,13 +22,7 @@
 			    	</div>
 			    	<div role="tabpanel" class="tab-pane" id="profile">
 			    		<div class="alert alert-info test" role="alert">每个用户只能创建一个属于自己的群</div>
-			    		{% if not qun %}
-			    			<div class="jumbotron">
-								<p><small>你现在还没有创建输入你自己的群</small></p>
-								<p class="text-primary"><small>只有当成群员人数超过10人，你才可以成为群主</small></p>
-								<p class="text-center"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create">创建群</button></p>
-							</div>
-			    		{% else %}
+			    		{% if qun %}
 			    			<tbody>
 								<tr>
 									<td class="text-primary"><strong>群名称</strong></td>
@@ -59,6 +53,12 @@
 									<td>{{ qun.balance_fund }}</td>
 								</tr>
 							</tbody>
+			    		{% else %}
+			    			<div class="jumbotron">
+								<p><small>你现在还没有创建输入你自己的群</small></p>
+								<p class="text-primary"><small>只有当成群员人数超过10人，你才可以成为群主</small></p>
+								<p class="text-center"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create">创建群</button></p>
+							</div>
 			    		{% endif %}
 			    	</div>
 			  	</div>
