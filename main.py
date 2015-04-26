@@ -81,7 +81,8 @@ def qun():
 			print openid
 			user = Custormer.query.filter_by(openid = openid).first()
 			my_qun = Qun.query.filter_by(openid = openid).first()
-			#print my_qun.building_fund
+			if my_qun:
+				print my_qun.building_fund
 			quns = user.quns
 			return render_template('qun.html', user = user, qun = my_qun, quns = quns)
 
@@ -100,7 +101,7 @@ def create():
 	except Exception, ex:
 		print 'Exception: ', ex
 		return render_template('qun.html', error = "创建群失败")
-	else:	
+	else:
 		return redirect(url_for('qun'))
 
 if __name__ == '__main__':

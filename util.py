@@ -20,6 +20,12 @@ def check_bing(request):
     	'grant_type': 'authorization_code'
 	}
 	result = requests.get('https://api.weixin.qq.com/sns/oauth2/access_token', params = data)
-	id = result.json().get('openid', '')
-	session['openid'] = id
-	return Custormer.query.filter_by(openid=id).first()
+	openid = result.json().get('openid')
+	session['openid'] = openid
+	custormer = Custormer.query.filter_by(openid = openid).first()
+	type(custormer)
+	if custormer:
+		print custormer.id
+		return True
+	else:
+		return False
