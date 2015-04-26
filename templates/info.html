@@ -10,7 +10,7 @@
 			</tr>
 			<tr>
 				<td class="text-primary"><strong>手机号码</strong></td>
-				<td>{{ user.phone_number }}</td>
+				<td>{{ user.phone }}</td>
 			</tr>
 			<tr>
 				<td class="text-primary"><strong>等级</strong></td>
@@ -24,11 +24,13 @@
 		<tbody>
 			{% for member in member %}
 			<tr>
-				<td>{{ member.qun_id }}</td>
-				<td>{{ member.qun_name }}</td>
+				<td>{{ member.id }}</td>
+				<td>{{ member.name }}</td>
 			</tr>
 			{% endfor %}
 		</tbody>
-	</table>		
+	</table>
+	{% else %}
+		<p>你还没有加入任何群</p>
 	{% endif %}
 {% endblock %}
