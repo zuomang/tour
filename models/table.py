@@ -7,6 +7,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zmyjy1314@localhost/test'
+app.config['SQLALCHEMY_RECORD_QUERIES'] = False
 db = SQLAlchemy(app)
 
 member = db.Table('member',
