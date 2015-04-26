@@ -43,8 +43,10 @@ class Qun(db.Model):
     balance_fund = db.Column(db.Integer, default = 0)
     openid = db.Column(db.String(40), db.ForeignKey('custormer.openid'))
 
-    def __init__(self, name, building_fund):
+    def __init__(self, name, phone, openid, building_fund):
         self.name = name
+        self.phone = phone
+        self.openid = openid
         self.building_fund = building_fund
 
     def __repr__(self):
