@@ -13,14 +13,15 @@ member = db.Table('member',
     db.Column('custormer_id', db.String(40), db.ForeignKey('custormer.openid')),
     db.Column('qun_id', db.Integer, db.ForeignKey('qun.id')),
 )
+
 class Custormer(db.Model):
     openid = db.Column(db.String(40), primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable = False)
-    phone_number = db.Column(db.String(11), unique=True, nullable = False)
+    phone = db.Column(db.String(11), unique=True, nullable = False)
     register_time = db.Column(db.DateTime, default = datetime.now())
     rank = db.Column(db.Integer, default = 1)
     quns = db.relationship('Qun', secondary=member,
-        backref = db.backref('custormer_set', lazy = 'dynamic'))
+        backref = db.backref('custormers', lazy = 'dynamic'))
 
     def __init__(self, openid, username, phone):
         self.openid = openid
@@ -33,25 +34,21 @@ class Custormer(db.Model):
 class Qun(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable = False)
     name = db.Column(db.String(20), unique=True, nullable = False)
-    phone_number = db.Column(db.Integer, unique=True, nullable = False)
+    phone = db.Column(db.String(11), db.ForeginKey('custormer.phone'))
     register_time = db.Column(db.DateTime, default = datetime.now())
     rank = db.Column(db.Integer, nullable = False, default = 1)
     member_count = db.Column(db.Integer, default = 0)
     building_fund = db.Column(db.Integer, default = 0)
     extracted_fund = db.Column(db.Integer, default = 0)
     balance_fund = db.Column(db.Integer, default = 0)
-    openid = db.Column(db.String(40), nullable = False)
-    # custormer = db.relationship('Custormer', backref = db.backref('quns', lazy = 'dynamic'))
-    custormers = db.relationship('Custormer', secondary=member,
-        backref = db.backref('qun_set', lazy = 'dynamic'))
+    openid = db.Column(db.String(40), db.ForeginKey('custormer.openid'))
 
-    def __init__(self, custormer_id, name, phone_number):
-        self.custormer_id = custormer_id
+    def __init__(self, name, building_fund):
         self.name = name
-        self.phone_number
-
+		self.building_fund = building_fund
+ 
     def __repr__(self):
-        return '<qun %r>' % self.name
+        return '<Qun %r>' % self.name
 
 if __name__ == '__main__':
     db.create_all()
