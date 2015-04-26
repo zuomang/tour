@@ -5,17 +5,26 @@ from access_token import get_access_token
 import requests, json, parameter, urllib
 
 info = urllib.quote_plus('http://www.quxhuan.com/info')
-url_info = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=STATE' %(parameter.appid, info)
+qun = urllib.quote_plus('http://www.quxhuan.com/qun')
+url_base = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=STATE'
+
+url_info = url_base %(parameter.appid, info)
+url_qun = url_qun %(parameter.appid, qun)
 
 menu = {
     "button": [
         {
-            "name": "menu",
+            "name": "我",
             "sub_button": [
                 {
                     "type": "view",
-                    "name": "1",
+                    "name": "我的信息",
                     "url": url_info
+                },
+                {
+                    "type": "view",
+                    "name": "我的群",
+                    "url": url_qun
                 }
             ]
         }

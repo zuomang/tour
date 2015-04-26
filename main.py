@@ -20,6 +20,9 @@ def get_db():
 @app.before_request
 def before_request(*args, **kwargs):
 	print '---------before_request----------'
+	if (request.path != '/') and (util.check_bing(request) == None) and (request.method == 'GET'):
+		return render_template('bing.html')
+
 
 @app.route('/', methods=['GET'])
 def wechat_auth():
@@ -40,13 +43,17 @@ def wechat_auth():
 @app.route('/info', methods=['GET'])
 def info():
     if request.method == 'GET':
-		if util.check_bing(request) == None:
-			return render_template('bing.html')
-		else:
-			openid = session['openid']
-			user = Custormer.query.filter_by(openid = session['openid']).first()
-			members = user.quns
-			return render_template('info.html', user = user, members = members)
+    	openid = session['openid']
+		user = Custormer.query.filter_by(openid = session['openid']).first()
+		members = user.quns
+		return render_template('info.html', user = user, members = members)
+		# if util.check_bing(request) == None:
+		# 	return render_template('bing.html')
+		# else:
+		# 	openid = session['openid']
+		# 	user = Custormer.query.filter_by(openid = session['openid']).first()
+		# 	members = user.quns
+		# 	return render_template('info.html', user = user, members = members)
 
 @app.route('/bing', methods=['POST'])
 def bing():
@@ -64,6 +71,10 @@ def bing():
 	else:
 		members = user.quns
 		return render_template('info.html', user = user, members = members)
+
+@app.route('/qun', methods=['GET'])
+def qun():
+	if request
 
 if __name__ == '__main__':
 	app.run()
