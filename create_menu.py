@@ -9,7 +9,7 @@ qun = urllib.quote_plus('http://www.quxhuan.com/qun')
 url_base = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=STATE'
 
 url_info = url_base %(parameter.appid, info)
-url_qun = url_qun %(parameter.appid, qun)
+url_qun = url_base %(parameter.appid, qun)
 
 menu = {
     "button": [
