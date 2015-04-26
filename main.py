@@ -44,9 +44,9 @@ def wechat_auth():
 def info():
     if request.method == 'GET':
     	openid = session['openid']
-		user = Custormer.query.filter_by(openid = session['openid']).first()
-		members = user.quns
-		return render_template('info.html', user = user, members = members)
+        user = Custormer.query.filter_by(openid = session['openid']).first()
+        members = user.quns
+        return render_template('info.html', user = user, members = members)
 		# if util.check_bing(request) == None:
 		# 	return render_template('bing.html')
 		# else:
