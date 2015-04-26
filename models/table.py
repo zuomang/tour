@@ -38,7 +38,7 @@ class Qun(db.Model):
     phone = db.Column(db.String(11))
     register_time = db.Column(db.DateTime, default = datetime.now())
     rank = db.Column(db.Integer, nullable = False, default = 1)
-    member_count = db.Column(db.Integer, default = 0)
+    member_count = db.Column(db.Integer, default = 1)
     building_fund = db.Column(db.Integer, default = 0)
     extracted_fund = db.Column(db.Integer, default = 0)
     balance_fund = db.Column(db.Integer, default = 0)
