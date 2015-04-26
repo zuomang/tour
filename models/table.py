@@ -34,14 +34,14 @@ class Custormer(db.Model):
 class Qun(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable = False)
     name = db.Column(db.String(20), unique=True, nullable = False)
-    phone = db.Column(db.String(11), db.ForeginKey('custormer.phone'))
+    phone = db.Column(db.String(11))
     register_time = db.Column(db.DateTime, default = datetime.now())
     rank = db.Column(db.Integer, nullable = False, default = 1)
     member_count = db.Column(db.Integer, default = 0)
     building_fund = db.Column(db.Integer, default = 0)
     extracted_fund = db.Column(db.Integer, default = 0)
     balance_fund = db.Column(db.Integer, default = 0)
-    openid = db.Column(db.String(40), db.ForeginKey('custormer.openid'))
+    openid = db.Column(db.String(40), db.ForeignKey('custormer.openid'))
 
     def __init__(self, name, building_fund):
         self.name = name
