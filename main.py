@@ -51,8 +51,9 @@ def info():
 		else:
 			openid = session['openid']
 			user = Custormer.query.filter_by(openid = openid).first()
-			members = user.quns
-			return render_template('info.html', user = user, members = members)
+			# members = user.quns
+			# return render_template('info.html', user = user, members = members)
+			return render_template('info.html', user = user)
 
 @app.route('/bing', methods=['POST'])
 def bing():
@@ -68,9 +69,10 @@ def bing():
 		print 'Exception: ', ex
 		return render_template('bing.html')
 	else:
-		members = user.quns
-		return render_template('info.html', user = user, members = members)
-
+		# members = user.quns
+		# return render_template('info.html', user = user, members = members)
+		return render_template('info.html', user = user)
+		
 @app.route('/qun', methods=['GET'])
 def qun():
     if request.method == 'GET':
