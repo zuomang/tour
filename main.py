@@ -79,8 +79,8 @@ def qun():
 		else:
 			openid = session['openid']
 			user = Custormer.query.filter_by(openid = openid).first()
-			my_qun = Qun.query.filter_by(openid = openid).first()
-			quns = user.quns
+			my_qun = Qun.query.filter_by(openid = user.openid).first()
+			quns = None
 			return render_template('qun.html', user = user, qun = my_qun, quns = quns)
 
 @app.route('/qun/create', methods=['POST'])
