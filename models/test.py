@@ -21,24 +21,7 @@ class Student(db.Model):
 
 	courses = db.relationship('Course', secondary = tags, 
 		backref = db.backref('students', lazy = 'dynamic'))
-<<<<<<< HEAD
-
-	def __init__(self, id, name):
-		self.id = id
-		self.name = name
-
-class Course(db.Model):
-	id = db.Column(db.Integer, primary_key = True)
-	teacher = db.Column(db.String(20))
-
-	def __init__(self, id, teacher):
-		self.id = id
-		self.teacher = teacher
-
-if __name__ == '__mian__':
-	db.create_all()
-=======
-
+	
 	def __init__(self, id, name):
 		self.id = id
 		self.name = name
@@ -53,4 +36,3 @@ class Course(db.Model):
 
 if __name__ == '__main__':
     db.create_all()
->>>>>>> affed5a72338980c5810b9051dcdfc6bc45ac102

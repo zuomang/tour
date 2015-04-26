@@ -78,12 +78,11 @@ def qun():
 			return render_template('bing.html')
 		else:
 			openid = session['openid']
-			print openid
 			user = Custormer.query.filter_by(openid = openid).first()
-			my_qun = Qun.query.filter_by(openid = openid).first()
+			my_qun = Qun.query.filter_by(openid = user.openid).first()
 			if my_qun:
 				print my_qun.building_fund
-			quns = user.quns
+			quns = None
 			return render_template('qun.html', user = user, qun = my_qun, quns = quns)
 
 @app.route('/qun/create', methods=['POST'])

@@ -25,7 +25,7 @@ def check_bing(request):
 	custormer = Custormer.query.filter_by(openid = openid).first()
 	type(custormer)
 	if custormer:
-		print custormer.id
+		print custormer.openid
 		return True
 	else:
 		return False
