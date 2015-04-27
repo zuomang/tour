@@ -3,17 +3,16 @@
 
 from flask import Flask, request, make_response, render_template, g, session, redirect, url_for
 from flask.ext.sqlalchemy import SQLAlchemy
-from models.table import Custormer, Qun, member
+from models.table import Custormer, Qun, member, db
 import time, hashlib
 import parameter
 import requests
 import util
+from create_menu import url_qun
 
 app = Flask(__name__)
 app.config.from_envvar('FLASK_TEST_SETTINGS')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zmyjy1314@localhost/test'
 app.secret_key = 'test'
-db = SQLAlchemy(app)
 
 def get_db():
     if not hasattr(g, 'db_session'):
@@ -93,7 +92,7 @@ def create():
 		print 'Exception: ', ex
 		return render_template('qun.html', error = "创建群失败")
 	else:
-		return redirect(url_for('qun'))
+		return redirect(url_qun)
 
 if __name__ == '__main__':
 	app.run()
