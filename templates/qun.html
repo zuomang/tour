@@ -19,20 +19,15 @@
 				</ul>
 			  	<div class="tab-content">
 			    	<div role="tabpanel" class="tab-pane active" id="home">
-			    		<div class="alert alert-info test" role="alert">每个用户最多只能加入8个群</div>
+			    		<div class="alert alert-denger test" role="alert">每个用户最多只能加入8个群</div>
 			    		{% if quns %}
-						<ul class="list-group">
-							{% for q in quns %}
-							<li class="list-group-item"><span class="badge">q.member_count</span>q.name</li>
-							{% endfor %}
-						</ul>
 						<div class="list-group">
 							{% for q in quns %}
-							<a href="#" class="list-group-item list-group-item-success"><span class="badge">q.member_count</span>q.name</a>
+							<a href="#" class="list-group-item list-group-item-success"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</a>
 							{% endfor %}
 						</div>
 						{% else %}
-							<div class="alert alert-info test" role="alert">每个用户最多只能加入8个群</div>
+							<div class="alert alert-info test" role="alert">你还没有加入任何一个群</div>
 						{% endif %}
 			    	</div>
 			    	<div role="tabpanel" class="tab-pane" id="profile">

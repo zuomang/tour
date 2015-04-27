@@ -44,7 +44,8 @@ def info():
         else:
 			openid = session['openid']
 			user = Custormer.query.filter_by(openid = openid).first()
-			return render_template('info.html', user = user)
+			members = user.quns
+			return render_template('info.html', user = user, members = members)
 
 @app.route('/bing', methods=['POST'])
 def bing():
@@ -73,6 +74,7 @@ def qun():
 			user = Custormer.query.filter_by(openid = openid).first()
 			my_qun = Qun.query.filter_by(openid = user.openid).first()
 			quns = user.quns
+			print quns
 			return render_template('qun.html', user = user, qun = my_qun, quns = quns)
 
 @app.route('/qun/create', methods=['POST'])
