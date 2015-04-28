@@ -2,3 +2,5 @@
 *.sh
 test.py
 debug.html
+tour.conf
+*.log
