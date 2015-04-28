@@ -22,11 +22,11 @@
 			    	<div role="tabpanel" class="tab-pane active" id="home">
 			    		<div class="alert alert-danger test" role="alert">每个用户最多只能加入8个群</div>
 			    		{% if my_quns %}
-						<div class="list-group">
+						<ul class="list-group">
 							{% for q in my_quns %}
-							<a href="#" class="list-group-item list-group-item-success"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</a>
+							<li class="list-group-item list-group-item-info"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
 							{% endfor %}
-						</div>
+						</ul>
 						{% else %}
 							<div class="alert alert-info" role="alert">你还没有加入任何一个群</div>
 						{% endif %}
@@ -76,11 +76,11 @@
 			    	</div>
 			    	<div role="tabpanel" class="tab-pane" id="all">
 						<div class="alert alert-info" role="alert">在这里你可以看见所有的群</div>
-						<div class="list-group">
+						<ul class="list-group">
 							{% for q in quns %}
-							<a href="#" class="list-group-item list-group-item-success"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</a>
+							<li class="list-group-item list-group-item-info"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
 							{% endfor %}
-						</div>
+						</ul>
 			    	</div>
 			  	</div>
 			</div>
