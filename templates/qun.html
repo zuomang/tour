@@ -16,52 +16,53 @@
 				<ul class="nav nav-tabs" role="tablist">
 					<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">已加入</a></li>
 				    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">我的群</a></li>
+				    <li role="presentation"><a href="#all" aria-controls="all" role="tab" data-toggle="tab">群部落</a></li>
 				</ul>
 			  	<div class="tab-content">
 			    	<div role="tabpanel" class="tab-pane active" id="home">
 			    		<div class="alert alert-danger test" role="alert">每个用户最多只能加入8个群</div>
-			    		{% if quns %}
+			    		{% if my_quns %}
 						<div class="list-group">
-							{% for q in quns %}
+							{% for q in my_quns %}
 							<a href="#" class="list-group-item list-group-item-success"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</a>
 							{% endfor %}
 						</div>
 						{% else %}
-							<div class="alert alert-info test" role="alert">你还没有加入任何一个群</div>
+							<div class="alert alert-info" role="alert">你还没有加入任何一个群</div>
 						{% endif %}
 			    	</div>
 			    	<div role="tabpanel" class="tab-pane" id="profile">
 			    		<div class="alert alert-info test" role="alert">每个用户只能创建一个属于自己的群</div>
-			    		{% if qun %}
+			    		{% if my_qun %}
 			    		<table class="table">
 			    			<tbody>
 								<tr>
 									<td class="text-primary"><strong>群名称</strong></td>
-									<td>{{ qun.name }}</td>
+									<td>{{ my_qun.name }}</td>
 								</tr>
 								<tr class="info">
 									<td class="text-primary"><strong>创建时间</strong></td>
-									<td>{{ qun.register_time }}</td>
+									<td>{{ my_qun.register_time }}</td>
 								</tr>
 								<tr>
 									<td class="text-primary"><strong>等级</strong></td>
-									<td>{{ qun.rank }}</td>
+									<td>{{ my_qun.rank }}</td>
 								</tr>
 								<tr class="info">
 									<td class="text-primary"><strong>总人数</strong></td>
-									<td>{{ qun.member_count }}</td>
+									<td>{{ my_qun.member_count }}</td>
 								</tr>
 								<tr>
 									<td class="text-primary"><strong>建设资金</strong></td>
-									<td>{{ qun.building_fund }}</td>
+									<td>{{ my_qun.building_fund }}</td>
 								</tr>
 								<tr class="info">
 									<td class="text-primary"><strong>已提取资金</strong></td>
-									<td>{{ qun.extracted_fund }}</td>
+									<td>{{ my_qun.extracted_fund }}</td>
 								</tr>
 																<tr>
 									<td class="text-primary"><strong>剩余资金</strong></td>
-									<td>{{ qun.balance_fund }}</td>
+									<td>{{ my_qun.balance_fund }}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -72,6 +73,14 @@
 								<p class="text-center"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create">创建群</button></p>
 							</div>
 			    		{% endif %}
+			    	</div>
+			    	<div role="tabpanel" class="tab-pane" id="all">
+						<div class="alert alert-info" role="alert">在这里你可以看见所有的群</div>
+						<div class="list-group">
+							{% for q in quns %}
+							<a href="#" class="list-group-item list-group-item-success"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</a>
+							{% endfor %}
+						</div>
 			    	</div>
 			  	</div>
 			</div>

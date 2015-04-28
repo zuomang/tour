@@ -4,9 +4,7 @@
 from flask import Flask, request, make_response, render_template, g, session, redirect, url_for
 from flask.ext.sqlalchemy import SQLAlchemy
 from models.table import Custormer, Qun, member, db
-import time, hashlib
-import parameter
-import requests
+import hashlib
 import util
 from create_menu import url_qun
 
@@ -73,9 +71,9 @@ def qun():
 			openid = session['openid']
 			user = Custormer.query.filter_by(openid = openid).first()
 			my_qun = Qun.query.filter_by(openid = user.openid).first()
-			quns = user.quns
-			print quns
-			return render_template('qun.html', user = user, qun = my_qun, quns = quns)
+			my_quns = user.quns
+			quns = Qun.query.all()
+			return render_template('qun.html', user = user, my_qun = my_qun, my_quns = my_quns, quns = quns)
 
 @app.route('/qun/create', methods=['POST'])
 def create():
