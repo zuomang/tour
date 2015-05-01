@@ -20,6 +20,7 @@
 				</ul>
 			  	<div class="tab-content">
 			    	<div role="tabpanel" class="tab-pane active" id="home">
+			    		<button type="button" class="btn btn-primary" id="cls">test</button>
 			    		<div class="alert alert-danger test" role="alert">每个用户最多只能加入8个群</div>
 			    		{% if my_quns %}
 						<ul class="list-group">
@@ -119,4 +120,18 @@
 				    </div><!-- /.modal-content -->
 			  	</div><!-- /.modal-dialog -->
 			</div><!-- /.modal -->
+			<script type="text/javascript">
+				var data = {
+					id : 1
+				};
+				$('#cls').ajax({
+					type: "POST",
+					url: "{{ url_for('qun_info') }}",
+					data: {json_str: JSON.stringify(data)},
+					contentType: 'application/json;charset=UTF-8',
+        			success: function(result) {
+            		alert(result);
+        			}
+				});
+			</script>
 {% endblock %}
