@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-from flask import Flask, request, make_response, render_template, g, session, redirect, url_for
+from flask import Flask, request, make_response, render_template, g, session, redirect, url_for, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 from models.table import Custormer, Qun, member, db
+from create_menu import url_qun
 import hashlib
 import util
-from create_menu import url_qun
 
 app = Flask(__name__)
 app.config.from_envvar('FLASK_TEST_SETTINGS')
@@ -93,6 +93,14 @@ def create():
 		return render_template('qun.html', error = "创建群失败")
 	else:
 		return redirect(url_qun)
+
+@app.route('qun/info', methods=['POST'])
+def qun_info():
+	if request.method == 'POST':
+		qun_id = request.form['qunId']
+		info = Qun.query.filter_by(id = qun_id).first()
+		print info, type(info)
+		return jsonify(**)
 
 if __name__ == '__main__':
 	app.run()

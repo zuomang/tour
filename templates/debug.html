@@ -55,53 +55,75 @@
 				<ul class="nav nav-tabs" role="tablist">
 					<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">已加入</a></li>
 				    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">我的群</a></li>
+				    <li role="presentation"><a href="#all" aria-controls="all" role="tab" data-toggle="tab">群部落</a></li>
 				</ul>
 			  	<div class="tab-content">
 			    	<div role="tabpanel" class="tab-pane active" id="home">
+			    		<div class="alert alert-danger test" role="alert">每个用户最多只能加入8个群</div>
+			    		{% if my_quns %}
+						<ul class="list-group">
+							{% for q in my_quns %}
+							<li class="list-group-item list-group-item-info"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
+							{% endfor %}
+						</ul>
+						{% else %}
+							<div class="alert alert-info" role="alert">你还没有加入任何一个群</div>
+						{% endif %}
 			    	</div>
 			    	<div role="tabpanel" class="tab-pane" id="profile">
 			    		<div class="alert alert-info test" role="alert">每个用户只能创建一个属于自己的群</div>
-			    		{% if not qun %}
+			    		{% if my_qun %}
+			    		<table class="table">
+			    			<tbody>
+								<tr>
+									<td class="text-primary"><strong>群名称</strong></td>
+									<td>{{ my_qun.name }}</td>
+								</tr>
+								<tr class="info">
+									<td class="text-primary"><strong>创建时间</strong></td>
+									<td>{{ my_qun.register_time }}</td>
+								</tr>
+								<tr>
+									<td class="text-primary"><strong>等级</strong></td>
+									<td>{{ my_qun.rank }}</td>
+								</tr>
+								<tr class="info">
+									<td class="text-primary"><strong>总人数</strong></td>
+									<td>{{ my_qun.member_count }}</td>
+								</tr>
+								<tr>
+									<td class="text-primary"><strong>建设资金</strong></td>
+									<td>{{ my_qun.building_fund }}</td>
+								</tr>
+								<tr class="info">
+									<td class="text-primary"><strong>已提取资金</strong></td>
+									<td>{{ my_qun.extracted_fund }}</td>
+								</tr>
+																<tr>
+									<td class="text-primary"><strong>剩余资金</strong></td>
+									<td>{{ my_qun.balance_fund }}</td>
+								</tr>
+							</tbody>
+						</table>
+			    		{% else %}
 			    			<div class="jumbotron">
 								<p><small>你现在还没有创建输入你自己的群</small></p>
 								<p class="text-primary"><small>只有当成群员人数超过10人，你才可以成为群主</small></p>
 								<p class="text-center"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create">创建群</button></p>
 							</div>
-			    		{% else %}
-			    			<tbody>
-								<tr>
-									<td class="text-primary"><strong>群名称</strong></td>
-									<td>{{ qun.name }}</td>
-								</tr>
-								<tr class="info">
-									<td class="text-primary"><strong>创建时间</strong></td>
-									<td>{{ qun.register_time }}</td>
-								</tr>
-								<tr>
-									<td class="text-primary"><strong>等级</strong></td>
-									<td>{{ qun.rank }}</td>
-								</tr>
-								<tr class="info">
-									<td class="text-primary"><strong>总人数</strong></td>
-									<td>{{ qun.member_count }}</td>
-								</tr>
-								<tr>
-									<td class="text-primary"><strong>建设资金</strong></td>
-									<td>{{ qun.building_fund }}</td>
-								</tr>
-								<tr class="info">
-									<td class="text-primary"><strong>已提取资金</strong></td>
-									<td>{{ qun.extracted_fund }}</td>
-								</tr>
-																<tr>
-									<td class="text-primary"><strong>剩余资金</strong></td>
-									<td>{{ qun.balance_fund }}</td>
-								</tr>
-							</tbody>
 			    		{% endif %}
+			    	</div>
+			    	<div role="tabpanel" class="tab-pane" id="all">
+						<div class="alert alert-info test" role="alert">在这里你可以看见所有的群</div>
+						<ul class="list-group">
+							{% for q in quns %}
+							<li class="list-group-item list-group-item-info" id="law" data-toggle="popover" data-placement="bottom" data-html="true"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
+							{% endfor %}
+						</ul>
 			    	</div>
 			  	</div>
 			</div>
+
 			<div class="modal fade" id="create" tabindex="-8" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 				    <div class="modal-content">
@@ -110,7 +132,7 @@
 							<h4 class="modal-title">新建群</h4>
 				     	</div>
 				    	<div class="modal-body">
-				    		<form class="form-horizontal" method="post" action="{{ url_for('qun/create') }}">url_for('bing')
+				    		<form class="form-horizontal" method="post" action="{{ url_for('create') }}">
 					            <div class="form-group">
 					                <label for="name" class="col-xs-offset-1 col-xs-3 control-label">群名称</label>
 					                <div class="col-xs-7">
@@ -135,7 +157,20 @@
 				    	</div>
 				    </div><!-- /.modal-content -->
 			  	</div><!-- /.modal-dialog -->
-			</div><!-- /.modal -->
+			</div>
 		</div>
+		<script type="text/javascript">
+			// $('#law').click(function() {
+			// 	console.log($('#law').data('id'));
+			// })
+			$(function () {
+  				$('[data-toggle="popover"]').popover()
+			});
+			$('#law').click(function() {
+				console.log("q");
+				$('#law').attr("data-content", '<div><h5>你确定加入{{ q.name }}群</h5><button type="button" class="btn btn-warning">确定</button></div>');
+				$('#law').popover();
+			})
+		</script>
 	</body>
 </html>
