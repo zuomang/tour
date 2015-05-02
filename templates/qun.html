@@ -121,17 +121,20 @@
 			  	</div><!-- /.modal-dialog -->
 			</div><!-- /.modal -->
 			<script type="text/javascript">
+			$('#cls').click(function() {
 				var data = {
 					id : 1
 				};
-				$('#cls').ajax({
+				$.ajax({
 					type: "POST",
 					url: "{{ url_for('qun_info') }}",
 					data: {json_str: JSON.stringify(data)},
 					contentType: 'application/json;charset=UTF-8',
         			success: function(result) {
-            		alert(result);
+            			alert(result);
+            			console.log(result);
         			}
-				});
+				});				
+			})
 			</script>
 {% endblock %}
