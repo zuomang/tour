@@ -97,10 +97,10 @@ def create():
 @app.route('qun/info', methods=['POST'])
 def qun_info():
 	if request.method == 'POST':
-		qun_id = request.form['qunId']
+		qun_id = request.json['id']
 		info = Qun.query.filter_by(id = qun_id).first()
 		print info, type(info)
-		return jsonify(**)
+		return jsonify(**info)
 
 if __name__ == '__main__':
 	app.run()
