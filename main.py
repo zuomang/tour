@@ -7,7 +7,7 @@ from models.table import Custormer, Qun, member, db
 from create_menu import url_qun
 import hashlib
 import util
-
+import json
 app = Flask(__name__)
 app.config.from_envvar('FLASK_TEST_SETTINGS')
 app.secret_key = 'test'
@@ -96,10 +96,10 @@ def create():
 @app.route('/qun/info', methods=['POST'])
 def qun_info():
 	if request.method == 'POST':
+		print "start qun_info"
 		qun_id = request.json['id']
 		info = Qun.query.filter_by(id = qun_id).first()
-		print info, type(info)
-		return jsonify(**info)
+		return jsonify(id = info.id, qun_name = info.name)
 
 if __name__ == '__main__':
 	app.run()

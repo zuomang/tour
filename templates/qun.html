@@ -128,7 +128,7 @@
 				$.ajax({
 					type: "POST",
 					url: "{{ url_for('qun_info') }}",
-					data: {json_str: JSON.stringify(data)},
+					data: JSON.stringify(data, null, '\t'),
 					contentType: 'application/json;charset=UTF-8',
         			success: function(result) {
             			alert(result);
