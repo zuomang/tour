@@ -94,13 +94,20 @@ def create():
 	else:
 		return redirect(url_qun)
 
-@app.route('qun/info', methods=['POST'])
-def qun_info():
+@app.route('qun/add', methods=['POST'])
+def qun_add():
 	if request.method == 'POST':
 		qun_id = request.json['id']
-		info = Qun.query.filter_by(id = qun_id).first()
-		print info, type(info)
-		return jsonify(**info)
+		openid = session['openid']
+
+		try:
+			user = Custormer.query.filter_by(openid = openid).first()
+			info = Qun.query.filter_by(id = qun_id).first()
+			user.quns.append(info)
+		except Exception, ex:
+			print 'Exception: ', ex
+        else:
+			return jsonify(err_code = 'E0000', err_msg = '你已成功加入')
 
 if __name__ == '__main__':
 	app.run()

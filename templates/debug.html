@@ -117,7 +117,7 @@
 						<div class="alert alert-info test" role="alert">在这里你可以看见所有的群</div>
 						<ul class="list-group">
 							{% for q in quns %}
-							<li class="list-group-item list-group-item-info" id="law" data-toggle="popover" data-placement="bottom" data-html="true"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
+							<li class="list-group-item list-group-item-info qun-add" data-id="{{ q.id }}" data-name="{{ qun.name }}"data-toggle="popover" data-placement="bottom" data-html="true"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
 							{% endfor %}
 						</ul>
 			    	</div>
@@ -160,17 +160,48 @@
 			</div>
 		</div>
 		<script type="text/javascript">
+			// $('#cls').click(function() {
+			// 	id = $('#cls').data('id');
+			// 	var data = {
+			// 		id : id
+			// 	};
+			// 	$.ajax({
+			// 		type: "POST",
+			// 		url: "{{ url_for('qun_info') }}",
+			// 		data: {json_str: JSON.stringify(data)},
+			// 		contentType: 'application/json;charset=UTF-8',
+   //      			success: function(result) {
+   //          			alert(result);
+   //          			console.log(result);
+   //      			}
+			// 	});				
+			// })
 			// $('#law').click(function() {
 			// 	console.log($('#law').data('id'));
 			// })
+			var name, id;
 			$(function () {
   				$('[data-toggle="popover"]').popover()
 			});
-			$('#law').click(function() {
-				console.log("q");
-				$('#law').attr("data-content", '<div><h5>你确定加入{{ q.name }}群</h5><button type="button" class="btn btn-warning">确定</button></div>');
+			$('.qun-add').click(function() {
+				id = $('.qun-add').data('id');
+				name = $('.qun-add').data('name');
+				$('#law').attr("data-content", '<div><h5>你确定加入' + name + '</h5><button type="button" class="btn btn-warning add">确定</button></div>');
 				$('#law').popover();
-			})
+			});
+			$('.add').click(function() {
+				$.ajax({
+					type: "POST",
+					url: "{{ url_for('qun_add') }}",
+					data: JSON.stringify({id: id}, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function(result) {
+						if (result.err_code == 'E0000') {
+							alert('你成功加入' + name);
+						};
+					}
+				});
+			});
 		</script>
 	</body>
 </html>
