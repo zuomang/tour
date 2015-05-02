@@ -7,14 +7,13 @@ from models.table import Custormer, Qun, member, db
 from create_menu import url_qun
 import hashlib
 import util
-
+import json
 app = Flask(__name__)
 app.config.from_envvar('FLASK_TEST_SETTINGS')
 app.secret_key = 'test'
 
 def get_db():
     if not hasattr(g, 'db_session'):
-    	print "全局环境中，存储db session"
         g.db_session = db.session
     return g.db_session
 
@@ -94,12 +93,11 @@ def create():
 	else:
 		return redirect(url_qun)
 
-@app.route('qun/add', methods=['POST'])
-def qun_add():
+@app.route('/qun/info', methods=['POST'])
+def qun_info():
 	if request.method == 'POST':
 		qun_id = request.json['id']
 		openid = session['openid']
-
 		try:
 			user = Custormer.query.filter_by(openid = openid).first()
 			info = Qun.query.filter_by(id = qun_id).first()

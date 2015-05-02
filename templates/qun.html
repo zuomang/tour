@@ -133,8 +133,8 @@
 			$('.add').click(function() {
 				$.ajax({
 					type: "POST",
-					url: "{{ url_for('qun_add') }}",
-					data: JSON.stringify({id: id}, null, '\t'),
+					url: "{{ url_for('qun_info') }}",
+					data: JSON.stringify(data, null, '\t'),
 					contentType: 'application/json;charset=UTF-8',
 					success: function(result) {
 						if (result.err_code == 'E0000') {
