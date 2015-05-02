@@ -78,7 +78,7 @@
 						<div class="alert alert-info test" role="alert">在这里你可以看见所有的群</div>
 						<ul class="list-group">
 							{% for q in quns %}
-							<li class="list-group-item list-group-item-info qun-add" data-id="{{ q.id }}" data-name="{{ qun.name }}"data-toggle="popover" data-placement="bottom" data-html="true"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
+							<li class="list-group-item list-group-item-info qun-add" data-id="{{ q.id }}" data-name="{{ q.name }}"data-toggle="popover" data-placement="bottom" data-html="true"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
 							{% endfor %}
 						</ul>
 			    	</div>
@@ -125,10 +125,10 @@
   				$('[data-toggle="popover"]').popover()
 			});
 			$('.qun-add').click(function() {
-				id = $('.qun-add').data('id');
-				name = $('.qun-add').data('name');
-				$('#law').attr("data-content", '<div><h5>你确定加入' + name + '</h5><button type="button" class="btn btn-warning add">确定</button></div>');
-				$('#law').popover();
+				id = $(this).data('id');
+				name = $(this).data('name');
+				$(this).attr("data-content", '<div><h5>你确定加入' + name + '</h5><button type="button" class="btn btn-warning add">确定</button></div>');
+				$(this).popover();
 			});
 			$('.add').click(function() {
 				$.ajax({
