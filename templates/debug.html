@@ -26,6 +26,9 @@
 			p {
 				font-size: 10px;
 			}
+			.qun-add{
+				margin-right: 10px;
+			}
 		</style>
 	</head>
 	<body>
@@ -114,13 +117,10 @@
 			    		{% endif %}
 			    	</div>
 			    	<div role="tabpanel" class="tab-pane" id="all">
-						<div class="alert alert-info test" role="alert">在这里你可以看见所有的群</div>
-						<button type="button" class="btn btn-warning cc">确定</button>
+						<div class="alert alert-info test all-qun" role="alert">在这里你可以看见所有的群</div>
 						<ul class="list-group">
 							{% for q in quns %}
-							<li class="list-group-item list-group-item-info qun-add" data-id="{{ q.id1 }}" data-name="{{ q.name }}"data-toggle="popover" data-placement="bottom" data-html="true"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
-							<li class="list-group-item list-group-item-info qun-add" data-id="{{ q.id2 }}" data-name="{{ q.name }}"data-toggle="popover" data-placement="bottom" data-html="true"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
-							<li class="list-group-item list-group-item-info qun-add" data-id="{{ q.id3 }}" data-name="{{ q.name }}"data-toggle="popover" data-placement="bottom" data-html="true"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
+							<li class="list-group-item list-group-item-info qun-down" data-id="{{ q.id }}" data-name="{{ q.name }}" data-toggle="popover" data-placement="bottom" data-html="true"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
 							{% endfor %}
 						</ul>
 			    	</div>
@@ -164,28 +164,44 @@
 			<script type="text/javascript">
 			var name, id;
 			$(function () {
-  				$('[data-toggle="popover"]').popover()
+  				$('[data-toggle="popover"]').popover();
+  				$('.all-qun').hide();
 			});
-			$('.qun-add').click(function() {
+			$('.qun-down').click(function() {
+				$('[data-toggle="popover"]').popover();
+				console.log("test");
 				id = $(this).data('id');
 				name = $(this).data('name');
-				console.log(id, name)
-				$(this).attr("data-content", '<div><h5>你确定加入' + name + '</h5><button type="button" class="btn btn-warning cc">确定</button></div>');
+				$(this).attr("data-content",
+					'<div>'
+					+ '<h5>你确定加入' + name + '</h5>'
+					+ '<button type="button" class="btn btn-warning qun-add">确定</button>'
+					+ '<button type="button" class="btn btn-danger qun-cancle">取消</button>'
+					+ '</div>');
 				$(this).popover();
 			});
-			$('.cc').click(function() {
-				console.log("this is test");
-				// $.ajax({
-				// 	type: "POST",
-				// 	url: "{{ url_for('qun_info') }}",
-				// 	data: JSON.stringify(data, null, '\t'),
-				// 	contentType: 'application/json;charset=UTF-8',
-				// 	success: function(result) {
-				// 		if (result.err_code == 'E0000') {
-				// 			alert('你成功加入' + name);
-				// 		};
-				// 	}
-				// });
+			$(document).on("click", '.qun-cancle', function() {
+				console.log("qun-cancle");
+				$('.qun-down').popover('hide');
+			});
+			$(document).on("click", '.qun-add', function() {
+				data = {
+					id : id
+				};
+				alert(data.id);
+				$.ajax({
+					type: "POST",
+					url: "{{ url_for('qun_info') }}",
+					data: JSON.stringify(data, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function(result) {
+						if (result.err_code == 'E0000') {
+							$('.all-qun').html('你成功加入' + name);
+							$('.all-qun').show();
+							// alert('你成功加入' + name);
+						}
+					}
+				});
 			});
 			</script>
 	</body>
