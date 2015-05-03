@@ -89,7 +89,6 @@ def create():
 		db.commit()
 	except Exception, ex:
 		print 'Exception: ', ex
-		return render_template('qun.html', error = "创建群失败")
 	finally:
 		return redirect(url_qun)
 
@@ -105,9 +104,9 @@ def qun_info():
 			info.member_count += 1
 			user.quns.append(info)
 			db.commit()
-		except Exception, ex:
-			print 'Exception: ', ex
-        finally:
+		except Exception, e:
+			print 'Exception: ', e
+		finally:
 			return jsonify(err_code = 'E0000', err_msg = '你已成功加入')
 
 if __name__ == '__main__':
