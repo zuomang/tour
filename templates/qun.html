@@ -126,6 +126,7 @@
 			});
 			$('.qun-down').click(function() {
 				$('[data-toggle="popover"]').popover();
+				console.log("test");
 				id = $(this).data('id');
 				name = $(this).data('name');
 				$(this).attr("data-content", '<div><h5>你确定加入' + name + '</h5>' + '
