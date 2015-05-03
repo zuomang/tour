@@ -90,7 +90,7 @@ def create():
 	except Exception, ex:
 		print 'Exception: ', ex
 		return render_template('qun.html', error = "创建群失败")
-	else:
+	finally:
 		return redirect(url_qun)
 
 @app.route('/qun/info', methods=['POST'])
@@ -98,16 +98,17 @@ def qun_info():
 	if request.method == 'POST':
 		qun_id = request.json['id']
 		openid = session['openid']
+		db = get_db()
 		try:
 			user = Custormer.query.filter_by(openid = openid).first()
 			info = Qun.query.filter_by(id = qun_id).first()
-			info.member_count + 1
+			info.member_count += 1
 			user.quns.append(info)
 			db.commit()
 		except Exception, ex:
 			print 'Exception: ', ex
-        else:
-			return make_response(jsonify(err_code = 'E0000', err_msg = '你已成功加入'))
+        finally:
+			return jsonify(err_code = 'E0000', err_msg = '你已成功加入')
 
 if __name__ == '__main__':
 	app.run()
