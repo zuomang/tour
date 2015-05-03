@@ -25,7 +25,7 @@
 			    	<div role="tabpanel" class="tab-pane active" id="home">
 			    		<div class="alert alert-danger test" role="alert">每个用户最多只能加入8个群</div>
 			    		{% if my_quns %}
-						<ul class="list-group">
+						<ul class="list-group list-my-qun">
 							{% for q in my_quns %}
 							<li class="list-group-item list-group-item-info"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
 							{% endfor %}
@@ -155,6 +155,11 @@
 					data: JSON.stringify(data, null, '\t'),
 					contentType: 'application/json;charset=UTF-8',
 					success: function(result) {
+						if (result.err_code == 'E0000') {
+							var count = $('.qun-down:contains(' + name + ')').childern().html();
+							$('.qun-down:contains(' + name + ')').childern().html(Number(count) + 1);
+
+						};
 						$('.add-success').html(result.err_msg);
 						$('.add-success').show();
 						$('.qun-down').popover('hide');
