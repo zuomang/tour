@@ -156,15 +156,31 @@
 					contentType: 'application/json;charset=UTF-8',
 					success: function(result) {
 						if (result.err_code == 'E0000') {
-							var count = $('.qun-down:contains(' + name + ')').childern().html();
-							$('.qun-down:contains(' + name + ')').childern().html(Number(count) + 1);
-
-						};
+							var count = Number($('.qun-down:contains(' + name + ')').children().html()) + 1;
+							$('.qun-down:contains(' + name + ')').children().html(count);
+							var listMyQun = document.getElementByClassName('list-my-qun');
+							listMyQun.append(addQunLi(name, count));
+						}
 						$('.add-success').html(result.err_msg);
 						$('.add-success').show();
 						$('.qun-down').popover('hide');
 					}
 				});
 			});
+
+			var addQunLi = function(name, count) {
+				var e = document.createElement('li');
+				e.setAttribute('class', 'list-group-item list-group-item-info');
+				var t = document.createTextNode(name);
+				e.appendChild(t);
+
+				var s = document.createElement('span');
+				s.setAttribute('class', 'badge');
+				t = document.createTextNode(count);
+				s.appendChild(t);
+
+				e.appendChild(s);
+				return e;
+			}
 			</script>
 {% endblock %}
