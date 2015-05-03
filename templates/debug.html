@@ -16,7 +16,7 @@
     	<script type="text/javascript" src="../static/js/ie10-viewport-bug-workaround.js"></script>
 
 	    <!-- <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet"> -->
-	    <link href="http://v3.bootcss.com/examples/starter-template/starter-template.css" rel="stylesheet">
+	    <link rel="stylesheet" type="text/css" href="../static/css/starter-template.css" rel="stylesheet">
 	    <!-- // <script src="./Starter Template for Bootstrap_files/ie-emulation-modes-warning.js"></script> -->
 		
 	    <style type="text/css">
@@ -117,9 +117,7 @@
 						<div class="alert alert-info test" role="alert">在这里你可以看见所有的群</div>
 						<ul class="list-group">
 							{% for q in quns %}
-							<li class="list-group-item list-group-item-info qun-add" data-id="{{ q.id1 }}" data-name="{{ q.name }}"data-toggle="popover" data-placement="bottom" data-html="true"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
-							<li class="list-group-item list-group-item-info qun-add" data-id="{{ q.id2 }}" data-name="{{ q.name }}"data-toggle="popover" data-placement="bottom" data-html="true"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
-							<li class="list-group-item list-group-item-info qun-add" data-id="{{ q.id3 }}" data-name="{{ q.name }}"data-toggle="popover" data-placement="bottom" data-html="true"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
+							<li class="list-group-item list-group-item-info qun-down" data-id="{{ q.id }}" data-name="{{ q.name }}"data-toggle="popover" data-placement="bottom" data-html="true"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
 							{% endfor %}
 						</ul>
 			    	</div>
@@ -165,14 +163,13 @@
 			$(function () {
   				$('[data-toggle="popover"]').popover()
 			});
-			$('.qun-add').click(function() {
+			$('.qun-down').click(function() {
 				id = $(this).data('id');
 				name = $(this).data('name');
-				console.log(id, name)
-				// $('#law').attr("data-content", '<div><h5>你确定加入' + name + '</h5><button type="button" class="btn btn-warning add">确定</button></div>');
-				// $('#law').popover();
+				$(this).attr("data-content", '<div><h5>你确定加入' + name + '</h5><button type="button" class="btn btn-warning qun-add">确定</button></div>');
+				$(this).popover();
 			});
-			$('.add').click(function() {
+			$(document).on("click", '.qun-add', function() {
 				$.ajax({
 					type: "POST",
 					url: "{{ url_for('qun_info') }}",
