@@ -107,7 +107,7 @@ def qun_info():
 		except Exception, ex:
 			print 'Exception: ', ex
         else:
-			return jsonify(err_code = 'E0000', err_msg = '你已成功加入')
+			return make_response(jsonify(err_code = 'E0000', err_msg = '你已成功加入'))
 
 if __name__ == '__main__':
 	app.run()
