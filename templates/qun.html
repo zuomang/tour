@@ -130,7 +130,8 @@
   				$('.add-success').hide();
 			});
 			$('.qun-down').click(function() {
-				$('[data-toggle="popover"]').popover();
+  				$('.add-success').hide();
+				$('.qun-down').popover('hide');
 				id = $(this).data('id');
 				name = $(this).data('name');
 				$(this).attr("data-content",
@@ -154,10 +155,9 @@
 					data: JSON.stringify(data, null, '\t'),
 					contentType: 'application/json;charset=UTF-8',
 					success: function(result) {
-						if (result.err_code == 'E0000') {
-							$('.add-success').html('你成功加入' + name);
-							$('.add-success').show();
-						}
+						$('.add-success').html(result.err_msg);
+						$('.add-success').show();
+						$('.qun-down').popover('hide');
 					}
 				});
 			});

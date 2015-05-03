@@ -7,7 +7,6 @@ from models.table import Custormer, Qun, member, db
 from create_menu import url_qun
 import hashlib
 import util
-import json
 app = Flask(__name__)
 app.config.from_envvar('FLASK_TEST_SETTINGS')
 app.secret_key = 'test'
@@ -100,14 +99,18 @@ def qun_info():
 		db = get_db()
 		try:
 			user = Custormer.query.filter_by(openid = openid).first()
-			info = Qun.query.filter_by(id = qun_id).first()
-			info.member_count += 1
-			user.quns.append(info)
-			db.commit()
+			qun = Qun.query.filter_by(id = qun_id).first()
+			if qun in user.quns:
+				#return jsonify(err_code = 'E0001', err_msg = '加入失败，你已经加入过这个群')
+			elif (user.quns.len == 8):
+				return jsonify(err_code = 'E0002', err_msg = '你最多只能加入八个群')
+			else:
+				qun.member_count += 1
+				user.quns.append(qun)
+				db.commit()
+				return jsonify(err_code = 'E0000', err_msg = '你已成功加入')
 		except Exception, e:
 			print 'Exception: ', e
-		finally:
-			return jsonify(err_code = 'E0000', err_msg = '你已成功加入')
 
 if __name__ == '__main__':
 	app.run()
