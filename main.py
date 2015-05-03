@@ -31,6 +31,8 @@ def wechat_auth():
 		s = ''.join(s)
 		if (hashlib.sha1(s).hexdigest() == signature):
 			return make_response(echostr)
+		else:
+			return ""
 
 @app.route('/info', methods=['GET'])
 def info():

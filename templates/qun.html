@@ -156,10 +156,9 @@
 					contentType: 'application/json;charset=UTF-8',
 					success: function(result) {
 						if (result.err_code == 'E0000') {
-							var count = $('.qun-down:contains(' + name + ')').childern().html();
-							$('.qun-down:contains(' + name + ')').childern().html(Number(count) + 1);
-
-						};
+							var count = $('.qun-down:contains(' + name + ')').children().html();
+							$('.qun-down:contains(' + name + ')').children().html(Number(count) + 1);
+						}
 						$('.add-success').html(result.err_msg);
 						$('.add-success').show();
 						$('.qun-down').popover('hide');
