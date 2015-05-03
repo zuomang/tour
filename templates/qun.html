@@ -125,12 +125,22 @@
   				$('[data-toggle="popover"]').popover()
 			});
 			$('.qun-down').click(function() {
+				$('[data-toggle="popover"]').popover();
 				id = $(this).data('id');
 				name = $(this).data('name');
-				$(this).attr("data-content", '<div><h5>你确定加入' + name + '</h5><button type="button" class="btn btn-warning qun-add">确定</button></div>');
+				$(this).attr("data-content", '<div><h5>你确定加入' + name + '</h5>' + '
+					<button type="button" class="btn btn-warning qun-add">确定</button>' + '
+					<button type="button" class="btn btn-danger qun-cancle">取消</button></div>');
 				$(this).popover();
 			});
+			$(document).on("click", '.qun-cancle', function() {
+				$('[data-toggle="popover"]').popover();
+			});
 			$(document).on("click", '.qun-add', function() {
+				data = {
+					id : id
+				};
+				alert(data.id);
 				$.ajax({
 					type: "POST",
 					url: "{{ url_for('qun_info') }}",

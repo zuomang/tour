@@ -101,7 +101,9 @@ def qun_info():
 		try:
 			user = Custormer.query.filter_by(openid = openid).first()
 			info = Qun.query.filter_by(id = qun_id).first()
+			info.member_count + 1
 			user.quns.append(info)
+			db.commit()
 		except Exception, ex:
 			print 'Exception: ', ex
         else:
