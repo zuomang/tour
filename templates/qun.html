@@ -131,6 +131,10 @@
 				$(this).popover();
 			});
 			$(document).on("click", '.qun-add', function() {
+				data = {
+					id : id
+				};
+				alert(data.id);
 				$.ajax({
 					type: "POST",
 					url: "{{ url_for('qun_info') }}",
@@ -139,7 +143,7 @@
 					success: function(result) {
 						if (result.err_code == 'E0000') {
 							alert('你成功加入' + name);
-						};
+						}
 					}
 				});
 			});
