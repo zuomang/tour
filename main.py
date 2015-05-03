@@ -12,32 +12,32 @@ app.config.from_envvar('FLASK_TEST_SETTINGS')
 app.secret_key = 'test'
 
 def get_db():
-    if not hasattr(g, 'db_session'):
-        g.db_session = db.session
-    return g.db_session
+	if not hasattr(g, 'db_session'):
+		g.db_session = db.session
+	return g.db_session
 
 @app.route('/', methods=['GET'])
 def wechat_auth():
-    if request.method == 'GET':
-        token = "test"
-        query = request.args
-        signature = query.get('signature', '')
-        timestamp = query.get('timestamp', '')
-        nonce = query.get('nonce', '')
-        echostr = query.get('echostr', '')
+	if request.method == 'GET':
+		token = "test"
+		query = request.args
+		signature = query.get('signature', '')
+		timestamp = query.get('timestamp', '')
+		nonce = query.get('nonce', '')
+		echostr = query.get('echostr', '')
 
-        s = [timestamp, nonce, token]
-        s.sort()
-        s = ''.join(s)
-        if (hashlib.sha1(s).hexdigest() == signature):
-            return make_response(echostr)
+		s = [timestamp, nonce, token]
+		s.sort()
+		s = ''.join(s)
+		if (hashlib.sha1(s).hexdigest() == signature):
+			return make_response(echostr)
 
 @app.route('/info', methods=['GET'])
 def info():
-    if request.method == 'GET':
-        if util.check_bing(request) == None:
+	if request.method == 'GET':
+		if util.check_bing(request) == None:
 			return render_template('bing.html')
-        else:
+		else:
 			openid = session['openid']
 			user = Custormer.query.filter_by(openid = openid).first()
 			members = user.quns
@@ -62,7 +62,7 @@ def bing():
 
 @app.route('/qun', methods=['GET'])
 def qun():
-    if request.method == 'GET':
+	if request.method == 'GET':
 		if util.check_bing(request) == None:
 			return render_template('bing.html')
 		else:
@@ -100,9 +100,10 @@ def qun_info():
 		try:
 			user = Custormer.query.filter_by(openid = openid).first()
 			qun = Qun.query.filter_by(id = qun_id).first()
-			if qun in user.quns:
-				#return jsonify(err_code = 'E0001', err_msg = '加入失败，你已经加入过这个群')
-			elif (user.quns.len == 8):
+			if (qun in user.quns):
+				pass
+                #return jsonify(err_code = 'E0001', err_msg = '加入失败，你已经加入过这个群')
+			elif (len(user.quns) == 8):
 				return jsonify(err_code = 'E0002', err_msg = '你最多只能加入八个群')
 			else:
 				qun.member_count += 1
