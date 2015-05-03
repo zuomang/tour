@@ -101,8 +101,7 @@ def qun_info():
 			user = Custormer.query.filter_by(openid = openid).first()
 			qun = Qun.query.filter_by(id = qun_id).first()
 			if (qun in user.quns):
-				pass
-                #return jsonify(err_code = 'E0001', err_msg = '加入失败，你已经加入过这个群')
+				return jsonify(err_code = 'E0001', err_msg = '加入失败，你已经加入过这个群')
 			elif (len(user.quns) == 8):
 				return jsonify(err_code = 'E0002', err_msg = '你最多只能加入八个群')
 			else:
