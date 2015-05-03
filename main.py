@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-from flask import Flask, request, make_response, render_template, g, session, redirect, url_for, jsonify
+from flask import Flask, request, make_response, render_template, g, session, redirect, url_for, jsonify, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 from models.table import Custormer, Qun, member, db
 from create_menu import url_qun
@@ -78,18 +78,18 @@ def qun():
 @app.route('/qun/create', methods=['POST'])
 def create():
 	openid = session['openid']
-	db = get_db()
-	user = Custormer.query.filter_by(openid = openid).first()
-
 	name = request.form['name']
 	build = request.form['build']
-	new_qun = Qun(name, user.phone, openid, build)
-	user.quns.append(new_qun)
-	db.add(new_qun)
+	db = get_db()
 	try:
+		user = Custormer.query.filter_by(openid = openid).first()
+		new_qun = Qun(name, user.phone, openid, build)
+		user.quns.append(new_qun)
+		db.add(new_qun)
 		db.commit()
 	except Exception, ex:
 		print 'Exception: ', ex
+		flash('创建群失败，稍后重试')
 	finally:
 		return redirect(url_qun)
 
