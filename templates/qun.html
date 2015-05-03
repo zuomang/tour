@@ -158,8 +158,8 @@
 						if (result.err_code == 'E0000') {
 							var count = Number($('.qun-down:contains(' + name + ')').children().html()) + 1;
 							$('.qun-down:contains(' + name + ')').children().html(count);
-							var listMyQun = document.getElementByClassName('list-my-qun');
-							listMyQun.append(addQunLi(name, count));
+							var listMyQun = document.getElementsByClassName('list-my-qun')[0];
+							listMyQun.appendChild(addQunLi(name, count));
 						}
 						$('.add-success').html(result.err_msg);
 						$('.add-success').show();
