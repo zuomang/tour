@@ -17,21 +17,21 @@ def get_access_token():
 	now = datetime.now()
 	try:
 		current_token = Token.query.filter_by(name = 'access_token').first()
-		interval = current_token.time - now
+		interval = now - current_token.time
 		if interval.seconds < 7000:
+			print "return old token"
 			return current_token.token
 		else:
+			print "return new token"
 			new_token = create_access_token()
 			new_time = datetime.now()
 			current_token.token = new_token
 			current_token.time = new_time
 			db.session.commit()
 			return new_token
-	except StatementError, e:
-		print 'StatementError: ', e
-		db.session.rollback()
 	except Exception, e:
 		print 'Exception', e
+		db.session.rollback()
 
 if __name__ == '__main__':
 	access_token = create_access_token()
