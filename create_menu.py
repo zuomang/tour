@@ -6,38 +6,55 @@ import requests, json, parameter, urllib
 
 info = urllib.quote_plus('http://www.quxhuan.com/info')
 qun = urllib.quote_plus('http://www.quxhuan.com/qun')
-url_base = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=STATE'
-
-url_info = url_base %(parameter.appid, info)
-url_qun = url_base %(parameter.appid, qun)
-
-menu = {
-    "button": [
-        {
-            "name": "我",
-            "sub_button": [
-                {
-                    "type": "view",
-                    "name": "我的信息",
-                    "url": url_info
-                },
-                {
-                    "type": "view",
-                    "name": "我的群",
-                    "url": url_qun
-                }
-            ]
-        }
-    ]
-}
-
+my_activity = urllib.quote_plus('http://www.quxhuan.com/my_activity')
+all_activity =  urllib.quote_plus('http://www.quxhuan.com/activity')
 token = get_access_token()
 
 url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s" %token
+url_base = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=STATE'
+url_info = url_base %(parameter.appid, info)
+url_qun = url_base %(parameter.appid, qun)
+url_my_activity = url_base %(parameter.appid, my_activity)
+url_all_activity = url_base %(parameter.appid, all_activity)
 
-r = requests.post(url, data = json.dumps(menu, ensure_ascii=False))
-if r.json().get('errcode') == 0:
-    print "create menu success"
-else:
-	print r.json().get('errmsg')
-# print url_info
+menu = {
+	"button": [
+			{
+			"name": "活动",
+			"sub_button": [
+				{
+					"type": "view",
+					"name": "全部信息",
+					"url": url_all_activity
+				}
+			]
+		},
+		{
+			"name": "我",
+			"sub_button": [
+				{
+					"type": "view",
+					"name": "我的信息",
+					"url": url_info
+				},
+				{
+					"type": "view",
+					"name": "我的群",
+					"url": url_qun
+				},
+				{
+					"type": "view",
+					"name": "我的活动",
+					"url": url_my_activity
+				}
+			]
+		}
+	]
+}
+
+if __name__ == '__main__':
+	r = requests.post(url, data = json.dumps(menu, ensure_ascii=False))
+	if r.json().get('errcode') == 0:
+		print "create menu success"
+	else:
+	   print r.json().get('errmsg')
