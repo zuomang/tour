@@ -68,6 +68,7 @@ class Activity(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	name = db.Column(db.String(20), nullable = False)
 	owner = db.Column(db.String(28), nullable = False)
+	description = db.Column(db.String(200))
 	partici_fee = db.Column(db.String(20), nullable = False)
 	cost = db.Column(db.String(20), nullable = False)
 
