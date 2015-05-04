@@ -3,7 +3,7 @@
 
 from flask import Flask, request, make_response, render_template, g, session, redirect, url_for, jsonify, flash
 from flask.ext.sqlalchemy import SQLAlchemy
-from models.table import Custormer, Qun, member, db
+from models.table import Custormer, Qun, member, db, Activity
 from create_menu import url_qun
 import hashlib
 import util
@@ -114,6 +114,49 @@ def qun_info():
 				return jsonify(err_code = 'E0000', err_msg = '你已成功加入')
 		except Exception, e:
 			print 'Exception: ', e
+
+@app.route('/qun/exit', methods = ['POST'])
+def qun_exit():
+	if request.method == 'POST':
+		openid = session['openid']
+		qun_id = request.json['id']
+		db = get_db
+		try:
+			user = Custormer.query.filter_by(openid = openid).first()
+			qun = Qun.query.filter_by(id = qun_id).first()
+			if (qun_id not in user.quns):
+				return jsonify(err_code = 'E0001', err_msg = '对不起，你还没有加入该群')
+			else:
+				user.quns.remove(qun)
+				qun.member_count -= 1
+				db.commit()
+				return jsonify(err_code = 'E0000', err_msg = '你已经退出了该群')
+		except Exception, e:
+			print 'Exception: ', e
+
+@app.route('/activity', methods = ['GET', 'POST'])
+def activity():
+	if request.method == 'GET':
+		if util.check_bing(request) == None:
+			return render_template('bing.html')
+		else:
+			openid = session['openid']
+			page_size = 10
+			page_number = 1
+			activity_count = len(Activity.query.all())
+			activitys = Activity.query.paginate(page_number, page_size, False)
+			return render_template('activity.html', activitys = activitys.items, count = activity_count)
+
+	if request.method == 'POST':
+		openid = session['openid']
+		page_size = 10
+		page_number = request.json['pageNumber']
+		try:
+			activitys = Activity.query.paginate(page_number, page_size, False)
+			if activitys:
+				return jsonify(err_code = 'E0000', err_msg = 'success', data = activitys.items)
+		except Exception, e:
+			print 'Exception', e
 
 if __name__ == '__main__':
 	app.run()
