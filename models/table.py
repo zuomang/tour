@@ -53,9 +53,9 @@ class Qun(db.Model):
 		return '<Qun %r>' % self.name
 
 class Token(db.Model):
-	name = db.Column(db.String(20), unique = True)
-	token = db.Column(db.String(150), nullable = False)
-	time = db.Column(db.DateTime, default = datetime.now())
+	name = db.Column(db.String(20), primary_key=True)
+	token = db.Column(db.String(150), nullable=False)
+	time = db.Column(db.DateTime, default=datetime.now())
 
 	def __init__(self, name, token):
 		self.name = name
@@ -69,7 +69,7 @@ class Activity(db.Model):
 	name = db.Column(db.String(20), nullable = False)
 	owner = db.Column(db.String(28), nullable = False)
 	partici_fee = db.Column(db.String(20), nullable = False)
-	cost = db.Column(db.String, nullable = False)
+	cost = db.Column(db.String(20), nullable = False)
 
 	def __init__(self, name, owner, partici_fee, cost):
 		self.name = name
