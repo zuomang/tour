@@ -3,7 +3,7 @@
 {% block style %}
 <style type="text/css">
 	.test {
-	    margin-top: 5px;
+		margin-top: 5px;
 	}
 	p {
 		font-size:12px;
@@ -14,17 +14,16 @@
 </style>
 {% endblock %}
 {% block content %}
-    		<br>
 			<div role="tabpanel">
 				<ul class="nav nav-tabs" role="tablist">
 					<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">已加入</a></li>
-				    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">我的群</a></li>
-				    <li role="presentation"><a href="#all" aria-controls="all" role="tab" data-toggle="tab">群部落</a></li>
+					<li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">我的群</a></li>
+					<li role="presentation"><a href="#all" aria-controls="all" role="tab" data-toggle="tab">群部落</a></li>
 				</ul>
-			  	<div class="tab-content">
-			    	<div role="tabpanel" class="tab-pane active" id="home">
-			    		<div class="alert alert-danger test" role="alert">每个用户最多只能加入8个群</div>
-			    		{% if my_quns %}
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="home">
+						<div class="alert alert-danger test" role="alert">每个用户最多只能加入8个群</div>
+						{% if my_quns %}
 						<ul class="list-group list-my-qun">
 							{% for q in my_quns %}
 							<li class="list-group-item list-group-item-info"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
@@ -33,12 +32,12 @@
 						{% else %}
 							<div class="alert alert-info" role="alert">你还没有加入任何一个群</div>
 						{% endif %}
-			    	</div>
-			    	<div role="tabpanel" class="tab-pane" id="profile">
-			    		<div class="alert alert-info test" role="alert">每个用户只能创建一个属于自己的群</div>
-			    		{% if my_qun %}
-			    		<table class="table">
-			    			<tbody>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="profile">
+						<div class="alert alert-info test" role="alert">每个用户只能创建一个属于自己的群</div>
+						{% if my_qun %}
+						<table class="table">
+							<tbody>
 								<tr>
 									<td class="text-primary"><strong>群名称</strong></td>
 									<td>{{ my_qun.name }}</td>
@@ -69,15 +68,15 @@
 								</tr>
 							</tbody>
 						</table>
-			    		{% else %}
-			    			<div class="jumbotron">
+						{% else %}
+							<div class="jumbotron">
 								<p><small>你现在还没有创建输入你自己的群</small></p>
 								<p class="text-primary"><small>只有当成群员人数超过10人，你才可以成为群主</small></p>
 								<p class="text-center"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create">创建群</button></p>
 							</div>
-			    		{% endif %}
-			    	</div>
-			    	<div role="tabpanel" class="tab-pane" id="all">
+						{% endif %}
+					</div>
+					<div role="tabpanel" class="tab-pane" id="all">
 						<div class="alert alert-info test" role="alert">在这里你可以看见所有的群</div>
 						<div class="alert alert-success add-success" role="alert"></div>
 						<ul class="list-group">
@@ -85,52 +84,52 @@
 							<li class="list-group-item list-group-item-info qun-down" data-id="{{ q.id }}" data-name="{{ q.name }}" data-toggle="popover" data-placement="bottom" data-html="true"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
 							{% endfor %}
 						</ul>
-			    	</div>
-			  	</div>
+					</div>
+				</div>
 			</div>
 
 			<div class="modal fade" id="create" tabindex="-8" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
-				    <div class="modal-content">
+					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 							<h4 class="modal-title">新建群</h4>
-				     	</div>
-				    	<div class="modal-body">
-				    		<form class="form-horizontal" method="post" action="{{ url_for('create') }}">
-					            <div class="form-group">
-					                <label for="name" class="col-xs-offset-1 col-xs-3 control-label">群名称</label>
-					                <div class="col-xs-7">
-					                    <input type="text" name="name" class="form-control" id="name" placeholder="请输入你的群名称">
-					                </div>
-					            </div>
-					            <div class="form-group">
-					                <label for="build" class="col-xs-offset-1 col-xs-3 control-label">建设资金</label>
-					                <div class="col-xs-7">
-					                    <input type="text" name="build" class="form-control" id="build" placeholder="请输入你的建设资金" maxlength="11">
-					                </div>
-					            </div>
-					            <div class="form-group">
-					                <div class="col-xs-offset-3 col-xs-2">
-					                    <button type="submit" id="submit" class="btn btn-primary">确定</button>
-					                </div>
-					                <div class="col-xs-offset-2 col-xs-2">
-					                    <button type="reset" id="reset" class="btn btn-danger">重置</button>
-					                </div>
-					            </div>
-				    		</form>
-				    	</div>
-				    </div><!-- /.modal-content -->
-			  	</div><!-- /.modal-dialog -->
+						</div>
+						<div class="modal-body">
+							<form class="form-horizontal" method="post" action="{{ url_for('create') }}">
+								<div class="form-group">
+									<label for="name" class="col-xs-offset-1 col-xs-3 control-label">群名称</label>
+									<div class="col-xs-7">
+										<input type="text" name="name" class="form-control" id="name" placeholder="请输入你的群名称">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="build" class="col-xs-offset-1 col-xs-3 control-label">建设资金</label>
+									<div class="col-xs-7">
+										<input type="text" name="build" class="form-control" id="build" placeholder="请输入你的建设资金" maxlength="11">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-xs-offset-3 col-xs-2">
+										<button type="submit" id="submit" class="btn btn-primary">确定</button>
+									</div>
+									<div class="col-xs-offset-2 col-xs-2">
+										<button type="reset" id="reset" class="btn btn-danger">重置</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
 			</div>
 			<script type="text/javascript">
 			var name, id;
 			$(function () {
-  				$('[data-toggle="popover"]').popover();
-  				$('.add-success').hide();
+				$('[data-toggle="popover"]').popover();
+				$('.add-success').hide();
 			});
 			$('.qun-down').click(function() {
-  				$('.add-success').hide();
+				$('.add-success').hide();
 				$('.qun-down').popover('hide');
 				id = $(this).data('id');
 				name = $(this).data('name');

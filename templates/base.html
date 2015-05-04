@@ -1,62 +1,63 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
-        <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 
-        <title>{% block title %}{% endblock %}</title>
+		<title>{% block title %}{% endblock %}</title>
 
-        <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
-        <script type="text/javascript" src="../static/js/ie-emulation-modes-warning.js"></script>
-        <script type="text/javascript" src="../static/js/jquery.min.js"></script>
-        <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="../static/js/ie10-viewport-bug-workaround.js"></script>
+		<!--<link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
+		<script type="text/javascript" src="../static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../static/js/bootstrap.min.js"></script>-->
+		<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<script type="text/javascript" src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+		<script type="text/javascript" src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>   
 
-        <!-- <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet"> -->
-        <link href="http://v3.bootcss.com/examples/starter-template/starter-template.css" rel="stylesheet">
-        <!-- // <script src="./Starter Template for Bootstrap_files/ie-emulation-modes-warning.js"></script> -->
-        
-        {% block style %}{% endblock %}
-    </head>
-    <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-    expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">撒欢吧兄弟</a>
-                </div>
-                <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">我的信息</a></li>
-                        <li><a href="#">我的群</a></li>
-                        <li><a href="#">我的活动</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+		<!-- <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet"> -->
+		<link href="http://v3.bootcss.com/examples/starter-template/starter-template.css" rel="stylesheet">
+		<!-- // <script src="./Starter Template for Bootstrap_files/ie-emulation-modes-warning.js"></script> -->
+		
+		{% block style %}{% endblock %}
+	</head>
+	<body>
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-    expanded="false" aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">撒欢吧兄弟</a>
+				</div>
+				<div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="#">我的信息</a></li>
+						<li><a href="#">我的群</a></li>
+						<li><a href="#">我的活动</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
 
-        <div class="container">
-            <br>
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                <div class="row">
-                    <ul class="list-group">
-                    {% for message in messages %}
-                        <li class="list-group-item list-group-item-info">{{ message }}</li>
-                    {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
-            {% endwith %}
-            {% block content %}{% endblock %}
-        </div>
-    </body>
+		<div class="container">
+			<br>
+			{% with messages = get_flashed_messages() %}
+				{% if messages %}
+				<div class="row">
+					<ul class="list-group">
+					{% for message in messages %}
+						<li class="list-group-item list-group-item-info">{{ message }}</li>
+					{% endfor %}
+					</ul>
+				</div>
+				{% endif %}
+			{% endwith %}
+			{% block content %}{% endblock %}
+		</div>
+	</body>
 </html>
