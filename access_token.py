@@ -19,10 +19,8 @@ def get_access_token():
 		current_token = Token.query.filter_by(name = 'access_token').first()
 		interval = now - current_token.time
 		if interval.seconds < 7000:
-			print "return old token"
 			return current_token.token
 		else:
-			print "return new token"
 			new_token = create_access_token()
 			new_time = datetime.now()
 			current_token.token = new_token
