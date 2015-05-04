@@ -1,17 +1,24 @@
 {% extends "base.html" %}
-{% block title %}我的信息{% endblock %}
-
+{% block title %}全部活动{% endblock %}
+{% block style %}
+<style>
+	.btn-right {
+		margin-left:24%;
+		margin-right:20px;
+	}
+</style>
+{% endblock %}
 {% block content %}
 <div class="row">
 	{% if activitys %}
 		<div class="col-xs-12">
 			{% for a in activitys %}
-			<div class="thumbnail bg-info">
+			<div class="thumbnail">
 				<div class="caption">
-					<h3>{{ a.name }}</h3>
+					<h4>{{ a.name }}</h4>
 					<p>{{ a.description }}</p>
 					<p>活动费用：<red>{{ a.partici_fee }}</red></p>
-					<p><button type="button" class="btn btn-info btn-default" data-id="{{ a.id }}">参加</button></p>
+					<p><button type="button" class="btn btn-info btn-default btn-right" data-id="{{ a.id }}">参加</button><botto type="button" class="btn btn-danger">查看详情</button></p>
 			  	</div>
 			</div>
 			{% endfor %}
@@ -34,7 +41,7 @@
  			}
  			$.ajax({
  				type: "POST",
- 				url: "{{ url_for(activity) }}",
+ 				url: "{{ url_for('activity') }}",
  				data: JSON.stringify(data, null, '\t'),
  				contentType: 'application/json;charset=UTF-8',
  				success: function(result) {
