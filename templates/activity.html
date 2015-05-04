@@ -16,7 +16,9 @@
 			<div class="thumbnail">
 				<div class="caption">
 					<h4>{{ a.name }}</h4>
-					<p>{{ a.description }}</p>
+					{% if a.description %}
+						<p>{{ a.description[:80] }}</p>
+					{% endif %}
 					<p>活动费用：<red>{{ a.partici_fee }}</red></p>
 					<p><button type="button" class="btn btn-info btn-default btn-right" data-id="{{ a.id }}">参加</button><botto type="button" class="btn btn-danger">查看详情</button></p>
 			  	</div>
