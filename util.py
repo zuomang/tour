@@ -25,9 +25,7 @@ def check_bing(request):
 	try:
 		flag = Custormer.query.filter_by(openid = id).first()
 		db.session.commit()
-	except StatementError, e:
-		print 'StatementError: ', e
-		db.session.rollback()
 	except Exception, e:
 		print 'Exception: ', e
+		db.session.rollback()
 	return flag
