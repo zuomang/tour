@@ -89,7 +89,8 @@ def create():
 		db.commit()
 	except Exception, ex:
 		print 'Exception: ', ex
-		flash('创建群失败，稍后重试')
+		session.pop('_flashes', None)
+		flash(u'创建群失败')
 	finally:
 		return redirect(url_qun)
 
