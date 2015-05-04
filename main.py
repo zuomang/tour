@@ -9,7 +9,7 @@ import hashlib
 import util
 app = Flask(__name__)
 app.config.from_envvar('FLASK_TEST_SETTINGS')
-app.secret_key = 'test'
+app.secret_key = '5wpfXy4MD8YhfXhbbtpk7H3X'
 
 def get_db():
 	if not hasattr(g, 'db_session'):
@@ -19,7 +19,7 @@ def get_db():
 @app.route('/', methods=['GET'])
 def wechat_auth():
 	if request.method == 'GET':
-		token = "test"
+		token = "cCPnbiQ3yFDEdkeQcEdf7jsX"
 		query = request.args
 		signature = query.get('signature', '')
 		timestamp = query.get('timestamp', '')
