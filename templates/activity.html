@@ -36,7 +36,8 @@
 	{% else %}
 		<div class="alert alert-info" role="alert">目前还没有发布任何活动</div>
 	{% endif %}
-	<script type="text/javascript">
+</div>
+<script type="text/javascript">
 		$('#down-page').click(function() {
 			var pageNumber = $(this).data('number');
 			var data = {
@@ -65,7 +66,7 @@
 			thumbnail.setAttribute("class", "thumbnail");
 
 			var caption = document.createElement('div');
-			caption..setAttribute("class", "caption");
+			caption.setAttribute("class", "caption");
 
 			var h = document.createElement('h4');
 			var t = document.createTextNode(data.name);
@@ -85,5 +86,4 @@
 			return thumbnail.appendChild(caption);
 		}
 	</script>
-</div>
 {% endblock %}
