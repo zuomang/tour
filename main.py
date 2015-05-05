@@ -138,7 +138,11 @@ def qun_exit():
 @app.route('/activity', methods = ['GET', 'POST'])
 def activity():
 	if request.method == 'GET':
-		return render_template('activity.html')
+			page_size = 10
+			page_number = 1
+			activity_count = len(Activity.query.all())
+			activitys = Activity.query.paginate(page_number, page_size, False)
+			return render_template('activity.html', activitys = activitys.items, count = activity_count)
 
 	if request.method == 'POST':
 		page_size = 10
