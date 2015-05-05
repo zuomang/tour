@@ -7,6 +7,7 @@ from models.table import Custormer, Qun, member, db, Activity
 from create_menu import url_qun
 import hashlib
 import util
+
 app = Flask(__name__)
 app.config.from_envvar('FLASK_TEST_SETTINGS')
 app.secret_key = '5wpfXy4MD8YhfXhbbtpk7H3X'
@@ -137,10 +138,6 @@ def qun_exit():
 @app.route('/activity', methods = ['GET', 'POST'])
 def activity():
 	if request.method == 'GET':
-		if util.check_bing(request) == None:
-			return render_template('bing.html')
-		else:
-			openid = session['openid']
 			page_size = 10
 			page_number = 1
 			activity_count = len(Activity.query.all())
@@ -148,13 +145,13 @@ def activity():
 			return render_template('activity.html', activitys = activitys.items, count = activity_count)
 
 	if request.method == 'POST':
-		openid = session['openid']
 		page_size = 10
 		page_number = request.json['pageNumber']
 		try:
 			activitys = Activity.query.paginate(page_number, page_size, False)
 			if activitys:
-				return jsonify(err_code = 'E0000', err_msg = 'success', data = activitys.items)
+				temp = util.list_and_obj(activitys.items)
+				return jsonify({'err_code' : 'E0000', 'err_msg': 'success', 'data': temp})
 		except Exception, e:
 			print 'Exception', e
 

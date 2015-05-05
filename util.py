@@ -5,8 +5,15 @@ from datetime import datetime
 import requests
 from flask import session, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
-from models.table import Custormer, db
+from models.table import Custormer, db, Activity
 import parameter
+import json
+
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, Activity):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
 
 def now():
 	return datetime.now()
@@ -29,3 +36,16 @@ def check_bing(request):
 		print 'Exception: ', e
 		db.session.rollback()
 	return flag
+
+def obj_to_dict(obj):
+	pr = {}
+	pr['name'] = obj.name
+	pr['partici_fee'] = obj.partici_fee
+	return pr
+
+def list_and_obj(activitys):
+	temp = []
+	for a in activitys:
+		t = obj_to_dict(a)
+		temp.append(t)
+	return temp

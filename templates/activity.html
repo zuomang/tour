@@ -38,29 +38,6 @@
 	{% endif %}
 </div>
 <script type="text/javascript">
-		$('#down-page').click(function() {
-			var pageNumber = $(this).data('number');
-			var data = {
-				pageNumber : pageNumber
-			}
-			$.ajax({
-				type: "POST",
-				url: "{{ url_for('activity') }}",
-				data: JSON.stringify(data, null, '\t'),
-				contentType: 'application/json;charset=UTF-8',
-				success: function(result) {
-					if (result.err_code == 'E0000') {
-						alert('success');
-						$('.all-activity').empty();
-						var allActivityList = document.getElementsByClassName('all-activity');
-						result.data.forEach(function(d) {
-							allActivityList.appendChild(createActivityDiv(d));
-						});
-					}
-				}
-			})
-		});
-
 		var createActivityDiv = function(data) {
 			var thumbnail = document.createElement('div');
 			thumbnail.setAttribute("class", "thumbnail");
@@ -74,16 +51,35 @@
 			caption.appendChild(h);
 
 			var h = document.createElement('p');
-			var t = document.createTextNode(data.description);
-			h.appendChild(t);
-			caption.appendChild(h);
-
-			var h = document.createElement('p');
 			var t = document.createTextNode(data.partici_fee);
 			h.appendChild(t);
 			caption.appendChild(h);
 
-			return thumbnail.appendChild(caption);
-		}
+			thumbnail.appendChild(caption);
+			return thumbnail;
+		};
+		$(document).on('click', '#down-page', function() {
+			var pageNumber = $(this).data('number');
+			var data = {
+				pageNumber : pageNumber
+			}
+			$.ajax({
+				type: "POST",
+				url: "{{ url_for('activity') }}",
+				data: JSON.stringify(data, null, '\t'),
+				contentType: 'application/json;charset=UTF-8',
+				success: function(result) {
+					if (result.err_code == 'E0000') {
+						$('.all-activity').empty();
+						var allActivityList = document.getElementsByClassName('all-activity');
+						result.data.forEach(function(e) {
+							console.log(e);
+							allActivityList[0].appendChild(createActivityDiv(e));
+						});
+					}
+				}
+			});
+		});
+
 	</script>
 {% endblock %}
