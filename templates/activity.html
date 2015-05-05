@@ -91,7 +91,8 @@
 						result.data.forEach(function(e) {
 							allActivityList.appendChild(createActivityDiv(e));
 							var pageCount = Math.ceil(result.count/10);
-							var pageContainer = document.getElementsByClassName('page')[0];
+							$('.pager').empty();
+							var pageContainer = document.getElementsByClassName('pager')[0];
 							if (pageNumber < pageCount) {
 								if (pageNumber == 1) {
 									pageContainer.appendChild(page('next', pageNumber + 1, '下一页'));
