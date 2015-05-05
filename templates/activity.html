@@ -10,57 +10,35 @@
 {% endblock %}
 {% block content %}
 <div class="row">
-	{% if activitys %}
-		<div class="col-xs-12 all-activity">
-			{% for a in activitys %}
-			<div class="thumbnail">
-				<div class="caption">
-					<h4>{{ a.name }}</h4>
-					{% if a.description %}
-						<p>{{ a.description[:80] }}</p>
-					{% endif %}
-					<p>活动费用：{{ a.partici_fee }}</p>
-					<p><button type="button" class="btn btn-info btn-default btn-right" data-id="{{ a.id }}">参加</button>
-						<botto type="button" class="btn btn-danger">查看详情</button></p>
-				</div>
-			</div>
-			{% endfor %}
-		</div>
-		{% if (count > 10) %}
-		<nav>
-			<ul class="pager">
-				<li class="next"><a href="#" data-number="2" id="down-page">下一页<span aria-hidden="true">&rarr;</span></a></li>
-			</ul>
-		</nav>
-		{% endif %}
-	{% else %}
-		<div class="alert alert-info" role="alert">目前还没有发布任何活动</div>
-	{% endif %}
+	<div class="col-xs-12 all-activity">
+	</div>
+	<div class="alert alert-info" role="alert">目前还没有发布任何活动</div>
 </div>
 <script type="text/javascript">
-		var createActivityDiv = function(data) {
-			var thumbnail = document.createElement('div');
-			thumbnail.setAttribute("class", "thumbnail");
+	var pageNumber = 1;
 
-			var caption = document.createElement('div');
-			caption.setAttribute("class", "caption");
+	var createActivityDiv = function(data) {
+		var thumbnail = document.createElement('div');
+		thumbnail.setAttribute("class", "thumbnail");
 
-			var h = document.createElement('h4');
-			var t = document.createTextNode(data.name);
-			h.appendChild(t);
-			caption.appendChild(h);
+		var caption = document.createElement('div');
+		caption.setAttribute("class", "caption");
+		var h = document.createElement('h4');
+		var t = document.createTextNode(data.name);
+		h.appendChild(t);
+		caption.appendChild(h);
 
-			var h = document.createElement('p');
-			var t = document.createTextNode(data.partici_fee);
-			h.appendChild(t);
-			caption.appendChild(h);
+		var h = document.createElement('p');
+		var t = document.createTextNode(data.partici_fee);
+		h.appendChild(t);
+		caption.appendChild(h);
 
-			thumbnail.appendChild(caption);
-			return thumbnail;
-		};
-		$(document).on('click', '#down-page', function() {
-			var pageNumber = $(this).data('number');
-			var data = {
+		thumbnail.appendChild(caption);
+		return thumbnail;
+	};
+
+	$(document).ready(function () {
+		var data = {
 				pageNumber : pageNumber
 			}
 			$.ajax({
@@ -73,13 +51,11 @@
 						$('.all-activity').empty();
 						var allActivityList = document.getElementsByClassName('all-activity');
 						result.data.forEach(function(e) {
-							console.log(e);
 							allActivityList[0].appendChild(createActivityDiv(e));
 						});
 					}
 				}
 			});
-		});
-
-	</script>
+	})
+</script>
 {% endblock %}

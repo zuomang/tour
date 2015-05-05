@@ -138,20 +138,17 @@ def qun_exit():
 @app.route('/activity', methods = ['GET', 'POST'])
 def activity():
 	if request.method == 'GET':
-			page_size = 10
-			page_number = 1
-			activity_count = len(Activity.query.all())
-			activitys = Activity.query.paginate(page_number, page_size, False)
-			return render_template('activity.html', activitys = activitys.items, count = activity_count)
+		return render_template('activity.html')
 
 	if request.method == 'POST':
 		page_size = 10
 		page_number = request.json['pageNumber']
 		try:
+			activity_count = len(Activity.query.all())
 			activitys = Activity.query.paginate(page_number, page_size, False)
 			if activitys:
 				temp = util.list_and_obj(activitys.items)
-				return jsonify({'err_code' : 'E0000', 'err_msg': 'success', 'data': temp})
+				return jsonify({'err_code' : 'E0000', 'err_msg': 'success', 'data': temp, 'count': activity_count})
 		except Exception, e:
 			print 'Exception', e
 
