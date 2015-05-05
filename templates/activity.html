@@ -10,35 +10,73 @@
 {% endblock %}
 {% block content %}
 <div class="row">
-	<div class="col-xs-12 all-activity">
-	</div>
-	<div class="alert alert-info" role="alert">目前还没有发布任何活动</div>
+	{% if activitys %}
+		<div class="col-xs-12 all-activity">
+			{% for a in activitys %}
+			<div class="thumbnail">
+				<div class="caption">
+					<h4>{{ a.name }}</h4>
+					{% if a.description %}
+						<p>{{ a.description[:80] }}</p>
+					{% endif %}
+					<p>活动费用：{{ a.partici_fee }}</p>
+					<p><button type="button" class="btn btn-info btn-default btn-right" data-id="{{ a.id }}">参加</button>
+						<botto type="button" class="btn btn-danger">查看详情</button></p>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		<nav>
+			<ul class="pager">
+				{% if (count > 10) %}
+				<li class="next"><a data-number="2" class="down">下一页</a></li>
+				{% endif %}
+			</ul>
+		</nav>
+	{% else %}
+		<div class="alert alert-info" role="alert">目前还没有发布任何活动</div>
+	{% endif %}
 </div>
 <script type="text/javascript">
-	var pageNumber = 1;
+		var createActivityDiv = function(data) {
+			var thumbnail = document.createElement('div');
+			thumbnail.setAttribute("class", "thumbnail");
 
-	var createActivityDiv = function(data) {
-		var thumbnail = document.createElement('div');
-		thumbnail.setAttribute("class", "thumbnail");
+			var caption = document.createElement('div');
+			caption.setAttribute("class", "caption");
 
-		var caption = document.createElement('div');
-		caption.setAttribute("class", "caption");
-		var h = document.createElement('h4');
-		var t = document.createTextNode(data.name);
-		h.appendChild(t);
-		caption.appendChild(h);
+			var h = document.createElement('h4');
+			var t = document.createTextNode(data.name);
+			h.appendChild(t);
+			caption.appendChild(h);
 
-		var h = document.createElement('p');
-		var t = document.createTextNode(data.partici_fee);
-		h.appendChild(t);
-		caption.appendChild(h);
+			var h = document.createElement('p');
+			var t = document.createTextNode(data.partici_fee);
+			h.appendChild(t);
+			caption.appendChild(h);
 
-		thumbnail.appendChild(caption);
-		return thumbnail;
-	};
+			thumbnail.appendChild(caption);
+			return thumbnail;
+		};
 
-	$(document).ready(function () {
-		var data = {
+		var page = function(cls, pageNumber, name) {
+			var page = document.createElement('li');
+			page.setAttribute("class", cls);
+
+			var a = document.createElement('a');
+			a.setAttribute("data-number", pageNumber);
+			a.setAttribute("class", 'down');
+
+			var t = document.createTextNode(name);
+			a.appendChild(t);
+			page.appendChild(a);
+
+			return page;
+		}
+
+		$(document).on('click', '.down', function() {
+			var pageNumber = $(this).data('number');
+			var data = {
 				pageNumber : pageNumber
 			}
 			$.ajax({
@@ -49,13 +87,27 @@
 				success: function(result) {
 					if (result.err_code == 'E0000') {
 						$('.all-activity').empty();
-						var allActivityList = document.getElementsByClassName('all-activity');
+						var allActivityList = document.getElementsByClassName('all-activity')[0];
 						result.data.forEach(function(e) {
-							allActivityList[0].appendChild(createActivityDiv(e));
+							allActivityList.appendChild(createActivityDiv(e));
+							var pageCount = Math.ceil(result.count/10);
+							var pageContainer = document.getElementsByClassName('page')[0];
+							if (pageNumber < pageCount) {
+								if (pageNumber == 1) {
+									pageContainer.appendChild(page('next', pageNumber + 1, '下一页'));
+								} else {
+									pageContainer.appendChild(page('previous', pageNumber - 1, '上一页'));
+									pageContainer.appendChild(page('next', pageNumber + 1, '下一页'));
+								}
+							} else {
+								if (pageNumber == pageCount) {
+									pageContainer.appendChild(page('previous', pageNumber - 1, '上一页'));
+								}
+							}
 						});
 					}
 				}
 			});
-	})
-</script>
+		});
+	</script>
 {% endblock %}
