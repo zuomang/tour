@@ -44,11 +44,12 @@ def obj_to_dict(obj):
 	pr['partici_fee'] = obj.partici_fee
 	pr['owner'] = obj.owner
 	pr['cost'] = obj.cost
+	pr['description'] = obj.description
 	return pr
 
 def list_and_obj(activitys):
 	temp = []
 	for a in activitys:
-		t = Activity_to_dict(a)
+		t = obj_to_dict(a)
 		temp.append(t)
 	return temp

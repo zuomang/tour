@@ -29,7 +29,7 @@
 		<nav>
 			<ul class="pager">
 				{% if (count > 10) %}
-				<li class="next"><a data-number="2" class="down">下一页</a></li>
+				<li class="next"><a href="#" data-number="2" class="down">下一页</a></li>
 				{% endif %}
 			</ul>
 		</nav>
@@ -90,8 +90,7 @@
 		var a = document.createElement('a');
 		a.setAttribute("data-number", pageNumber);
 		a.setAttribute("class", 'down');
-		a.setAttribute("href", "#");	//fix 触摸屏无法触发点击事件
-
+		a.setAttribute("href", "#");
 		var t = document.createTextNode(name);
 		a.appendChild(t);
 		page.appendChild(a);
@@ -99,7 +98,8 @@
 		return page;
 	}
 
-	$(document).on('click', '.down', function() {
+	$(document).on("click", ".down", function(event) {
+		event.preventDefault();
 		var pageNumber = $(this).data('number');
 		var data = {
 			pageNumber : pageNumber
@@ -135,4 +135,5 @@
 			}
 		});
 	});
+</script>
 {% endblock %}
