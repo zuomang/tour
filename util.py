@@ -39,13 +39,16 @@ def check_bing(request):
 
 def obj_to_dict(obj):
 	pr = {}
+	pr['id'] = obj.id
 	pr['name'] = obj.name
 	pr['partici_fee'] = obj.partici_fee
+	pr['owner'] = obj.owner
+	pr['cost'] = obj.cost
 	return pr
 
 def list_and_obj(activitys):
 	temp = []
 	for a in activitys:
-		t = obj_to_dict(a)
+		t = Activity_to_dict(a)
 		temp.append(t)
 	return temp
