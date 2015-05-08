@@ -79,7 +79,9 @@
 <script type="text/javascript">
 	$(function() {
 		$("#date").datetimepicker({
-			format: 'yyyymmdd'
+			format: "yyyy-mm-dd hh:ii",
+			autoclose: true,
+			autostep: 10
 		});
 	});
 	var createActivityDiv = function(data) {
