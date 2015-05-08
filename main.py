@@ -156,5 +156,22 @@ def activity():
 		except Exception, e:
 			print 'Exception', e
 
+@app.route('/activity/join', methods = ['GET', 'POST'])
+def activity_join():
+	if request.method == 'POST':
+		openid = "o3gd3jqcRYTOsPDgm0cgYSUa4UdA"
+		activity_id = request.json('activityId')
+		print activity_id
+		# openid = session.get("openid")
+		try:
+			user = Custormer.query.filter_by(openid = openid).first()
+			qun = Qun.query.filter_by(openid = openid).first()
+			if qun:
+				return jsonify('err_code': 'E0000', 'err_msg': 'success')
+			else:
+				return redirect(url_qun)
+		except Exception, e:
+			print 'Exception', e
+
 if __name__ == '__main__':
 	app.run()

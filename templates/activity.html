@@ -9,34 +9,69 @@
 </style>
 {% endblock %}
 {% block content %}
-<div class="row">
-	{% if activitys %}
-		<div class="col-xs-12 all-activity">
-			{% for a in activitys %}
-			<div class="thumbnail">
-				<div class="caption">
-					<h4>{{ a.name }}</h4>
-					{% if a.description %}
-						<p>{{ a.description[:80] }}</p>
-					{% endif %}
-					<p>活动费用：{{ a.partici_fee }}</p>
-					<p><button type="button" class="btn btn-info btn-default btn-right" data-id="{{ a.id }}">参加</button>
-						<botto type="button" class="btn btn-danger">查看详情</button></p>
-				</div>
-			</div>
-			{% endfor %}
-		</div>
-		<nav>
-			<ul class="pager">
-				{% if (count > 10) %}
-				<li class="next"><a href="#" data-number="2" class="down">下一页</a></li>
+			<div class="row">
+				{% if activitys %}
+					<div class="col-xs-12 all-activity">
+						{% for a in activitys %}
+						<div class="thumbnail">
+							<div class="caption">
+								<h4>{{ a.name }}</h4>
+								{% if a.description %}
+									<p>{{ a.description[:80] }}</p>
+								{% endif %}
+								<p>活动费用：{{ a.partici_fee }}</p>
+								<p><button type="button" class="btn btn-info btn-default btn-right" data-id="{{ a.id }}">参加</button>
+									<botto type="button" class="btn btn-danger">查看详情</button></p>
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+					<nav>
+						<ul class="pager">
+							{% if (count > 10) %}
+							<li class="next"><a href="#" data-number="2" class="down">下一页</a></li>
+							{% endif %}
+						</ul>
+					</nav>
+				{% else %}
+					<div class="alert alert-info" role="alert">目前还没有发布任何活动</div>
 				{% endif %}
-			</ul>
-		</nav>
-	{% else %}
-		<div class="alert alert-info" role="alert">目前还没有发布任何活动</div>
-	{% endif %}
-</div>
+			</div>
+
+			<div class="modal fade" id="create" tabindex="-8" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title">参加活动</h4>
+						</div>
+						<div class="modal-body">
+							<form class="form-horizontal" method="post" action="{{ url_for('create') }}">
+								<div class="form-group">
+									<label for="name" class="col-xs-offset-1 col-xs-3 control-label">群名称</label>
+									<div class="col-xs-7">
+										<input type="text" name="name" class="form-control" id="name" placeholder="请输入你的群名称">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="build" class="col-xs-offset-1 col-xs-3 control-label">建设资金</label>
+									<div class="col-xs-7">
+										<input type="text" name="build" class="form-control" id="build" placeholder="请输入你的建设资金" maxlength="11">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-xs-offset-3 col-xs-2">
+										<button type="submit" id="submit" class="btn btn-primary">确定</button>
+									</div>
+									<div class="col-xs-offset-2 col-xs-2">
+										<button type="reset" id="reset" class="btn btn-danger">重置</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div>
 <script type="text/javascript">
 	var createActivityDiv = function(data) {
 		var thumbnail = document.createElement('div');
@@ -98,6 +133,24 @@
 		return page;
 	}
 
+	$(document).on("click", ".btn-right", function(event) {
+		event.preventDefault();
+		var data = {
+			activityId : $(this).data('id')
+		}
+		$.ajax({
+			type: "POST",
+			url: "{{ url_for('activity_join') }}",
+			data: JSON.stringify(data, null, '\t'),
+			contentType: 'application/json;charset=UTF-8',
+			success: function(result) {
+				if (result.err_code == 'E0000') {
+					alert(err_msg);
+					$("#create").modal('show');
+				};
+			}
+		})
+	})
 	$(document).on("click", ".down", function(event) {
 		event.preventDefault();
 		var pageNumber = $(this).data('number');
