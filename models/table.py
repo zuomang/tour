@@ -15,13 +15,14 @@ member = db.Table('member',
 )
 
 class Custormer(db.Model):
-	openid = db.Column(db.String(40), primary_key=True)
-	username = db.Column(db.String(20), unique=True, nullable = False)
-	phone = db.Column(db.String(11), unique=True, nullable = False)
-	register_time = db.Column(db.DateTime, default = datetime.now())
-	rank = db.Column(db.Integer, default = 1)
-	quns = db.relationship('Qun', secondary=member,
-		backref = db.backref('custormers', lazy = 'dynamic'))
+	__bind_key__ = 'custormer'
+	Openid = db.Column(db.String(40), primary_key=True)
+	Username = db.Column(db.String(20), unique=True, nullable = False)
+	Phone = db.Column(db.String(11), unique=True, nullable = False)
+	Register_Time = db.Column(db.DateTime, default = datetime.now())
+	Rank = db.Column(db.Integer, default = 1)
+	Quns = db.relationship('Qun', secondary=member,
+		backref = db.backref('Custormers', lazy = 'dynamic'))
 
 	def __init__(self, openid, username, phone):
 		self.openid = openid
@@ -71,6 +72,8 @@ class Activity(db.Model):
 	description = db.Column(db.String(200))
 	partici_fee = db.Column(db.Float, nullable = False)
 	cost = db.Column(db.Float, nullable = False)
+	activity_details = db.relationship('ActivityDetail',
+		backref = db.backref('activity', lazy = 'dynamic'))
 
 	def __init__(self, name, owner, partici_fee, cost):
 		self.name = name
@@ -104,7 +107,7 @@ class ActivityDetail(db.Model):
 		self.qunbuilding_return = qunbuilding_return
 
 	def __repr__(self):
-		return '<ActivityDetail %r>' %self.id
-		
+		return '<ActivityDetail %r>' % self.id
+
 if __name__ == '__main__':
 	db.create_all()
