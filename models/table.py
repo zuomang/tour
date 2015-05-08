@@ -15,13 +15,14 @@ member = db.Table('member',
 )
 
 class Custormer(db.Model):
-	openid = db.Column(db.String(40), primary_key=True)
-	username = db.Column(db.String(20), unique=True, nullable = False)
-	phone = db.Column(db.String(11), unique=True, nullable = False)
-	register_time = db.Column(db.DateTime, default = datetime.now())
-	rank = db.Column(db.Integer, default = 1)
-	quns = db.relationship('Qun', secondary=member,
-		backref = db.backref('custormers', lazy = 'dynamic'))
+	__bind_key__ = 'custormer'
+	Openid = db.Column(db.String(40), primary_key=True)
+	Username = db.Column(db.String(20), unique=True, nullable = False)
+	Phone = db.Column(db.String(11), unique=True, nullable = False)
+	Register_Time = db.Column(db.DateTime, default = datetime.now())
+	Rank = db.Column(db.Integer, default = 1)
+	Quns = db.relationship('Qun', secondary=member,
+		backref = db.backref('Custormers', lazy = 'dynamic'))
 
 	def __init__(self, openid, username, phone):
 		self.openid = openid
@@ -80,6 +81,31 @@ class Activity(db.Model):
 
 	def __repr__(self):
 		return '<Activity %r>' % self.name
+
+class ActivityDetail(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	Activity_Id = db.Column(db.Integer, db.ForeignKey('Activity.id'))
+	Activity_Name = db.Column(db.String(20), nullable = False)
+	Activity_Date = db.Column(db.String(20), nullable = False)
+	Qun_Id = db.Column(db.Integer, db.ForeignKey('Qun.id'))
+	Custormer_Id = db.Column(db.String(20), db.ForeignKey('Custormer.openid'))
+	Accompany_Count = db.Column(db.Integer, nullable = False)
+	Activities_Pay = db.Column(db.Integer, nullable = False)
+	QunBuilding_Return = db.Column(db.Integer, nullable = False)
+
+	def __init__(self, Activity_Id, Activity_Name, Activity_Date, Qun_Id, Custormer_Id, Accompany_Count, Activities_Pay, QunBuilding_Return):
+		self.Activity_Id = Activity_Id
+		self.Activity_Name = Activity_Name
+		self.Activity_Date = Activity_Date
+		self.Qun_Id = Qun_Id
+		self.Custormer_Id = Custormer_Id
+		self.Accompany_Count = Accompany_Count
+		self.Activities_Pay = Activities_Pay
+		self.QunBuilding_Return = QunBuilding_Return
+
+	def __repr(self):
+		return '<ActivityDetail %r>' % self.ActivityDetail
+
 
 if __name__ == '__main__':
 	db.create_all()
