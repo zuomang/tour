@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block title %}全部活动{% endblock %}
 {% block jqueryPlugin %}
-<link rel="stylesheet" href="code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<script src="code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="../static/css/bootstrap-datetimepicker.min.css">
+<script src="../static/js/bootstrap-datetimepicker.min.js"></script>
 {% endblock %}
 {% block style %}
 <style>
@@ -78,7 +78,9 @@
 			</div>
 <script type="text/javascript">
 	$(function() {
-		$("#date").datepicker();
+		$("#date").datetimepicker({
+			format: 'yyyymmdd'
+		});
 	});
 	var createActivityDiv = function(data) {
 		var thumbnail = document.createElement('div');
