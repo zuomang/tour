@@ -160,16 +160,16 @@ def activity():
 def activity_join():
 	if request.method == 'POST':
 		openid = "o3gd3jqcRYTOsPDgm0cgYSUa4UdA"
-		activity_id = request.json('activityId')
+		activity_id = request.json['activityId']
 		print activity_id
 		# openid = session.get("openid")
 		try:
 			user = Custormer.query.filter_by(openid = openid).first()
 			qun = Qun.query.filter_by(openid = openid).first()
 			if qun:
-				return jsonify('err_code': 'E0000', 'err_msg': 'success')
+				return jsonify(err_code = 'E0000', err_msg = 'success')
 			else:
-				return redirect(url_qun)
+				return jsonify(err_code = 'E0001', err_msg = '你还没有属于自己的群')
 		except Exception, e:
 			print 'Exception', e
 

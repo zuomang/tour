@@ -145,7 +145,7 @@
 			contentType: 'application/json;charset=UTF-8',
 			success: function(result) {
 				if (result.err_code == 'E0000') {
-					alert(err_msg);
+					console.log(result.err_msg);
 					$("#create").modal('show');
 				};
 			}
