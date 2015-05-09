@@ -19,29 +19,13 @@ def now():
 	return datetime.now()
 
 def check_bing(request):
-    if session.get('openid'):
-        if not Custormer.query.filter_by(openid = session.get('openid')).first():
-            return False
-        else:
-            return True
-    else:
-        code = request.args.get('code', '')
-        data = {
-		    'appid': parameter.appid,
-		    'secret': parameter.appsecret,
-		    'code': code,
-		    'grant_type': 'authorization_code'
-	    }
-        result = requests.get('https://api.weixin.qq.com/sns/oauth2/access_token', params = data)
-        id = result.json().get('openid')
-        session['openid'] = id
-        try:
-		    flag = Custormer.query.filter_by(openid = id).first()
-		    db.session.commit()
-        except Exception, e:
-		    print 'Exception: ', e
-		    db.session.rollback()
+    openid = session.get['openid']
+    try:
+        flag = Custormer.query.filter_by(openid = openid).first()
         return flag
+    except Exception, e:
+        print 'Exception: ', e
+        db.session.rollback()
 
 def obj_to_dict(obj):
 	pr = {}
