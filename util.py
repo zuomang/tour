@@ -20,7 +20,10 @@ def now():
 
 def check_bing(request):
     if session.get('openid'):
-        return Custormer.query.filter_by(openid = id).first()
+        if not Custormer.query.filter_by(openid = session.get('openid')).first():
+			return False
+		else:
+			return True
     else:
         code = request.args.get('code', '')
         data = {
