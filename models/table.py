@@ -20,11 +20,9 @@ class Custormer(db.Model):
     username = db.Column(db.String(20), unique=True, nullable = False)
     phone = db.Column(db.String(11), unique=True, nullable = False)
     register_time = db.Column(db.DateTime, default = datetime.now())
-    Rank = db.Column(db.Integer, default = 1)
-    Quns = db.relationship('Qun', secondary=member,
-            backref = db.backref('Custormers', lazy = 'dynamic'))
-    activity_details = db.relationship('ActivityDetail',
-            backref = db.backref('custormer', lazy = 'dynamic'))
+    rank = db.Column(db.Integer, default = 1)
+    quns = db.relationship('Qun', secondary=member,
+            backref = db.backref('custormers', lazy = 'dynamic'))
 
     def __init__(self, openid, username, phone):
         self.openid = openid
@@ -46,8 +44,6 @@ class Qun(db.Model):
     extracted_fund = db.Column(db.Float, default = 0)
     balance_fund = db.Column(db.Float, default = 0)
     openid = db.Column(db.String(40), db.ForeignKey('custormer.openid'))
-    activity_details = db.relationship('ActivityDetail',
-            backref = db.backref('qun', lazy = 'dynamic'))
 
     def __init__(self, name, phone, openid, building_fund):
         self.name = name
@@ -79,8 +75,7 @@ class Activity(db.Model):
     description = db.Column(db.String(200))
     partici_fee = db.Column(db.Float, nullable = False)
     cost = db.Column(db.Float, nullable = False)
-    activity_details = db.relationship('ActivityDetail',
-            backref = db.backref('activity', lazy = 'dynamic'))
+    activity_details = db.relationship('ActivityDetail', backref = 'activity', lazy = 'dynamic')
 
     def __init__(self, name, owner, partici_fee, cost):
         self.name = name
@@ -97,8 +92,8 @@ class ActivityDetail(db.Model):
     activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'))
     activity_name = db.Column(db.String(20), nullable = False)
     activity_date = db.Column(db.String(20), nullable = False)
-    qunownr_id = db.Column(db.String(28), db.ForeignKey('custormer.openid'))
-    custormer_id = db.Column(db.String(28), db.ForeignKey('custormer.openid'))
+    qunownr_id = db.Column(db.String(28), nullable = False)
+    custormer_id = db.Column(db.String(28), nullable = False)
     accompany_count = db.Column(db.Integer, nullable = False)
     activity_pay = db.Column(db.Float, nullable = False)
     qunbuilding_return = db.Column(db.Float, nullable = False)
@@ -118,4 +113,5 @@ class ActivityDetail(db.Model):
         return '<ActivityDetail %r>' % self.id
 
 if __name__ == "__main__":
-    db.create_all()
+	db.drop_all()
+	db.create_all()

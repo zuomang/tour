@@ -33,6 +33,7 @@ def get_access_token():
 
 if __name__ == '__main__':
 	access_token = create_access_token()
+	print access_token
 	token = Token('access_token', access_token)
 	db.session.add(token)
 	db.session.commit()
