@@ -10,104 +10,112 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zmyjy1314@localhost/test'
 db = SQLAlchemy(app)
 
 member = db.Table('member',
-	db.Column('custormer_id', db.String(40), db.ForeignKey('custormer.openid')),
-	db.Column('qun_id', db.Integer, db.ForeignKey('qun.id')),
+    db.Column('custormer_id', db.String(40), db.ForeignKey('custormer.openid')),
+    db.Column('qun_id', db.Integer, db.ForeignKey('qun.id')),
 )
 
+
 class Custormer(db.Model):
-	__bind_key__ = 'custormer'
-	Openid = db.Column(db.String(40), primary_key=True)
-	Username = db.Column(db.String(20), unique=True, nullable = False)
-	Phone = db.Column(db.String(11), unique=True, nullable = False)
-	Register_Time = db.Column(db.DateTime, default = datetime.now())
-	Rank = db.Column(db.Integer, default = 1)
-	Quns = db.relationship('Qun', secondary=member,
-		backref = db.backref('Custormers', lazy = 'dynamic'))
+    openid = db.Column(db.String(40), primary_key = True)
+    username = db.Column(db.String(20), unique=True, nullable = False)
+    phone = db.Column(db.String(11), unique=True, nullable = False)
+    register_time = db.Column(db.DateTime, default = datetime.now())
+    Rank = db.Column(db.Integer, default = 1)
+    Quns = db.relationship('Qun', secondary=member,
+            backref = db.backref('Custormers', lazy = 'dynamic'))
+    activity_details = db.relationship('ActivityDetail',
+            backref = db.backref('custormer', lazy = 'dynamic'))
 
-	def __init__(self, openid, username, phone):
-		self.openid = openid
-		self.username = username
-		self.phone = phone
+    def __init__(self, openid, username, phone):
+        self.openid = openid
+        self.username = username
+        self.phone = phone
 
-	def __repr__(self):
-		return '<User %r>' % self.username
+    def __repr__(self):
+        return '<User %r>' % self.username
+
 
 class Qun(db.Model):
-	id = db.Column(db.Integer, primary_key=True, nullable = False)
-	name = db.Column(db.String(20), unique=True, nullable = False)
-	phone = db.Column(db.String(11))
-	register_time = db.Column(db.DateTime, default = datetime.now())
-	rank = db.Column(db.Integer, nullable = False, default = 1)
-	member_count = db.Column(db.Integer, default = 1)
-	building_fund = db.Column(db.Float, default = 0)
-	extracted_fund = db.Column(db.Float, default = 0)
-	balance_fund = db.Column(db.Float, default = 0)
-	openid = db.Column(db.String(40), db.ForeignKey('custormer.openid'))
+    id = db.Column(db.Integer, primary_key=True, nullable = False)
+    name = db.Column(db.String(20), unique=True, nullable = False)
+    phone = db.Column(db.String(11))
+    register_time = db.Column(db.DateTime, default = datetime.now())
+    rank = db.Column(db.Integer, nullable = False, default = 1)
+    member_count = db.Column(db.Integer, default = 1)
+    building_fund = db.Column(db.Float, default = 0)
+    extracted_fund = db.Column(db.Float, default = 0)
+    balance_fund = db.Column(db.Float, default = 0)
+    openid = db.Column(db.String(40), db.ForeignKey('custormer.openid'))
+    activity_details = db.relationship('ActivityDetail',
+            backref = db.backref('qun', lazy = 'dynamic'))
 
-	def __init__(self, name, phone, openid, building_fund):
-		self.name = name
-		self.phone = phone
-		self.openid = openid
-		self.building_fund = building_fund
+    def __init__(self, name, phone, openid, building_fund):
+        self.name = name
+        self.phone = phone
+        self.openid = openid
+        self.building_fund = building_fund
 
-	def __repr__(self):
-		return '<Qun %r>' % self.name
+    def __repr__(self):
+        return '<Qun %r>' % self.name
+
 
 class Token(db.Model):
-	name = db.Column(db.String(20), primary_key=True)
-	token = db.Column(db.String(150), nullable=False)
-	time = db.Column(db.DateTime, default=datetime.now())
+    name = db.Column(db.String(20), primary_key=True)
+    token = db.Column(db.String(150), nullable=False)
+    time = db.Column(db.DateTime, default=datetime.now())
 
-	def __init__(self, name, token):
-		self.name = name
-		self.token = token
+    def __init__(self, name, token):
+        self.name = name
+        self.token = token
 
-	def __repr__(self):
-		return '<Token %r>' % self.name
+    def __repr__(self):
+        return '<Token %r>' % self.name
+
 
 class Activity(db.Model):
-	id = db.Column(db.Integer, primary_key = True)
-	name = db.Column(db.String(20), nullable = False)
-	owner = db.Column(db.String(28), nullable = False)
-	description = db.Column(db.String(200))
-	partici_fee = db.Column(db.Float, nullable = False)
-	cost = db.Column(db.Float, nullable = False)
-	activity_details = db.relationship('ActivityDetail',
-		backref = db.backref('activity', lazy = 'dynamic'))
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(20), nullable = False)
+    owner = db.Column(db.String(28), nullable = False)
+    description = db.Column(db.String(200))
+    partici_fee = db.Column(db.Float, nullable = False)
+    cost = db.Column(db.Float, nullable = False)
+    activity_details = db.relationship('ActivityDetail',
+            backref = db.backref('activity', lazy = 'dynamic'))
 
-	def __init__(self, name, owner, partici_fee, cost):
-		self.name = name
-		self.owner = owner
-		self.partici_fee = partici_fee
-		self.cost = cost
+    def __init__(self, name, owner, partici_fee, cost):
+        self.name = name
+        self.owner = owner
+        self.partici_fee = partici_fee
+        self.cost = cost
 
-	def __repr__(self):
-		return '<Activity %r>' % self.name
+    def __repr__(self):
+        return '<Activity %r>' % self.name
+
 
 class ActivityDetail(db.Model):
-	id = db.Column(db.Integer, primary_key = True)
-	activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'))
-	activity_name = db.Column(db.String(20), nullable = False)
-	activity_date = db.Column(db.String(20), nullable = False)
-	qunownr_id = db.Column(db.String(28), db.ForeignKey('custormer.openid'))
-	custormer_id = db.Column(db.String(28), db.ForeignKey('custormer.openid'))
-	accompany_count = db.Column(db.Integer, nullable = False)
-	activity_pay = db.Column(db.Float, nullable = False)
-	qunbuilding_return = db.Column(db.Float, nullable = False)
+    id = db.Column(db.Integer, primary_key = True)
+    activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'))
+    activity_name = db.Column(db.String(20), nullable = False)
+    activity_date = db.Column(db.String(20), nullable = False)
+    qunownr_id = db.Column(db.String(28), db.ForeignKey('custormer.openid'))
+    custormer_id = db.Column(db.String(28), db.ForeignKey('custormer.openid'))
+    accompany_count = db.Column(db.Integer, nullable = False)
+    activity_pay = db.Column(db.Float, nullable = False)
+    qunbuilding_return = db.Column(db.Float, nullable = False)
 
-	def __init__(self, activity_id, activity_name, activity_date, qunownr_id,
-		custormer_id, accompany_count, activity_pay, qunbuilding_return):
-		self.activity_id = activity_id
-		self.activity_name = activity_name
-		self.activity_date = activity_date
-		self.qunownr_id = qunownr_id
-		self.custormer_id = custormer_id,
-		self.accompany_count = accompany_count
-		self.activity_pay = activity_pay
-		self.qunbuilding_return = qunbuilding_return
+    def __init__(self, activity_id, activity_name, activity_date, qunownr_id,
+            custormer_id, accompany_count, activity_pay, qunbuilding_return):
+        self.activity_id = activity_id
+        self.activity_name = activity_name
+        self.activity_date = activity_date
+        self.qunownr_id = qunownr_id
+        self.custormer_id = custormer_id
+        self.accompany_count = accompany_count
+        self.activity_pay = activity_pay
+        self.qunbuilding_return = qunbuilding_return
 
-	def __repr__(self):
-		return '<ActivityDetail %r>' % self.id
+    def __repr__(self):
+        return '<ActivityDetail %r>' % self.id
 
-if __name__ == '__main__':
-	db.create_all()
+if __name__ == "__main__":
+    db.create_all()
