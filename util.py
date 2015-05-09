@@ -19,13 +19,15 @@ def now():
 	return datetime.now()
 
 def check_bing(request):
-    openid = session.get['openid']
+    openid = session.get('openid')
     try:
         flag = Custormer.query.filter_by(openid = openid).first()
+        db.session.commit()
         return flag
     except Exception, e:
         print 'Exception: ', e
         db.session.rollback()
+        return flag
 
 def obj_to_dict(obj):
 	pr = {}
