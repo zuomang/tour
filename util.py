@@ -21,9 +21,9 @@ def now():
 def check_bing(request):
     if session.get('openid'):
         if not Custormer.query.filter_by(openid = session.get('openid')).first():
-			return False
-		else:
-			return True
+            return False
+        else:
+            return True
     else:
         code = request.args.get('code', '')
         data = {
