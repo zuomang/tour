@@ -205,10 +205,9 @@ def activity_join():
 		try:
 			user = Custormer.query.filter_by(openid = openid).first()
 			activity = Activity.query.filter_by(id = activity_id).first()
-			detail = ActivityDetail(activity_id, activity.name, activity_date, openid,
-            activity.id, number, 100, 20)
-            db.add(detail)
-            db.commit()
+			detail = ActivityDetail(activity_id, activity.name, activity_date, openid, activity.id, activity_number, 100, 20)
+			db.add(detail)
+			db.commit()
 		except Exception, e:
 			print 'Exception', e
 		else:
