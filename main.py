@@ -3,7 +3,7 @@
 
 from flask import Flask, request, make_response, render_template, g, session, redirect, url_for, jsonify, flash
 from flask.ext.sqlalchemy import SQLAlchemy
-from models.table import Custormer, Qun, member, db, Activity
+from models.table import Custormer, Qun, member, db, Activity, ActivityDetail
 from create_menu import url_qun
 import hashlib
 import util
@@ -177,8 +177,8 @@ def activity():
 		except Exception, e:
 			print 'Exception', e
 
-@app.route('/activity/join', methods = ['GET', 'POST'])
-def activity_join():
+@app.route('/activity/check', methods = ['GET', 'POST'])
+def activity_check():
 	if request.method == 'POST':
 		openid = "o3gd3jqcRYTOsPDgm0cgYSUa4UdA"
 		activity_id = request.json['activityId']
@@ -187,12 +187,36 @@ def activity_join():
 		try:
 			user = Custormer.query.filter_by(openid = openid).first()
 			qun = Qun.query.filter_by(openid = openid).first()
+		except Exception, e:
+			print 'Exception', e
+		else:
 			if qun:
 				return jsonify(err_code = 'E0000', err_msg = 'success')
 			else:
 				return jsonify(err_code = 'E0001', err_msg = '你还没有属于自己的群')
+
+@app.route('/activity/join', methods = ['POST'])
+def activity_join():
+	if request.method == 'POST':
+		openid = "o3gd3jqcRYTOsPDgm0cgYSUa4UdA"
+		activity_id = request.json['activityId']
+		activity_date = request.json['date']
+		activity_number= request.json['number']
+		db = get_db()
+		try:
+			user = Custormer.query.filter_by(openid = openid).first()
+			activity = Activity.query.filter_by(id = activity_id).first()
+			detail = ActivityDetail(activity_id, activity.name, activity_date, openid,
+            activity.id, number, 100, 20)
+            db.add(detail)
+            db.commit()
 		except Exception, e:
 			print 'Exception', e
+		else:
+			if detail.id:
+				return jsonify(err_code = 'E0000', err_msg = 'success')
+			else:
+				return jsonify(err_code = 'E0001', err_msg = '加入活动失败')
 
 if __name__ == '__main__':
 	app.run()
