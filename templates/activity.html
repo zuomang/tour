@@ -13,69 +13,70 @@
 </style>
 {% endblock %}
 {% block content %}
-			<div class="row">
-				{% if activitys %}
-					<div class="col-xs-12 all-activity">
-						{% for a in activitys %}
-						<div class="thumbnail">
-							<div class="caption">
-								<h4>{{ a.name }}</h4>
-								{% if a.description %}
-									<p>{{ a.description[:80] }}</p>
-								{% endif %}
-								<p>活动费用：{{ a.partici_fee }}</p>
-								<p><button type="button" class="btn btn-info btn-default btn-right" data-id="{{ a.id }}">参加</button>
-									<botto type="button" class="btn btn-danger">查看详情</button></p>
-							</div>
-						</div>
-						{% endfor %}
-					</div>
-					<nav>
-						<ul class="pager">
-							{% if (count > 10) %}
-							<li class="next"><a href="#" data-number="2" class="down">下一页</a></li>
-							{% endif %}
-						</ul>
-					</nav>
-				{% else %}
-					<div class="alert alert-info" role="alert">目前还没有发布任何活动</div>
+<div class="alert alert-success add-success" role="alert"></div>
+<div class="row">
+	{% if activitys %}
+	<div class="col-xs-12 all-activity">
+		{% for a in activitys %}
+		<div class="thumbnail">
+			<div class="caption">
+				<h4>{{ a.name }}</h4>
+				{% if a.description %}
+				<p>{{ a.description[:80] }}</p>
 				{% endif %}
+				<p>活动费用：{{ a.partici_fee }}</p>
+				<p><button type="button" class="btn btn-info btn-default btn-right" data-id="{{ a.id }}">参加</button>
+					<botto type="button" class="btn btn-danger">查看详情</button></p>
 			</div>
+		</div>
+		{% endfor %}
+	</div>
+	<nav>
+		<ul class="pager">
+			{% if (count > 10) %}
+			<li class="next"><a href="#" data-number="2" class="down">下一页</a></li>
+			{% endif %}
+		</ul>
+	</nav>
+	{% else %}
+	<div class="alert alert-info" role="alert">目前还没有发布任何活动</div>
+	{% endif %}
+</div>
 
-			<div class="modal fade" id="create" tabindex="-8" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title">参加活动</h4>
-						</div>
-						<div class="modal-body">
-							<form class="form-horizontal" method="post" action="#">
-								<div class="form-group">
-									<label for="date" class="col-xs-offset-1 col-xs-3 control-label">日期</label>
-									<div class="col-xs-7">
-										<input type="text" name="date" class="form-control" id="date" placeholder="点击输入日期">
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="number" class="col-xs-offset-1 col-xs-3 control-label">人数</label>
-									<div class="col-xs-7">
-										<input type="text" name="number" class="form-control" id="number" placeholder="人数" maxlength="11">
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="col-xs-offset-3 col-xs-2">
-										<button type="submit" id="submit" class="btn btn-primary">确定</button>
-									</div>
-									<div class="col-xs-offset-2 col-xs-2">
-										<button type="reset" id="reset" class="btn btn-danger">重置</button>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div><!-- /.modal-content -->
-				</div><!-- /.modal-dialog -->
+<div class="modal fade" id="create" tabindex="-8" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&ti;</span></button>
+				<h4 class="modal-title">参加活动</h4>
 			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" method="post" action="#">
+					<div class="form-group">
+						<label for="date" class="col-xs-offset-1 col-xs-3 control-label">日期</label>
+						<div class="col-xs-7">
+							<input type="text" name="date" class="form-control" id="date" placeholder="点击输入日期">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="number" class="col-xs-offset-1 col-xs-3 control-label">人数</label>
+						<div class="col-xs-7">
+							<input type="text" name="number" class="form-control" id="number" placeholder="人数" maxlength="11">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-offset-3 col-xs-2">
+							<button type="submit" id="join-submit" class="btn btn-primary">确定</button>
+						</div>
+						<div class="col-xs-offset-2 col-xs-2">
+							<button type="reset" id="reset" class="btn btn-danger">重置</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div>
 <script type="text/javascript">
 	$(function() {
 		$("#date").datetimepicker({
@@ -83,6 +84,7 @@
 			autoclose: true,
 			autostep: 10
 		});
+		$('.add-success').hide();
 	});
 	var createActivityDiv = function(data) {
 		var thumbnail = document.createElement('div');
@@ -146,8 +148,37 @@
 
 	$(document).on("click", ".btn-right", function(event) {
 		event.preventDefault();
+		$('.add-success').hide();
 		var data = {
 			activityId : $(this).data('id')
+		}
+		currentActivityId = data.activityId;
+		$.ajax({
+			type: "POST",
+			url: "{{ url_for('activity_check') }}",
+			data: JSON.stringify(data, null, '\t'),
+			contentType: 'application/json;charset=UTF-8',
+			success: function(result) {
+				if (result.err_code == 'E0000') {
+					console.log(result.err_msg);
+					$("#create").modal('show');
+				} else {
+					$('.add-success').html(result.err_msg);
+					$('.add-success').show();
+				}
+			}
+		})
+	});
+
+	$(document).on("click", "#join-submit", function(event) {
+		$('.add-success').hide();
+		event.preventDefault();
+		var date = $("#date").val();
+		var number = $("#number").val();
+		var data = {
+			date : date,
+			number : number
+			activityId : currentActivityId
 		}
 		$.ajax({
 			type: "POST",
@@ -155,15 +186,15 @@
 			data: JSON.stringify(data, null, '\t'),
 			contentType: 'application/json;charset=UTF-8',
 			success: function(result) {
-				if (result.err_code == 'E0000') {
-					console.log(result.err_msg);
-					$("#create").modal('show');
-				};
+				$('.add-success').html(result.err_msg);
+				$("#create").modal('hide');
 			}
 		})
 	})
+
 	$(document).on("click", ".down", function(event) {
 		event.preventDefault();
+		$('.add-success').hide();
 		var pageNumber = $(this).data('number');
 		var data = {
 			pageNumber : pageNumber
