@@ -17,6 +17,10 @@ def get_db():
 		g.db_session = db.session
 	return g.db_session
 
+@app.before_request
+def bind(request):
+	print "-----------" + request.url
+
 @app.route('/', methods=['GET', 'POST'])
 def wechat_auth():
 	if request.method == 'GET':
