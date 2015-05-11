@@ -36,18 +36,19 @@ def wechat_auth():
 			return
 	else:
 		token = 'cCPnbiQ3yFDEdkeQcEdf7jsX'
-		signature = request.form['signature']
-		timestamp = request.form['timestamp']
-		nonce = request.form['nonce']
-		echostr = request.form['echostr']
+		query = request.args
+		signature = query.get('signature', '')
+		timestamp = query.get('timestamp', '')
+		nonce = query.get('nonce', '')
+		echostr = query.get('echostr', '')
 
 		s = [timestamp, nonce, token]
 		s.sort()
 		s = ''.join(s)
 		if (hashlib.sha1(s).hexdigest() == signature):
-			return True
+			return make_response("True")
 		else:
-			return False
+			return make_response("False")
 
 @app.route('/info', methods=['GET'])
 def info():
