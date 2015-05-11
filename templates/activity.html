@@ -177,7 +177,7 @@
 		var number = $("#number").val();
 		var data = {
 			date : date,
-			number : number
+			number : number,
 			activityId : currentActivityId
 		}
 		$.ajax({
@@ -187,6 +187,7 @@
 			contentType: 'application/json;charset=UTF-8',
 			success: function(result) {
 				$('.add-success').html(result.err_msg);
+				$('.add-success').show();
 				$("#create").modal('hide');
 			}
 		})
