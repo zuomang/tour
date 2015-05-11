@@ -2,12 +2,11 @@
 # encoding: utf-8
 
 from datetime import datetime
-import requests
-from flask import session, render_template
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask import session
 from models.table import Custormer, db, Activity
-import parameter
 import json
+import parameter
+import requests
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -19,15 +18,31 @@ def now():
 	return datetime.now()
 
 def check_bing(request):
-    openid = session.get('openid')
-    try:
+    openid = session.get('openid', None)
+    if openid:
         flag = Custormer.query.filter_by(openid = openid).first()
-        db.session.commit()
-        return flag
-    except Exception, e:
-        print 'Exception: ', e
-        db.session.rollback()
-        return flag
+        print "-----------session:flag---------: ", flag
+        if flag:
+            return True
+        else:
+            return False
+    else:
+        code = request.args.get('code', '')
+        data = {
+                'appid': parameter.appid,
+                'secret': parameter.appsecret,
+                'code': code,
+                'grant_type': 'authorization_code'
+                }
+        result = requests.get('https://api.weixin.qq.com/sns/oauth2/access_token', params = data)
+        id = result.json().get('openid')
+        session['openid'] = id
+        flag = Custormer.query.filter_by(openid = id).first()
+        print "------------wechat:flag---------: ", flag
+        if flag:
+            return True
+        else:
+            return False
 
 def obj_to_dict(obj):
 	pr = {}

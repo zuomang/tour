@@ -34,27 +34,11 @@ def wechat_auth():
 			return make_response(echostr)
 		else:
 			return
-	if request.method == 'POST':
-		token = "cCPnbiQ3yFDEdkeQcEdf7jsX"
-		query = request.args
-		signature = query.get('signature', '')
-		print "test"
-		timestamp = query.get('timestamp', '')
-		nonce = query.get('nonce', '')
-		echostr = query.get('echostr', '')
-
-		s = [timestamp, nonce, token]
-		s.sort()
-		s = ''.join(s)
-		if (hashlib.sha1(s).hexdigest() == signature):
-			return make_response(echostr)
-		else:
-			return
 
 @app.route('/info', methods=['GET'])
 def info():
 	if request.method == 'GET':
-		if util.check_bing(request) == None:
+		if util.check_bing(request):
 			return render_template('bing.html')
 		else:
 			openid = session['openid']
