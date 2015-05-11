@@ -38,7 +38,7 @@ def wechat_auth():
 @app.route('/info', methods=['GET'])
 def info():
 	if request.method == 'GET':
-		if util.check_bing(request):
+		if not util.check_bing(request):
 			return render_template('bing.html')
 		else:
 			openid = session['openid']
