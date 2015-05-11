@@ -18,8 +18,9 @@ def get_db():
 	return g.db_session
 
 @app.before_request
-def bind(request):
-	print "-----------" + request.url
+def bind(*args, **kwargs):
+	if request.method == 'GET' and request.path != '/activity' and not util.check_bing(request):
+		return render_template('bing.html')
 
 @app.route('/', methods=['GET', 'POST'])
 def wechat_auth():
@@ -57,13 +58,10 @@ def wechat_auth():
 @app.route('/info', methods=['GET'])
 def info():
 	if request.method == 'GET':
-		if not util.check_bing(request):
-			return render_template('bing.html')
-		else:
-			openid = session['openid']
-			user = Custormer.query.filter_by(openid = openid).first()
-			members = user.quns
-			return render_template('info.html', user = user, members = members)
+		openid = session['openid']
+		user = Custormer.query.filter_by(openid = openid).first()
+		members = user.quns
+		return render_template('info.html', user = user, members = members)
 
 @app.route('/bing', methods=['POST'])
 def bing():
@@ -86,19 +84,16 @@ def bing():
 @app.route('/qun', methods=['GET'])
 def qun():
 	if request.method == 'GET':
-		if not util.check_bing(request):
-			return render_template('bing.html')
+		openid = session['openid']
+		try:
+			user = Custormer.query.filter_by(openid = openid).first()
+			my_qun = Qun.query.filter_by(openid = user.openid).first()
+			quns = Qun.query.all()
+		except Exception, e:
+			print 'Exception: ', e
 		else:
-			openid = session['openid']
-			try:
-				user = Custormer.query.filter_by(openid = openid).first()
-				my_qun = Qun.query.filter_by(openid = user.openid).first()
-				quns = Qun.query.all()
-			except Exception, e:
-				print 'Exception: ', e
-			else:
-				my_quns = user.quns
-				return render_template('qun.html', user = user, my_qun = my_qun, my_quns = my_quns, quns = quns)
+			my_quns = user.quns
+			return render_template('qun.html', user = user, my_qun = my_qun, my_quns = my_quns, quns = quns)
 
 @app.route('/qun/create', methods=['POST'])
 def create():
