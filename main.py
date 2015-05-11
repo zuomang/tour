@@ -17,7 +17,7 @@ def get_db():
 		g.db_session = db.session
 	return g.db_session
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET', 'POST'])
 def wechat_auth():
 	if request.method == 'GET':
 		token = "cCPnbiQ3yFDEdkeQcEdf7jsX"
@@ -34,11 +34,25 @@ def wechat_auth():
 			return make_response(echostr)
 		else:
 			return
+	else:
+		token = 'cCPnbiQ3yFDEdkeQcEdf7jsX'
+		signature = request.form['signature']
+		timestamp = request.form['timestamp']
+		nonce = request.form['nonce']
+		echostr = request.form['echostr']
+
+		s = [timestamp, nonce, token]
+		s.sort()
+		s = ''.join(s)
+		if (hashlib.sha1(s).hexdigest() == signature):
+			return True
+		else:
+			return False
 
 @app.route('/info', methods=['GET'])
 def info():
 	if request.method == 'GET':
-		if util.check_bing(request):
+		if not util.check_bing(request):
 			return render_template('bing.html')
 		else:
 			openid = session['openid']
@@ -48,52 +62,58 @@ def info():
 
 @app.route('/bing', methods=['POST'])
 def bing():
-	openid = session['openid']
-	username = request.form['username']
-	phone = request.form['phone']
-	db = get_db()
-	user = Custormer(openid, username, phone)
-	db.add(user)
-	try:
-		db.commit()
-	except Exception, ex:
-		print 'Exception: ', ex
-		return render_template('bing.html')
-	else:
-		members = user.quns
-		return render_template('info.html', user = user, members = members)
+	if request.method == 'POST':
+		openid = session['openid']
+		username = request.form['username']
+		phone = request.form['phone']
+		db = get_db()
+		try:
+			user = Custormer(openid, username, phone)
+			db.add(user)
+			db.commit()
+		except Exception, ex:
+			print 'Exception: ', ex
+			return render_template('bing.html')
+		else:
+			members = user.quns
+			return render_template('info.html', user = user, members = members)
 
 @app.route('/qun', methods=['GET'])
 def qun():
 	if request.method == 'GET':
-		if util.check_bing(request) == None:
+		if not util.check_bing(request):
 			return render_template('bing.html')
 		else:
 			openid = session['openid']
-			user = Custormer.query.filter_by(openid = openid).first()
-			my_qun = Qun.query.filter_by(openid = user.openid).first()
-			my_quns = user.quns
-			quns = Qun.query.all()
-			return render_template('qun.html', user = user, my_qun = my_qun, my_quns = my_quns, quns = quns)
+			try:
+				user = Custormer.query.filter_by(openid = openid).first()
+				my_qun = Qun.query.filter_by(openid = user.openid).first()
+				quns = Qun.query.all()
+			except Exception, e:
+				print 'Exception: ', e
+			else:
+				my_quns = user.quns
+				return render_template('qun.html', user = user, my_qun = my_qun, my_quns = my_quns, quns = quns)
 
 @app.route('/qun/create', methods=['POST'])
 def create():
-	openid = session['openid']
-	name = request.form['name']
-	build = request.form['build']
-	db = get_db()
-	try:
-		user = Custormer.query.filter_by(openid = openid).first()
-		new_qun = Qun(name, user.phone, openid, build)
-		user.quns.append(new_qun)
-		db.add(new_qun)
-		db.commit()
-	except Exception, ex:
-		print 'Exception: ', ex
-		session.pop('_flashes', None)
-		flash(u'创建群失败')
-	finally:
-		return redirect(url_qun)
+	if request.method == 'POST':
+		openid = session['openid']
+		name = request.form['name']
+		build = request.form['build']
+		db = get_db()
+		try:
+			user = Custormer.query.filter_by(openid = openid).first()
+			new_qun = Qun(name, user.phone, openid, build)
+			user.quns.append(new_qun)
+			db.add(new_qun)
+			db.commit()
+		except Exception, ex:
+			print 'Exception: ', ex
+			session.pop('_flashes', None)
+			flash(u'创建群失败')
+		finally:
+			return redirect(url_for('qun'))
 
 @app.route('/qun/info', methods=['POST'])
 def qun_info():
