@@ -22,11 +22,11 @@
 				</ul>
 				<div class="tab-content">
 					<div role="tabpanel" class="tab-pane active" id="home">
-						<div class="alert alert-danger test" role="alert">每个用户最多只能加入8个群</div>
+						<div class="alert alert-danger test quit-info" role="alert">每个用户最多只能加入8个群</div>
 						{% if my_quns %}
-						<ul class="list-group list-my-qun">
+						<ul class="list-group list-my-qun qun-quit">
 							{% for q in my_quns %}
-							<li class="list-group-item list-group-item-info"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
+							<li class="list-group-item list-group-item-info" data-id="{{ q.id }}"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
 							{% endfor %}
 						</ul>
 						{% else %}
@@ -122,14 +122,64 @@
 					</div><!-- /.modal-content -->
 				</div><!-- /.modal-dialog -->
 			</div>
+			
+			<div class="modal fade" id="quit" tabindex="-8" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title">退出群</h4>
+						</div>
+						<div class="modal-body">
+							<p id="quit-title"></p>
+							<div class="row">
+								<div class="col-xs-offset-3 col-xs-2">
+									<button type="button" id="quit-confirm" class="btn btn-primary">确定</button>
+								</div>
+								<div class="col-xs-offset-3 col-xs-2">
+									<button type="button" id="reset" class="btn btn-danger">取消</button>
+								</div>
+							</div>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div>
             {% endblock %}
             {% block js %}
 			<script type="text/javascript">
-			var name, id;
+			var name, id, size;
 			$(function () {
 				$('[data-toggle="popover"]').popover();
 				$('.add-success').hide();
 			});
+			
+			$('.qun-quit>li').click(function() {
+				name = $(this).val();
+				id = $(this).data('id');
+				size = $('.qun-quit>li').index($(this)[0]);
+				$('#quit-title').val("你确定退出" + name + "?");
+				$('#quit').modal('show');
+			});
+
+			$(document).on('click', '#quit-confirm', function(event) {
+				event.preventDefault();
+				data = {
+					id : id
+				}
+				$.ajax({
+					type: "POST",
+					url: "{{ url_for('qun_exit') }}",
+					data: JSON.stringify(data, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function(result) {
+						$('.quit-info').val(result.err_msg);
+						if (result.err_code == 'E0000') {
+							$('.qun-quit li:eq(' + size + ')').remove();
+						}
+					}
+				})
+			});
+			
 			$('.qun-down').click(function() {
 				$('.add-success').hide();
 				$('.qun-down').popover('hide');
