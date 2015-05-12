@@ -148,7 +148,7 @@
 				$('.add-success').hide();
 			});
 			
-			$('.qun-quit>li').click(function() {
+			$(document).on('click', '.qun-quit>li', function() {
 				name = $(this).html();
 				id = $(this).data('id');
 				size = $('.qun-quit>li').index($(this)[0]);
@@ -195,9 +195,11 @@
 					+ '</div>');
 				$(this).popover();
 			});
+
 			$(document).on("click", '.qun-cancle', function() {
 				$('.qun-down').popover('hide');
 			});
+
 			$(document).on("click", '.qun-add', function() {
 				data = {
 					id : id
@@ -212,7 +214,7 @@
 							var count = Number($('.qun-down:contains(' + name + ')').children().html()) + 1;
 							$('.qun-down:contains(' + name + ')').children().html(count);
 							var listMyQun = document.getElementsByClassName('list-my-qun')[0];
-							listMyQun.appendChild(addQunLi(name, count));
+							listMyQun.appendChild(addQunLi(name, count, id));
 						}
 						$('.add-success').html(result.err_msg);
 						$('.add-success').show();
@@ -221,9 +223,10 @@
 				});
 			});
 
-			var addQunLi = function(name, count) {
+			var addQunLi = function(name, count, id) {
 				var e = document.createElement('li');
 				e.setAttribute('class', 'list-group-item list-group-item-info');
+				e.setAttribute('data-id', id);
 				var t = document.createTextNode(name);
 				e.appendChild(t);
 
