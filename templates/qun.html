@@ -122,6 +122,28 @@
 					</div><!-- /.modal-content -->
 				</div><!-- /.modal-dialog -->
 			</div>
+			
+			<div class="modal fade" id="quit" tabindex="-8" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title">退出群</h4>
+						</div>
+						<div class="modal-body">
+							<p id="quit-title"></p>
+							<div class="row">
+								<div class="col-xs-offset-3 col-xs-2">
+									<button type="button" id="quit-confirm" class="btn btn-primary">确定</button>
+								</div>
+								<div class="col-xs-offset-3 col-xs-2">
+									<button type="button" id="reset" class="btn btn-danger">取消</button>
+								</div>
+							</div>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div>
             {% endblock %}
             {% block js %}
 			<script type="text/javascript">
