@@ -81,12 +81,12 @@
 {% block js %}
 <script type="text/javascript">
 	$(function() {
+		$('.add-success').hide();
 		$("#date").datetimepicker({
 			format: "yyyy-mm-dd hh:ii",
 			autoclose: true,
 			autostep: 10
 		});
-		$('.add-success').hide();
 	});
 	var createActivityDiv = function(data) {
 		var thumbnail = document.createElement('div');
