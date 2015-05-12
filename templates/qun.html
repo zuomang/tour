@@ -23,13 +23,12 @@
 				<div class="tab-content">
 					<div role="tabpanel" class="tab-pane active" id="home">
 						<div class="alert alert-danger test quit-info" role="alert">每个用户最多只能加入8个群</div>
-						{% if my_quns %}
 						<ul class="list-group list-my-qun qun-quit">
 							{% for q in my_quns %}
 							<li class="list-group-item list-group-item-info" data-id="{{ q.id }}"><span class="badge">{{ q.member_count }}</span>{{ q.name }}</li>
 							{% endfor %}
 						</ul>
-						{% else %}
+						{% if not my_quns %}
 							<div class="alert alert-info" role="alert">你还没有加入任何一个群</div>
 						{% endif %}
 					</div>
@@ -123,7 +122,7 @@
 				</div><!-- /.modal-dialog -->
 			</div>
 			
-			<div class="modal fade" id="quit" tabindex="-300" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal fade" id="quit" tabindex="150" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">

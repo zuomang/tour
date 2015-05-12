@@ -32,128 +32,26 @@
 		</style>
 	</head>
 	<body>
-		<nav class="navbar navbar-inverse navbar-fixed-top">
-	      	<div class="container">
-	        	<div class="navbar-header">
-		          	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-	expanded="false" aria-controls="navbar">
-		            	<span class="sr-only">Toggle navigation</span>
-		            	<span class="icon-bar"></span>
-		            	<span class="icon-bar"></span>
-		            	<span class="icon-bar"></span>
-		          	</button>
-		          	<a class="navbar-brand" href="#">撒欢吧兄弟</a>
-	        	</div>
-	        	<div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
-	          		<ul class="nav navbar-nav">
-		            	<li class="active"><a href="#">我的信息</a></li>
-		            	<li><a href="#">我的群</a></li>
-		            	<li><a href="#">我的活动</a></li>
-	          		</ul>
-	        	</div>
-	      	</div>
-    	</nav>
-    	<div class="container">
-    		<div class="row">
-	{% if activitys %}
-		<div class="col-xs-12 all-activity">
-			{% for a in activitys %}
-			<div class="thumbnail">
-				<div class="caption">
-					<h4>{{ a.name }}</h4>
-					{% if a.description %}
-						<p>{{ a.description[:80] }}</p>
-					{% endif %}
-					<p>活动费用：{{ a.partici_fee }}</p>
-					<p><button type="button" class="btn btn-info btn-default btn-right" data-id="{{ a.id }}">参加</button>
-						<botto type="button" class="btn btn-danger">查看详情</button></p>
-				</div>
-			</div>
-			{% endfor %}
-		</div>
-		{% if (count > 10) %}
-		<nav>
-			<ul class="pager">
-				<li class="next"><a href="#" data-number="2" id="down-page">下一页<span aria-hidden="true">&rarr;</span></a></li>
-			</ul>
-		</nav>
-		{% endif %}
-	{% else %}
-		<div class="alert alert-info" role="alert">目前还没有发布任何活动</div>
-	{% endif %}
+<!-- Large modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      ...
+    </div>
+  </div>
 </div>
-	<script type="text/javascript">
-			var createActivityDiv = function(data) {
-			var thumbnail = document.createElement('div');
-			thumbnail.setAttribute("class", "thumbnail");
 
-			var caption = document.createElement('div');
-			caption.setAttribute("class", "caption");
+<!-- Small modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Small modal</button>
 
-			var h = document.createElement('h4');
-			var t = document.createTextNode(data.name);
-			h.appendChild(t);
-			caption.appendChild(h);
-
-			var h = document.createElement('p');
-			var t = document.createTextNode(data.partici_fee);
-			h.appendChild(t);
-			caption.appendChild(h);
-
-			thumbnail.appendChild(caption);
-			return thumbnail;
-		};
-
-		var page = function(cls, pageNumber, name) {
-			var page = document.createElement('li');
-			page.setAttribute("class", cls);
-
-			var a = document.createElement('a');
-			a.setAttribute("data-number", pageNumber);
-			a.setAttribute("class", 'down');
-
-			var t = document.createTextNode(name);
-			a.appendChild(t);
-			page.appendChild(a);
-
-			return page;
-		}
-		
-		$(document).on('click', '.down', function() {
-			var pageNumber = $(this).data('number');
-			var data = {
-				pageNumber : pageNumber
-			}
-			$.ajax({
-				type: "POST",
-				url: "{{ url_for('activity') }}",
-				data: JSON.stringify(data, null, '\t'),
-				contentType: 'application/json;charset=UTF-8',
-				success: function(result) {
-					if (result.err_code == 'E0000') {
-						$('.all-activity').empty();
-						var allActivityList = document.getElementsByClassName('all-activity')[0];
-						result.data.forEach(function(e) {
-							allActivityList.appendChild(createActivityDiv(e));
-							var pageCount = Math.ceil(result.count/10);
-							var pageContainer = document.getElementsByClassName('page')[0];
-							if (pageNumber < pageCount) {
-								if (pageNumber == 1) {
-									pageContainer.appendChild(page('next', pageNumber + 1, '下一页'));
-								} else {
-									pageContainer.appendChild(page('previous', pageNumber - 1, '上一页'));
-									pageContainer.appendChild(page('next', pageNumber + 1, '下一页'));
-								}
-							} else {
-								if (pageNumber == pageCount) {
-									pageContainer.appendChild(page('previous', pageNumber - 1, '上一页'));
-								}
-							}
-						});
-					}
-				}
-			});
-		});
-	</script>
-	</script>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      ...
+    </div>
+  </div>
+</div>
 	</body>
 </html>
