@@ -123,7 +123,7 @@
 				</div><!-- /.modal-dialog -->
 			</div>
 			
-			<div class="modal fade" id="quit" tabindex="-8" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal fade" id="quit" tabindex="-300" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -131,13 +131,13 @@
 							<h4 class="modal-title">退出群</h4>
 						</div>
 						<div class="modal-body">
-							<p id="quit-title"></p>
+							<h5 id="quit-title"></h5>
 							<div class="row">
 								<div class="col-xs-offset-3 col-xs-2">
 									<button type="button" id="quit-confirm" class="btn btn-primary">确定</button>
 								</div>
 								<div class="col-xs-offset-3 col-xs-2">
-									<button type="button" id="reset" class="btn btn-danger">取消</button>
+									<button type="button" id="quit-reset" class="btn btn-danger">取消</button>
 								</div>
 							</div>
 						</div>
@@ -154,10 +154,12 @@
 			});
 			
 			$('.qun-quit>li').click(function() {
-				name = $(this).val();
+				name = $(this).html();
 				id = $(this).data('id');
 				size = $('.qun-quit>li').index($(this)[0]);
-				$('#quit-title').val("你确定退出" + name + "?");
+				var re = /<span.+<\/span>/;
+				var temp = name.match(re)[0].length;
+				$('#quit-title').html("你确定退出" + name.substr(temp) + "?");
 				$('#quit').modal('show');
 			});
 
@@ -175,10 +177,15 @@
 						$('.quit-info').val(result.err_msg);
 						if (result.err_code == 'E0000') {
 							$('.qun-quit li:eq(' + size + ')').remove();
+							$('#quit').modal('hide');
 						}
 					}
 				})
 			});
+
+			$(document).on('click', '#quit-reset', function(event) {
+				$('#quit').modal('hide');
+			})
 			
 			$('.qun-down').click(function() {
 				$('.add-success').hide();

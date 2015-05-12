@@ -141,11 +141,11 @@ def qun_exit():
 	if request.method == 'POST':
 		openid = session['openid']
 		qun_id = request.json['id']
-		db = get_db
+		db = get_db()
 		try:
 			user = Custormer.query.filter_by(openid = openid).first()
 			qun = Qun.query.filter_by(id = qun_id).first()
-			if (qun_id not in user.quns):
+			if (qun not in user.quns):
 				return jsonify(err_code = 'E0001', err_msg = '对不起，你还没有加入该群')
 			else:
 				user.quns.remove(qun)
