@@ -41,28 +41,35 @@
         </form>
         <script>
             var flag = true;
+            var username = $("#username").val();
+            var phone = $("#phone").val();
 
             $("#username").focusout(function() {
                 //检查用户名
-                var username = $('#username').val();
                 $('.text-warning').remove();
-                // flag = false;
+                username = $(this).val();
+                if (!username) {
+                    $(this).parent(".col-xs-7").append('<p class="text-warning">用户名不能为空</p>');
+                    flag = false;
+                } else {
+                    $("#submit").removeAttr("disabled");
+                    flag = true;
+                }
             });
 
             $("#phone").focusout(function() {
                 //检查手机号码长度
-                var phone = $("#phone").val();
+                phone = $("#phone").val();
                 $('.text-warning').remove();
                 if (phone.length != 11) {
-                    console.log(phone.length);
-                    $("#phone").parent(".col-xs-7").append('<p class="text-warning">手机号码必须为11位</p>');
+                    $(this).parent(".col-xs-7").append('<p class="text-warning">手机号码必须为11位</p>');
+                    flag = false;
+                } else if (!phone.match(/^(1+\d{10})$/)) {
+                    $(this).parent(".col-xs-7").append('<p class="text-warning">手机号码格式不对</p>');
                     flag = false;
                 } else {
-                    //检查手机号码格式
-                    if (!phone.match(/^(1+\d{10})$/)) {
-                        $("#phone").parent(".col-xs-7").append('<p class="text-warning">手机号码格式不对</p>');
-                        flag = false;
-                    } 
+                    $("#submit").removeAttr("disabled");
+                    flag = true;
                 }
             });
 
