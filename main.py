@@ -9,8 +9,7 @@ import hashlib
 import util
 
 app = Flask(__name__)
-app.config.from_envvar('FLASK_TEST_SETTINGS')
-app.secret_key = '5wpfXy4MD8YhfXhbbtpk7H3X'
+app.config.from_envvar('FLASK_PRODUCT_SETTINGS')
 
 def get_db():
 	if not hasattr(g, 'db_session'):
@@ -19,7 +18,7 @@ def get_db():
 
 @app.before_request
 def bind(*args, **kwargs):
-	if request.method == 'GET' and request.path != '/activity' and not util.check_bing(request):
+	if request.method == 'GET' and request.path != '/activity' and request.path != '/' and not util.check_bing(request):
 		return render_template('bing.html')
 
 @app.route('/', methods=['GET', 'POST'])
@@ -100,11 +99,10 @@ def create():
 	if request.method == 'POST':
 		openid = session['openid']
 		name = request.form['name']
-		build = request.form['build']
 		db = get_db()
 		try:
 			user = Custormer.query.filter_by(openid = openid).first()
-			new_qun = Qun(name, user.phone, openid, build)
+			new_qun = Qun(name, user.phone, openid)
 			user.quns.append(new_qun)
 			db.add(new_qun)
 			db.commit()
@@ -179,7 +177,7 @@ def activity():
 @app.route('/activity/check', methods = ['GET', 'POST'])
 def activity_check():
 	if request.method == 'POST':
-		openid = "o3gd3jqcRYTOsPDgm0cgYSUa4UdA"
+		openid = session['openid']
 		activity_id = request.json['activityId']
 		print activity_id
 		# openid = session.get("openid")
@@ -197,7 +195,7 @@ def activity_check():
 @app.route('/activity/join', methods = ['POST'])
 def activity_join():
 	if request.method == 'POST':
-		openid = "o3gd3jqcRYTOsPDgm0cgYSUa4UdA"
+		openid = session['openid']
 		activity_id = request.json['activityId']
 		activity_date = request.json['date']
 		activity_number= request.json['number']

@@ -6,7 +6,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zmyjy1314@localhost/test'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zmyjy1314@localhost/tour'
 db = SQLAlchemy(app)
 
 member = db.Table('member',
@@ -45,11 +45,10 @@ class Qun(db.Model):
     balance_fund = db.Column(db.Float, default = 0)
     openid = db.Column(db.String(40), db.ForeignKey('custormer.openid'))
 
-    def __init__(self, name, phone, openid, building_fund):
+    def __init__(self, name, phone, openid):
         self.name = name
         self.phone = phone
         self.openid = openid
-        self.building_fund = building_fund
 
     def __repr__(self):
         return '<Qun %r>' % self.name

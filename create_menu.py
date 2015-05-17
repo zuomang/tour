@@ -41,11 +41,6 @@ menu = {
 					"type": "view",
 					"name": "我的群",
 					"url": url_qun
-				},
-				{
-					"type": "view",
-					"name": "我的活动",
-					"url": url_my_activity
 				}
 			]
 		}

@@ -19,9 +19,10 @@ def now():
 
 def check_bing(request):
     openid = session.get('openid', None)
+    print openid
     if openid:
         flag = Custormer.query.filter_by(openid = openid).first()
-        print "-----------session:flag---------: ", flag
+        print '---------------------flag:session-------------------------'
         if flag:
             return True
         else:
@@ -38,7 +39,7 @@ def check_bing(request):
         id = result.json().get('openid')
         session['openid'] = id
         flag = Custormer.query.filter_by(openid = id).first()
-        print "------------wechat:flag---------: ", flag
+        print '---------------------flag:code-------------------------'
         if flag:
             return True
         else:
