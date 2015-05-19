@@ -137,20 +137,20 @@
             {% block js %}
 			<script type="text/javascript">
 			var name, id, size;
-			$(function () {
+			$(document).ready(function () {
 				$('[data-toggle="popover"]').popover();
 				$('.add-success').hide();
+				$('.qun-quit>li').click(function() {
+					name = $(this).html();
+					id = $(this).data('id');
+					size = $('.qun-quit>li').index($(this)[0]);
+					var re = /<span.+<\/span>/;
+					var temp = name.match(re)[0].length;
+					$('#quit-title').html("你确定退出" + name.substr(temp) + "?");
+					$('#quit').modal('show');
+				});
 			});
 			
-			$('.qun-quit>li').click(function() {
-				name = $(this).html();
-				id = $(this).data('id');
-				size = $('.qun-quit>li').index($(this)[0]);
-				var re = /<span.+<\/span>/;
-				var temp = name.match(re)[0].length;
-				$('#quit-title').html("你确定退出" + name.substr(temp) + "?");
-				$('#quit').modal('show');
-			});
 
 			$(document).on('click', '#quit-confirm', function(event) {
 				event.preventDefault();
