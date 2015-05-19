@@ -37,9 +37,9 @@ def wechat_auth():
 		if (hashlib.sha1(s).hexdigest() == signature):
 			return make_response(echostr)
 		else:
-			return
-	else:
-		token = 'cCPnbiQ3yFDEdkeQcEdf7jsX'
+			return make_response()
+	if request.method == 'POST':
+		token = "cCPnbiQ3yFDEdkeQcEdf7jsX"
 		query = request.args
 		signature = query.get('signature', '')
 		timestamp = query.get('timestamp', '')
@@ -50,9 +50,9 @@ def wechat_auth():
 		s.sort()
 		s = ''.join(s)
 		if (hashlib.sha1(s).hexdigest() == signature):
-			return make_response("True")
+			return make_response(True)
 		else:
-			return make_response("False")
+			return make_response(False)
 
 @app.route('/info', methods=['GET'])
 def info():
@@ -75,6 +75,7 @@ def bing():
 			db.commit()
 		except Exception, ex:
 			print 'Exception: ', ex
+			db.rollback()
 			return render_template('bing.html')
 		else:
 			members = user.quns
@@ -108,6 +109,7 @@ def create():
 			db.commit()
 		except Exception, ex:
 			print 'Exception: ', ex
+			db.rollback()
 			session.pop('_flashes', None)
 			flash(u'创建群失败')
 		finally:
@@ -133,6 +135,7 @@ def qun_info():
 				return jsonify(err_code = 'E0000', err_msg = '你已成功加入')
 		except Exception, e:
 			print 'Exception: ', e
+			db.rollback()
 
 @app.route('/qun/exit', methods = ['POST'])
 def qun_exit():
@@ -152,6 +155,7 @@ def qun_exit():
 				return jsonify(err_code = 'E0000', err_msg = '你已经退出了该群')
 		except Exception, e:
 			print 'Exception: ', e
+			db.rollback()
 
 @app.route('/activity', methods = ['GET', 'POST'])
 def activity():
@@ -208,6 +212,7 @@ def activity_join():
 			db.commit()
 		except Exception, e:
 			print 'Exception', e
+			db.rollback()
 		else:
 			if detail.id:
 				return jsonify(err_code = 'E0000', err_msg = 'success')

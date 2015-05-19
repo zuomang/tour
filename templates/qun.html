@@ -142,7 +142,7 @@
 				$('.add-success').hide();
 			});
 			
-			$(document).on('click', '.qun-quit>li', function() {
+			$('.qun-quit>li').click(function() {
 				name = $(this).html();
 				id = $(this).data('id');
 				size = $('.qun-quit>li').index($(this)[0]);
