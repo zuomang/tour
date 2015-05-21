@@ -39,19 +39,19 @@
 
 		$('.btn-block').click(function(event) {
 			event.preventDefault();
-			var amount = $('.form-control').val();
+			//var amount = $('.form-control').val();
 			var data = {
-				amount : amount
+				amount : 100
 			}
 			$.ajax({
 				type: "POST",
 				url: "{{ url_for('recharge') }}",
-				data: data,
+				data: JSON.stringify(data),
 				contentType: 'application/json;charset=UTF-8',
 				success: function(result) {
 					console.log("success");
 				}
-			})
+			});
 		})
 	</script>
 {% endblock %}

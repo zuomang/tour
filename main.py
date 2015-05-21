@@ -5,9 +5,10 @@ from flask import Flask, request, make_response, render_template, g, session, re
 from flask.ext.sqlalchemy import SQLAlchemy
 from models.table import Custormer, Qun, member, db, Activity, ActivityDetail
 from create_menu import url_qun
+from payment import UnfiedOrder
+
 import hashlib
 import util
-from wechat_payment import UnifiedOrder
 
 app = Flask(__name__)
 app.config.from_envvar('FLASK_PRODUCT_SETTINGS')
@@ -228,12 +229,15 @@ def recharge():
 		return render_template('recharge.html')
 
 	if request.method == 'POST':
+		print "request start........"
 		openid = session['openid']
 		amount = request.json['amount']
 		print amount
-		payment = UnifiedOrder()
-		payment.createXml("virtual product", amount)
-		print payment.getPrepayId
+		payment = UnfiedOrder()
+        payment.setParameter("body", "test")
+        payment.setParameter("total_fee", str(amout))
+		payment.createXml()
+		print payment.getPrepayId()
 		return jsonify(err_code = 'EOOOO', err_msg = "success")
 
 

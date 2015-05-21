@@ -149,25 +149,27 @@ class WechatPaymentBase(CommonUtilPub):
         return self.result
 
 
-class UnfiedOrder_pub(WechatPaymentBase):
+class UnfiedOrder(WechatPaymentBase):
     """统一支付接口"""
 
     def __init__(self, timeout = PaymentBaseConf.CURL_TIMEOUT):
         self.url = "https://api.mch.weixin.qq.com/pay/unifiedorder"
         self.curl_timeout = timeout
-        super(WechatPaymentBase, self).__init__()
+        super(UnfiedOrder, self).__init__()
 
-    def createXml(self, body, total_fee):
+    def createXml(self):
         self.parameters["appid"] = PaymentBaseConf.APPID
         self.parameters["mch_id"] = PaymentBaseConf.MCHID
-        self.parameters["nonce_str"] = self.createNoncestr
-        self.parameters["body"] = body
+        self.parameters["nonce_str"] = self.createNoncestr()
+        #self.parameters["body"] = body
         self.parameters["out_trade_no"] = self.createTradeNo()
-        self.parameters["total_fee"] = total_fee
+        #self.parameters["total_fee"] = str(total_fee)
         self.parameters["spbill_create_ip"] = "127.0.0.1"
         self.parameters["notify_url"] = PaymentBaseConf.NOTIFY_URL
         self.parameters["trade_type"] = "JSAPI"
         self.parameters["sign"] = self.getSign(self.parameters)
+        print self.parameters
+        return self.arrayToXml(self.parameters)
 
     def getPrepayId(self):
         self.postXml()
