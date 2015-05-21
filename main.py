@@ -219,5 +219,10 @@ def activity_join():
 			else:
 				return jsonify(err_code = 'E0001', err_msg = '加入活动失败')
 
+@app.route('/recharge', methods = ['GET'])
+def recharge():
+	if request.method == 'GET':
+		return render_template('recharge.html')
+
 if __name__ == '__main__':
 	app.run()
