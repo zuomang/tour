@@ -7,6 +7,7 @@ from models.table import Custormer, Qun, member, db, Activity, ActivityDetail
 from create_menu import url_qun
 import hashlib
 import util
+from wechat_payment import UnifiedOrder
 
 app = Flask(__name__)
 app.config.from_envvar('FLASK_PRODUCT_SETTINGS')
@@ -196,6 +197,7 @@ def activity_check():
 			else:
 				return jsonify(err_code = 'E0001', err_msg = '你还没有属于自己的群')
 
+
 @app.route('/activity/join', methods = ['POST'])
 def activity_join():
 	if request.method == 'POST':
@@ -219,10 +221,21 @@ def activity_join():
 			else:
 				return jsonify(err_code = 'E0001', err_msg = '加入活动失败')
 
-@app.route('/recharge', methods = ['GET'])
+
+@app.route('/recharge', methods = ['GET', 'POST'])
 def recharge():
 	if request.method == 'GET':
 		return render_template('recharge.html')
+
+	if request.method == 'POST':
+		openid = session['openid']
+		amount = request.json['amount']
+		print amount
+		payment = UnifiedOrder()
+		payment.createXml("virtual product", amount)
+		print payment.getPrepayId
+		return jsonify(err_code = 'EOOOO', err_msg = "success")
+
 
 if __name__ == '__main__':
 	app.run()
