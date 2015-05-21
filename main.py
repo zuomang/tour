@@ -2,10 +2,9 @@
 # encoding: utf-8
 
 from flask import Flask, request, make_response, render_template, g, session, redirect, url_for, jsonify, flash
-from flask.ext.sqlalchemy import SQLAlchemy
 from models.table import Custormer, Qun, member, db, Activity, ActivityDetail
 from create_menu import url_qun
-from payment import UnfiedOrder
+from payment import UnfiedOrder, WechatJsAPI
 
 import hashlib
 import util
@@ -223,6 +222,15 @@ def activity_join():
 				return jsonify(err_code = 'E0001', err_msg = '加入活动失败')
 
 
+@app.route('/getPaymentConf', methods = ['POST'])
+def getPaymentConf():
+    if request.method == 'POST' and session['openid']:
+        jsPay = WechatJsAPI()
+        jsPay.createDate()
+        result = jsPay.getResult()
+        return jsonify(err_code = 'E0000', err_msg = 'success', data = result )
+
+
 @app.route('/recharge', methods = ['GET', 'POST'])
 def recharge():
 	if request.method == 'GET':
@@ -231,7 +239,7 @@ def recharge():
 	if request.method == 'POST':
 		openid = session['openid']
 		amount = request.json['amount']
-		
+
 		payment = UnfiedOrder()
         payment.setParameter("body", "test")
         payment.setParameter("total_fee", str(amount))
