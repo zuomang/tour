@@ -10,6 +10,8 @@ import threading
 import uuid
 
 from urllib import quote
+from jsapi_ticket import get_jsapi_ticket
+from util import get_timestamp
 
 class PaymentBaseConf(object):
     APPID = parameter.appid
@@ -114,6 +116,45 @@ class CommonUtilPub(object):
 
     def postXmlCurl(self, xml, url, second = 30):
         return HttpClient().postXml(xml, url, second = second)
+
+
+class WechatJsAPI(CommonUtilPub):
+    respone = None
+    url = None
+    curl_timeout = None
+
+    def __init__(self):
+        self.parameters = {}
+        self.result = {}
+
+    def setParameter(self, parameter, parameterValue):
+        self.parameters[self.trimString(parameter)] = self.trimString(parameterValue)
+
+    def getSign(self, obj):
+        """生成签名"""
+        #签名步骤一：按字典序排序参数,formatBizQueryParaMap已做
+        String = self.formatBizQueryParaMap(obj, False)
+        print String
+        #签名步骤二：在string后加入KEY
+        String = hashlib.sha1(String).hexdigest()
+        return String
+
+    def createDate(self):
+        self.parameters["noncestr"] = self.createNoncestr()
+        self.parameters["jsapi_ticket"] = get_jsapi_ticket()
+        self.parameters["timestamp"] = get_timestamp()
+        self.parameters["url"] = "http://mp.weixin.qq.com?params=value"
+        self.parameters["sign"] = self.getSign(self.parameters)
+
+    def getResult(self):
+        self.result = {
+            'appId': parameter.appid,
+            'timestamp': self.parameters['timestamp'],
+            'nonceStr': self.parameters['noncestr'],
+            'signature': self.parameters['sign'],
+            'jsApiList': []
+            }
+        return self.result
 
 
 class WechatPaymentBase(CommonUtilPub):
