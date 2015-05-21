@@ -236,6 +236,7 @@ def recharge():
 		payment = UnfiedOrder()
         payment.setParameter("body", "test")
         payment.setParameter("total_fee", str(amount))
+        payment.setParameter("openid", openid)
         payment.createXml()
         print payment.getPrepayId()
         return jsonify(err_code = 'EOOOO', err_msg = "success")

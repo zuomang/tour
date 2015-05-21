@@ -83,8 +83,10 @@ class CommonUtilPub(object):
         """生成签名"""
         #签名步骤一：按字典序排序参数,formatBizQueryParaMap已做
         String = self.formatBizQueryParaMap(obj, False)
+        print String
         #签名步骤二：在string后加入KEY
         String = "{0}&key={1}".format(String, PaymentBaseConf.KEY)
+        print String
         #签名步骤三：MD5加密
         String = hashlib.md5(String).hexdigest()
         #签名步骤四：所有字符转为大写
@@ -124,7 +126,7 @@ class WechatPaymentBase(CommonUtilPub):
         self.parameters = {}
         self.result = {}
 
-    def setParamter(self, parameter, parameterValue):
+    def setParameter(self, parameter, parameterValue):
         self.parameters[self.trimString(parameter)] = self.trimString(parameterValue)
 
     def createXml(self):
@@ -161,9 +163,7 @@ class UnfiedOrder(WechatPaymentBase):
         self.parameters["appid"] = PaymentBaseConf.APPID
         self.parameters["mch_id"] = PaymentBaseConf.MCHID
         self.parameters["nonce_str"] = self.createNoncestr()
-        #self.parameters["body"] = body
         self.parameters["out_trade_no"] = self.createTradeNo()
-        #self.parameters["total_fee"] = str(total_fee)
         self.parameters["spbill_create_ip"] = "127.0.0.1"
         self.parameters["notify_url"] = PaymentBaseConf.NOTIFY_URL
         self.parameters["trade_type"] = "JSAPI"
@@ -174,5 +174,6 @@ class UnfiedOrder(WechatPaymentBase):
     def getPrepayId(self):
         self.postXml()
         self.result = self.xmlToArray(self.respone)
+        print self.result
         prepay_id = self.result["prepay_id"]
         return prepay_id
