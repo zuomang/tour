@@ -72,10 +72,12 @@ class CommonUtilPub(object):
     def formatBizQueryParaMap(self, paraMap, urlencode):
         """格式化参数，签名过程需要使用"""
         slist = sorted(paraMap)
+        print slist
         buff = []
         for k in slist:
-            v = quote(paraMap[k]) if urlencode else paraMap[k]
-            buff.append("{0}={1}".format(k, v))
+            if k != "sign":
+                v = quote(paraMap[k]) if urlencode else paraMap[k]
+                buff.append("{0}={1}".format(k, v))
 
         return "&".join(buff)
 
