@@ -72,7 +72,6 @@ class CommonUtilPub(object):
     def formatBizQueryParaMap(self, paraMap, urlencode):
         """格式化参数，签名过程需要使用"""
         slist = sorted(paraMap)
-        print slist
         buff = []
         for k in slist:
             if k != "sign":
@@ -85,10 +84,8 @@ class CommonUtilPub(object):
         """生成签名"""
         #签名步骤一：按字典序排序参数,formatBizQueryParaMap已做
         String = self.formatBizQueryParaMap(obj, False)
-        print String
         #签名步骤二：在string后加入KEY
         String = "{0}&key={1}".format(String, PaymentBaseConf.KEY)
-        print String
         #签名步骤三：MD5加密
         String = hashlib.md5(String).hexdigest()
         #签名步骤四：所有字符转为大写
@@ -170,12 +167,10 @@ class UnfiedOrder(WechatPaymentBase):
         self.parameters["notify_url"] = PaymentBaseConf.NOTIFY_URL
         self.parameters["trade_type"] = "JSAPI"
         self.parameters["sign"] = self.getSign(self.parameters)
-        print self.parameters
         return self.arrayToXml(self.parameters)
 
     def getPrepayId(self):
         self.postXml()
         self.result = self.xmlToArray(self.respone)
-        print self.result
         prepay_id = self.result["prepay_id"]
         return prepay_id

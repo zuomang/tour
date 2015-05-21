@@ -229,10 +229,9 @@ def recharge():
 		return render_template('recharge.html')
 
 	if request.method == 'POST':
-		print "request start........"
 		openid = session['openid']
 		amount = request.json['amount']
-		print amount
+		
 		payment = UnfiedOrder()
         payment.setParameter("body", "test")
         payment.setParameter("total_fee", str(amount))
