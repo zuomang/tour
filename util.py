@@ -4,6 +4,8 @@
 from datetime import datetime
 from flask import session
 from models.table import Custormer, db, Activity
+from time import time
+
 import json
 import parameter
 import requests
@@ -16,6 +18,10 @@ class JSONEncoder(json.JSONEncoder):
 
 def now():
 	return datetime.now()
+
+def get_timestamp():
+    timestamp = time()
+    return int(timestamp)
 
 def check_bing(request):
     openid = session.get('openid', None)

@@ -222,9 +222,9 @@ def activity_join():
 				return jsonify(err_code = 'E0001', err_msg = '加入活动失败')
 
 
-@app.route('/getPaymentConf', methods = ['POST'])
+@app.route('/getPaymentConf', methods = ['GET'])
 def getPaymentConf():
-    if request.method == 'POST' and session['openid']:
+    if request.method == 'GET':
         jsPay = WechatJsAPI()
         jsPay.createDate()
         result = jsPay.getResult()

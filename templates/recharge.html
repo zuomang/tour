@@ -31,7 +31,25 @@
 	</div>
 {% endblock %}
 {% block js %}
+	<script type="text/javascript" src="../static/js/jweixin-1.0.0.js"></script>
 	<script type="text/javascript">
+		$(document).ready(function() {
+			var data;
+			$.get("{{ url_for('getPaymentConf')}} ", function(result) {
+				if (result.err_code == "EOOOO") {
+					data = result.data;
+				};
+			});
+			wx.config({
+				debug: true,
+				appid: data.appId,
+				nonceStr: data.timestamp,
+				nonceStr: data.nonceStr,
+				signature: data.signature,
+				jsApiList: data.jsApiList
+			});
+		});
+
 		$('.btn-default').click(function() {
 			var btnValue = $(this).html();
 			$('.form-control').val(btnValue);
