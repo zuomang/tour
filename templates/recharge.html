@@ -67,7 +67,20 @@
 				data: JSON.stringify(data),
 				contentType: 'application/json;charset=UTF-8',
 				success: function(result) {
-					console.log("success");
+                    var prepayid;
+                    if(result.err_code == "E0000") {
+                        prepayid = result.data.prepayid;
+                        wx.chooseWXPay({
+                            timestamp: paymentSignInfo.timestamp,
+                            nonceStr: paymentSignInfo.nonceStr,
+                            package: "prepay_id=" + prepayid,
+                            signType: "SHA1",
+                            paySign: paymentSignInfo.signature,
+                            success: function(result) {
+                                alert("ok");
+                            }
+                        })
+                    }
 				}
 			});
 		})
