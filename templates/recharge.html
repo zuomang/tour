@@ -60,7 +60,7 @@
 			//var amount = $('.form-control').val();
 			var data = {
 				amount : 100
-			}
+			};
 			$.ajax({
 				type: "POST",
 				url: "{{ url_for('recharge') }}",
@@ -70,18 +70,26 @@
                     var prepayid;
                     if(result.err_code == "E0000") {
                         prepayid = result.data.prepayid;
-                        wx.chooseWXPay({
-                            timestamp: paymentSignInfo.timestamp,
-                            nonceStr: paymentSignInfo.nonceStr,
-                            package: "prepay_id=" + prepayid,
-                            signType: "SHA1",
-                            paySign: paymentSignInfo.signature,
-                            success: function(result) {
-                                alert("ok");
-                            }
-                        })
-                    }
-				}
+                        var data = {
+                            prepayid : prepayid
+                        };
+			            $.post("{{ url_for('getPaymentConf')}} ", data, function(result) {
+                            if(result.err_code == "E0000") {
+                                info = result.data;
+                                wx.chooseWXPay({
+                                    timeStamp: info.timeStamp,
+                                    nonceStr: info.nonceStr,
+                                    package: "prepay_id=" + prepayid,
+                                    signType: "MD5",
+                                    paySign: info.sign,
+                                    success: function(result) {
+                                        alert("ok");
+                                    }
+                                });
+                            };
+                        });
+                    };
+				};
 			});
 		})
 	</script>

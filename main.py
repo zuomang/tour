@@ -4,8 +4,7 @@
 from flask import Flask, request, make_response, render_template, g, session, redirect, url_for, jsonify, flash
 from models.table import Custormer, Qun, member, db, Activity, ActivityDetail
 from create_menu import url_qun
-from payment import UnfiedOrder, WechatJsAPI
-
+from payment import UnfiedOrder, WechatConfigJsAPI, WechatJsPayment
 import hashlib
 import util
 
@@ -223,10 +222,17 @@ def activity_join():
 @app.route('/getPaymentConf', methods = ['GET'])
 def getPaymentConf():
     if request.method == 'GET':
-        jsPay = WechatJsAPI()
+        jsPay = WechatConfigJsAPI()
         jsPay.createDate()
         result = jsPay.getResult()
         return jsonify(err_code = 'E0000', err_msg = 'success', data = result )
+
+    if request.method == 'POST':
+        wechatPayment = WechatJsPayment()
+        prepayid = request.json['prepayid']
+        result = wechatPayment.getParameters(prepayid)
+        print result
+        return jsonify(err_code = 'E0000', err_msg = "success", data = result)
 
 
 @app.route('/recharge', methods = ['GET', 'POST'])
@@ -244,7 +250,7 @@ def recharge():
         payment.setParameter("openid", openid)
         payment.createXml()
         data = {"prepayid": payment.getPrepayId()}
-        return jsonify(err_code = 'EOOOO', err_msg = "success", data = data )
+        return jsonify(err_code = 'E0000', err_msg = "success", data = data )
 
 if __name__ == '__main__':
 	app.run()

@@ -8,6 +8,7 @@ import xml.etree.ElementTree as ET
 import urllib2
 import threading
 import uuid
+import json
 
 from urllib import quote
 from jsapi_ticket import get_jsapi_ticket
@@ -118,7 +119,7 @@ class CommonUtilPub(object):
         return HttpClient().postXml(xml, url, second = second)
 
 
-class WechatJsAPI(CommonUtilPub):
+class WechatConfigJsAPI(CommonUtilPub):
     respone = None
     url = None
     curl_timeout = None
@@ -156,6 +157,28 @@ class WechatJsAPI(CommonUtilPub):
             }
         return self.result
 
+
+class WechatJsPayment(CommonUtilPub):
+    code = None
+    openid = None
+    parameters = None
+    prepay_id = None
+    curl_timeout = None
+
+    def __init__(self, timeout = PaymentBaseConf.CURL_TIMEOUT):
+        self.curl_timeout = timeout
+
+    def getParameters(self, prepayid):
+        jsApiObj = {}
+        jsApiObj["appId"] = PaymentBaseConf.APPID
+        jsApiObj["timeStamp"] = get_timestamp()
+        jsApiObj["nonceStr"] = self.createNoncestr()
+        jsApiObj["package"] = "prepay_id=" + prepayid
+        jsApiObj["signType"] = "MD5"
+        jsApiObj["sign"] = self.getSign(jsApiObj)
+        self.parameters = jsApiObj
+
+        return self.parameters
 
 class WechatPaymentBase(CommonUtilPub):
     respone = None
