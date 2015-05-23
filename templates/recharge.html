@@ -33,20 +33,20 @@
 {% block js %}
 	<script type="text/javascript" src="../static/js/jweixin-1.0.0.js"></script>
 	<script type="text/javascript">
+		var paymentSignInfo;
 		$(document).ready(function() {
-			var data;
 			$.get("{{ url_for('getPaymentConf')}} ", function(result) {
-				if (result.err_code == "EOOOO") {
-					data = result.data;
+				if (result.err_code == "E0000") {
+					paymentSignInfo = result.data;
+					wx.config({
+						debug: true,
+						appId: paymentSignInfo.appId,
+						timestamp: paymentSignInfo.timestamp,
+						nonceStr: paymentSignInfo.nonceStr,
+						signature: paymentSignInfo.signature,
+						jsApiList: paymentSignInfo.jsApiList
+					});
 				};
-			});
-			wx.config({
-				debug: true,
-				appid: data.appId,
-				nonceStr: data.timestamp,
-				nonceStr: data.nonceStr,
-				signature: data.signature,
-				jsApiList: data.jsApiList
 			});
 		});
 

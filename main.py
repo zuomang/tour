@@ -184,8 +184,6 @@ def activity_check():
 	if request.method == 'POST':
 		openid = session['openid']
 		activity_id = request.json['activityId']
-		print activity_id
-		# openid = session.get("openid")
 		try:
 			user = Custormer.query.filter_by(openid = openid).first()
 			qun = Qun.query.filter_by(openid = openid).first()
@@ -245,8 +243,8 @@ def recharge():
         payment.setParameter("total_fee", str(amount))
         payment.setParameter("openid", openid)
         payment.createXml()
-        print payment.getPrepayId()
-        return jsonify(err_code = 'EOOOO', err_msg = "success")
+        data = {"prepayid": payment.getPrepayId()}
+        return jsonify(err_code = 'EOOOO', err_msg = "success", data = data )
 
 if __name__ == '__main__':
 	app.run()

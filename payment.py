@@ -143,7 +143,7 @@ class WechatJsAPI(CommonUtilPub):
         self.parameters["noncestr"] = self.createNoncestr()
         self.parameters["jsapi_ticket"] = get_jsapi_ticket()
         self.parameters["timestamp"] = get_timestamp()
-        self.parameters["url"] = "http://mp.weixin.qq.com?params=value"
+        self.parameters["url"] = "http://www.quxhuan.com/recharge"
         self.parameters["sign"] = self.getSign(self.parameters)
 
     def getResult(self):
@@ -152,7 +152,7 @@ class WechatJsAPI(CommonUtilPub):
             'timestamp': self.parameters['timestamp'],
             'nonceStr': self.parameters['noncestr'],
             'signature': self.parameters['sign'],
-            'jsApiList': []
+            'jsApiList': ['chooseWXPay']
             }
         return self.result
 
