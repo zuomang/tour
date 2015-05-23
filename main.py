@@ -219,7 +219,7 @@ def activity_join():
 				return jsonify(err_code = 'E0001', err_msg = '加入活动失败')
 
 
-@app.route('/getPaymentConf', methods = ['GET'])
+@app.route('/payment/getPaymentConf', methods = ['GET', 'POST'])
 def getPaymentConf():
     if request.method == 'GET':
         jsPay = WechatConfigJsAPI()
@@ -229,19 +229,20 @@ def getPaymentConf():
 
     if request.method == 'POST':
         wechatPayment = WechatJsPayment()
-        prepayid = request.json['prepayid']
+        prepayid = request.form['prepayid']
         result = wechatPayment.getParameters(prepayid)
         print result
         return jsonify(err_code = 'E0000', err_msg = "success", data = result)
 
 
-@app.route('/recharge', methods = ['GET', 'POST'])
+@app.route('/payment/recharge', methods = ['GET', 'POST'])
 def recharge():
 	if request.method == 'GET':
 		return render_template('recharge.html')
 
 	if request.method == 'POST':
 		openid = session['openid']
+		#openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
 		amount = request.json['amount']
 
 		payment = UnfiedOrder()

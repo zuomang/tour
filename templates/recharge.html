@@ -73,11 +73,11 @@
                         var data = {
                             prepayid : prepayid
                         };
-			            $.post("{{ url_for('getPaymentConf')}} ", data, function(result) {
+			            $.post(" {{ url_for('getPaymentConf')}} ", data, function(result) {
                             if(result.err_code == "E0000") {
                                 info = result.data;
                                 wx.chooseWXPay({
-                                    timeStamp: info.timeStamp,
+                                    timestamp: info.timeStamp,
                                     nonceStr: info.nonceStr,
                                     package: "prepay_id=" + prepayid,
                                     signType: "MD5",
@@ -86,10 +86,10 @@
                                         alert("ok");
                                     }
                                 });
-                            };
+                            }
                         });
-                    };
-				};
+                    }
+				}
 			});
 		})
 	</script>

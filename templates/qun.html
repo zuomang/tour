@@ -55,7 +55,7 @@
 								</tr>
 								<tr>
 									<td class="text-primary"><strong>建设资金</strong></td>
-									<td>{{ my_qun.building_fund }}<a href="{{ url_for('recharge') }}" class="btn btn-danger btn-xs active" role="button">充值</a></td>
+									<td>{{ my_qun.building_fund }}<a href="{{ url_for('recharge') + '?showwxpaytitle=1' }}" class="btn btn-danger btn-xs active" role="button">充值</a></td>
 								</tr>
 								<tr class="info">
 									<td class="text-primary"><strong>已提取资金</strong></td>

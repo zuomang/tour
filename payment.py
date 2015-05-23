@@ -144,7 +144,7 @@ class WechatConfigJsAPI(CommonUtilPub):
         self.parameters["noncestr"] = self.createNoncestr()
         self.parameters["jsapi_ticket"] = get_jsapi_ticket()
         self.parameters["timestamp"] = get_timestamp()
-        self.parameters["url"] = "http://www.quxhuan.com/recharge"
+        self.parameters["url"] = "http://www.quxhuan.com/payment/recharge?showwxpaytitle=1"
         self.parameters["sign"] = self.getSign(self.parameters)
 
     def getResult(self):
@@ -171,7 +171,7 @@ class WechatJsPayment(CommonUtilPub):
     def getParameters(self, prepayid):
         jsApiObj = {}
         jsApiObj["appId"] = PaymentBaseConf.APPID
-        jsApiObj["timeStamp"] = get_timestamp()
+        jsApiObj["timeStamp"] = str(get_timestamp())
         jsApiObj["nonceStr"] = self.createNoncestr()
         jsApiObj["package"] = "prepay_id=" + prepayid
         jsApiObj["signType"] = "MD5"
