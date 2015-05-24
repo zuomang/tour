@@ -220,7 +220,7 @@ def activity_join():
 				return jsonify(err_code = 'E0001', err_msg = '加入活动失败')
 
 
-#@app.route('/payment/getPaymentConf', methods = ['GET', 'POST'])
+@app.route('/payment/getPaymentConf', methods = ['GET', 'POST'])
 @app.route('/paymenttest/getPaymentConf', methods = ['GET', 'POST'])
 def getPaymentConf():
 	if request.method == 'GET':
@@ -245,7 +245,6 @@ def recharge():
 
 	if request.method == 'POST':
 		openid = session['openid']
-		#openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
 		amount = request.json['amount']
 
 		payment = UnfiedOrder()
@@ -260,9 +259,7 @@ def recharge():
 @app.route('/payback', methods = ['POST', 'GET'])
 def paymentCallback():
 	if request.method == "POST":
-		print request.headers
 		call_data = util.xmlToArray(request.data)
-		print call_data
 		if call_data.get('result_code') == "SUCCESS" and call_data.get('return_code') == "SUCCESS":
 			db = get_db()
 			try:
@@ -270,7 +267,7 @@ def paymentCallback():
 					call_data["result_code"], call_data["time_end"], call_data["total_fee"], call_data["trade_type"], call_data["transaction_id"])
 				db.add(order)
 				owner_qun = Qun.query.filter_by(openid = call_data["openid"]).first()
-				owner_qun.building_fund += call_data.total_fee
+				owner_qun.building_fund += float(call_data["total_fee"])
 				db.commit()
 			except Exception, e:
 				print "Exception: ", e

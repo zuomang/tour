@@ -145,8 +145,7 @@ class WechatConfigJsAPI(CommonUtilPub):
         self.parameters["noncestr"] = self.createNoncestr()
         self.parameters["jsapi_ticket"] = get_jsapi_ticket()
         self.parameters["timestamp"] = get_timestamp()
-        #self.parameters["url"] = "http://www.quxhuan.com/payment/recharge?showwxpaytitle=1"
-        self.parameters["url"] = "http://www.quxhuan.com/paymenttest/recharge?showwxpaytitle=1"
+        self.parameters["url"] = "http://www.quxhuan.com/payment/recharge?showwxpaytitle=1"
         self.parameters["sign"] = self.getSign(self.parameters)
 
     def getResult(self):

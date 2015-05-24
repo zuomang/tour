@@ -57,9 +57,9 @@
 
 		$('.btn-block').click(function(event) {
 			event.preventDefault();
-			//var amount = $('.form-control').val();
+			var amount = $('.form-control').val();
 			var data = {
-				amount : 10
+				amount : amount
 			};
 			$.ajax({
 				type: "POST",
