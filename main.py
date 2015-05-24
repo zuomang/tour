@@ -38,6 +38,7 @@ def wechat_auth():
 			return make_response(echostr)
 		else:
 			return make_response()
+
 	if request.method == 'POST':
 		token = "cCPnbiQ3yFDEdkeQcEdf7jsX"
 		query = request.args
@@ -49,7 +50,10 @@ def wechat_auth():
 		s = [timestamp, nonce, token]
 		s.sort()
 		s = ''.join(s)
-		return
+		if (hashlib.sha1(s).hexdigest() == signature):
+			return make_response("True")
+		else:
+			return make_response("False")
 
 @app.route('/info', methods=['GET'])
 def info():
@@ -258,11 +262,12 @@ def paymentCallback():
 	if request.method == "POST":
 		print request.headers
 		call_data = util.xmlToArray(request.data)
-		if call_data.result_code == "SUCCESS" and call_data.return_code == "SUCCESS":
+		print call_data
+		if call_data.get('result_code') == "SUCCESS" and call_data.get('return_code') == "SUCCESS":
 			db = get_db()
 			try:
-				order = PaymentOrder(call_data.bank_type, call_data.cash_fee, call_data.fee_type, call_data.is_subscribe, call_data.openid, call_data.out_trade_no,
-					call_data.result_code, call_data.time_end, call_data.total_fee, call_data.trade_type, call_data.transaction_id)
+				order = PaymentOrder(call_data["bank_type"], call_data["cash_fee"], call_data["fee_type"], call_data["is_subscribe"], call_data["openid"], call_data["out_trade_no"],
+					call_data["result_code"], call_data["time_end"], call_data["total_fee"], call_data["trade_type"], call_data["transaction_id"])
 				db.add(order)
 				owner_qun = Qun.query.filter_by(openid = call_data.openid).first()
 				owner_qun.building_fund += call_data.total_fee
