@@ -269,7 +269,7 @@ def paymentCallback():
 				order = PaymentOrder(call_data["bank_type"], call_data["cash_fee"], call_data["fee_type"], call_data["is_subscribe"], call_data["openid"], call_data["out_trade_no"],
 					call_data["result_code"], call_data["time_end"], call_data["total_fee"], call_data["trade_type"], call_data["transaction_id"])
 				db.add(order)
-				owner_qun = Qun.query.filter_by(openid = call_data.openid).first()
+				owner_qun = Qun.query.filter_by(openid = call_data["openid"]).first()
 				owner_qun.building_fund += call_data.total_fee
 				db.commit()
 			except Exception, e:
@@ -281,7 +281,7 @@ def paymentCallback():
 					'return_msg': ''
 				}
 				xmlResponse = util.arrayToXml(response)
-				return Response(xmlResponse, mimetype='application/xml;charset=UTF-8')
+				return Response(xmlResponse, mimetype='text/xml;charset=UTF-8')
 
 
 if __name__ == '__main__':
