@@ -24,7 +24,7 @@
 				{% if a.description %}
 				<p>{{ a.description[:80] }}</p>
 				{% endif %}
-				<p>活动费用：{{ a.partici_fee }}</p>
+				<p>活动费用：{{ a.partici_fee }}元/人</p>
 				<p><button type="button" class="btn btn-info btn-default btn-right" data-id="{{ a.id }}">参加</button>
 					<botto type="button" class="btn btn-danger">查看详情</button></p>
 			</div>
@@ -195,6 +195,7 @@
 		})
 	})
 
+	//分页	
 	$(document).on("click", ".down", function(event) {
 		event.preventDefault();
 		$('.add-success').hide();

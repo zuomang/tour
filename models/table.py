@@ -131,7 +131,7 @@ class PaymentOrder(db.Model):
         self.bank_type = bank_type
         self.cash_fee = cash_fee
         self.fee_type = fee_type
-        self.is_subscribe = self.is_subscribe
+        self.is_subscribe = is_subscribe
         self.openid = openid
         self.out_trade_no = out_trade_no
         self.result_code = result_code

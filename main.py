@@ -12,18 +12,23 @@ app = Flask(__name__)
 app.config.from_envvar('FLASK_PRODUCT_SETTINGS')
 
 def get_db():
+	"""配置全局数据源"""
 	if not hasattr(g, 'db_session'):
 		g.db_session = db.session
 	return g.db_session
 
+
 @app.before_request
 def bind(*args, **kwargs):
+	"""拦截器：验证用户是否绑定"""
 	if request.method == 'GET' and request.path != '/activity' and request.path != '/' and not util.check_bing(request):
 		return render_template('bing.html')
+
 
 @app.route('/', methods=['GET', 'POST'])
 def wechat_auth():
 	if request.method == 'GET':
+		"""微信后台接口配置验证"""
 		token = "cCPnbiQ3yFDEdkeQcEdf7jsX"
 		query = request.args
 		signature = query.get('signature', '')
@@ -40,6 +45,7 @@ def wechat_auth():
 			return make_response()
 
 	if request.method == 'POST':
+		"""微信推送过来消息验证"""
 		token = "cCPnbiQ3yFDEdkeQcEdf7jsX"
 		query = request.args
 		signature = query.get('signature', '')
@@ -55,17 +61,21 @@ def wechat_auth():
 		else:
 			return make_response("False")
 
+
 @app.route('/info', methods=['GET'])
 def info():
 	if request.method == 'GET':
+		"""个人信息页面"""
 		openid = session['openid']
 		user = Custormer.query.filter_by(openid = openid).first()
 		members = user.quns
 		return render_template('info.html', user = user, members = members)
 
+
 @app.route('/bing', methods=['POST'])
 def bing():
 	if request.method == 'POST':
+		"""微信用户绑定"""
 		openid = session['openid']
 		username = request.form['username']
 		phone = request.form['phone']
@@ -82,13 +92,15 @@ def bing():
 			members = user.quns
 			return render_template('info.html', user = user, members = members)
 
+
 @app.route('/qun', methods=['GET'])
 def qun():
 	if request.method == 'GET':
+		"""群消息展示"""
 		openid = session['openid']
 		try:
 			user = Custormer.query.filter_by(openid = openid).first()
-			my_qun = Qun.query.filter_by(openid = user.openid).first()
+			my_qun = Qun.query.filter_by(openid = openid).first()
 			quns = Qun.query.all()
 		except Exception, e:
 			print 'Exception: ', e
@@ -96,9 +108,11 @@ def qun():
 			my_quns = user.quns
 			return render_template('qun.html', user = user, my_qun = my_qun, my_quns = my_quns, quns = quns)
 
+
 @app.route('/qun/create', methods=['POST'])
 def create():
 	if request.method == 'POST':
+		"""创建群"""
 		openid = session['openid']
 		name = request.form['name']
 		db = get_db()
@@ -115,6 +129,7 @@ def create():
 			flash(u'创建群失败')
 		finally:
 			return redirect(url_for('qun'))
+
 
 @app.route('/qun/info', methods=['POST'])
 def qun_info():
@@ -138,6 +153,7 @@ def qun_info():
 			print 'Exception: ', e
 			db.rollback()
 
+
 @app.route('/qun/exit', methods = ['POST'])
 def qun_exit():
 	if request.method == 'POST':
@@ -157,6 +173,7 @@ def qun_exit():
 		except Exception, e:
 			print 'Exception: ', e
 			db.rollback()
+
 
 @app.route('/activity', methods = ['GET', 'POST'])
 def activity():
@@ -179,9 +196,11 @@ def activity():
 		except Exception, e:
 			print 'Exception', e
 
+
 @app.route('/activity/check', methods = ['GET', 'POST'])
 def activity_check():
 	if request.method == 'POST':
+		"""check是否是群主"""
 		openid = session['openid']
 		activity_id = request.json['activityId']
 		try:
@@ -207,7 +226,12 @@ def activity_join():
 		try:
 			user = Custormer.query.filter_by(openid = openid).first()
 			activity = Activity.query.filter_by(id = activity_id).first()
-			detail = ActivityDetail(activity_id, activity.name, activity_date, openid, activity.id, activity_number, 100, 20)
+			qun = Qun.query.filter_by(openid = openid).first()
+			amount = int(activity_number) * activity.cost
+			qun_building = qun.building_fund
+			if amount>qun_building:
+				return jsonify(err_code = 'E0002', err_msg = '你的群建设资金不足')
+			detail = ActivityDetail(activity_id, activity.name, activity_date, openid, activity.id, activity_number, amount, 0)
 			db.add(detail)
 			db.commit()
 		except Exception, e:
@@ -224,40 +248,47 @@ def activity_join():
 @app.route('/paymenttest/getPaymentConf', methods = ['GET', 'POST'])
 def getPaymentConf():
 	if request.method == 'GET':
+		"""微信SDK config 验证"""
 		jsPay = WechatConfigJsAPI()
 		jsPay.createDate()
 		result = jsPay.getResult()
 		return jsonify(err_code = 'E0000', err_msg = 'success', data = result )
 
 	if request.method == 'POST':
+		"""H5页面JS API发起支付"""
 		wechatPayment = WechatJsPayment()
 		prepayid = request.form['prepayid']
 		result = wechatPayment.getParameters(prepayid)
-		print result
 		return jsonify(err_code = 'E0000', err_msg = "success", data = result)
 
 
 @app.route('/payment/recharge', methods = ['GET', 'POST'])
 @app.route('/paymenttest/recharge', methods = ['GET', 'POST'])
 def recharge():
+	
 	if request.method == 'GET':
+		"""GET方法返回充值页面"""
 		return render_template('recharge.html')
 
 	if request.method == 'POST':
+		"""POST方法调用统一下单接口下单"""
 		openid = session['openid']
-		amount = request.json['amount']
+		amount = float(request.json['amount'])*100 #充值金额单位为分
 
 		payment = UnfiedOrder()
 		payment.setParameter("body", "test")
 		payment.setParameter("total_fee", str(amount))
 		payment.setParameter("openid", openid)
 		payment.createXml()
-		data = {"prepayid": payment.getPrepayId()}
+		data = {
+			"prepayid": payment.getPrepayId()
+			}
 		return jsonify(err_code = 'E0000', err_msg = "success", data = data )
 
 
 @app.route('/payback', methods = ['POST', 'GET'])
 def paymentCallback():
+	"""payback负责微信支付回调"""
 	if request.method == "POST":
 		call_data = util.xmlToArray(request.data)
 		if call_data.get('result_code') == "SUCCESS" and call_data.get('return_code') == "SUCCESS":
@@ -277,8 +308,13 @@ def paymentCallback():
 					'return_code': 'SUCCESS',
 					'return_msg': ''
 				}
-				xmlResponse = util.arrayToXml(response)
-				return Response(xmlResponse, mimetype='text/xml;charset=UTF-8')
+		else:
+			response = {
+					'return_code': 'FAIL',
+					'return_msg': ''
+				}
+		xmlResponse = util.arrayToXml(response)
+		return Response(xmlResponse, mimetype='text/xml;charset=UTF-8')
 
 
 if __name__ == '__main__':
