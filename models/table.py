@@ -111,6 +111,38 @@ class ActivityDetail(db.Model):
     def __repr__(self):
         return '<ActivityDetail %r>' % self.id
 
+
+class PaymentOrder(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    bank_type = db.Column(db.String(16))
+    cash_fee = db.Column(db.String(32))
+    fee_type = db.Column(db.String(8))
+    is_subscribe = db.Column(db.String(1))
+    openid = db.Column(db.String(32))
+    out_trade_no = db.Column(db.String(32))
+    result_code = db.Column(db.String(16))
+    time_end = db.Column(db.String(14))
+    total_fee = db.Column(db.String(20))
+    trade_type = db.Column(db.String(16))
+    transaction_id = db.Column(db.String(32))
+
+    def __init__(self, bank_type, cash_fee, fee_type, is_subscribe, openid, out_trade_no,
+            result_code, time_end, total_fee, trade_type, transaction_id):
+        self.bank_type = bank_type
+        self.cash_fee = cash_fee
+        self.fee_type = fee_type
+        self.is_subscribe = self.is_subscribe
+        self.openid = openid
+        self.out_trade_no = out_trade_no
+        self.result_code = result_code
+        self.time_end = time_end
+        self.total_fee = total_fee
+        self.trade_type = trade_type
+        self.transaction_id = transaction_id
+
+    def __repr__(self):
+        return '<PaymentOrder %r>' % self.id
+
 if __name__ == "__main__":
 	db.drop_all()
 	db.create_all()

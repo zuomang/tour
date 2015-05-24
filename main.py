@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-from flask import Flask, request, make_response, render_template, g, session, redirect, url_for, jsonify, flash
-from models.table import Custormer, Qun, member, db, Activity, ActivityDetail
-from create_menu import url_qun
+from flask import Flask, request, make_response, Response, render_template, g, session, redirect, url_for, jsonify, flash
+from models.table import Custormer, Qun, db, Activity, ActivityDetail, PaymentOrder
 from payment import UnfiedOrder, WechatConfigJsAPI, WechatJsPayment
+
 import hashlib
 import util
 
@@ -219,18 +219,18 @@ def activity_join():
 #@app.route('/payment/getPaymentConf', methods = ['GET', 'POST'])
 @app.route('/paymenttest/getPaymentConf', methods = ['GET', 'POST'])
 def getPaymentConf():
-    if request.method == 'GET':
-        jsPay = WechatConfigJsAPI()
-        jsPay.createDate()
-        result = jsPay.getResult()
-        return jsonify(err_code = 'E0000', err_msg = 'success', data = result )
+	if request.method == 'GET':
+		jsPay = WechatConfigJsAPI()
+		jsPay.createDate()
+		result = jsPay.getResult()
+		return jsonify(err_code = 'E0000', err_msg = 'success', data = result )
 
-    if request.method == 'POST':
-        wechatPayment = WechatJsPayment()
-        prepayid = request.form['prepayid']
-        result = wechatPayment.getParameters(prepayid)
-        print result
-        return jsonify(err_code = 'E0000', err_msg = "success", data = result)
+	if request.method == 'POST':
+		wechatPayment = WechatJsPayment()
+		prepayid = request.form['prepayid']
+		result = wechatPayment.getParameters(prepayid)
+		print result
+		return jsonify(err_code = 'E0000', err_msg = "success", data = result)
 
 
 @app.route('/payment/recharge', methods = ['GET', 'POST'])
@@ -245,21 +245,39 @@ def recharge():
 		amount = request.json['amount']
 
 		payment = UnfiedOrder()
-        payment.setParameter("body", "test")
-        payment.setParameter("total_fee", str(amount))
-        payment.setParameter("openid", openid)
-        payment.createXml()
-        data = {"prepayid": payment.getPrepayId()}
-        return jsonify(err_code = 'E0000', err_msg = "success", data = data )
+		payment.setParameter("body", "test")
+		payment.setParameter("total_fee", str(amount))
+		payment.setParameter("openid", openid)
+		payment.createXml()
+		data = {"prepayid": payment.getPrepayId()}
+		return jsonify(err_code = 'E0000', err_msg = "success", data = data )
 
 
 @app.route('/payback', methods = ['POST', 'GET'])
 def paymentCallback():
-    if request.method == "POST":
-        print "callback"
-        print request.data
-        print request.json
-        return
+	if request.method == "POST":
+		print request.headers
+		call_data = util.xmlToArray(request.data)
+		if call_data.result_code == "SUCCESS" and call_data.return_code == "SUCCESS":
+			db = get_db()
+			try:
+				order = PaymentOrder(call_data.bank_type, call_data.cash_fee, call_data.fee_type, call_data.is_subscribe, call_data.openid, call_data.out_trade_no,
+					call_data.result_code, call_data.time_end, call_data.total_fee, call_data.trade_type, call_data.transaction_id)
+				db.add(order)
+				owner_qun = Qun.query.filter_by(openid = call_data.openid).first()
+				owner_qun.building_fund += call_data.total_fee
+				db.commit()
+			except Exception, e:
+				print "Exception: ", e
+				db.rollback()
+			else:
+				response = {
+					'return_code': 'SUCCESS',
+					'return_msg': ''
+				}
+				xmlResponse = util.arrayToXml(response)
+				return Response(xmlResponse, mimetype='application/xml;charset=UTF-8')
+
 
 if __name__ == '__main__':
 	app.run()
