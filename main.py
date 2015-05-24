@@ -219,7 +219,7 @@ def activity_join():
 				return jsonify(err_code = 'E0001', err_msg = '加入活动失败')
 
 
-@app.route('/payment/getPaymentConf', methods = ['GET', 'POST'])
+@app.route('/payment/test/getPaymentConf', methods = ['GET', 'POST'])
 def getPaymentConf():
     if request.method == 'GET':
         jsPay = WechatConfigJsAPI()
@@ -235,7 +235,7 @@ def getPaymentConf():
         return jsonify(err_code = 'E0000', err_msg = "success", data = result)
 
 
-@app.route('/payment/recharge', methods = ['GET', 'POST'])
+@app.route('/payment/test/recharge', methods = ['GET', 'POST'])
 def recharge():
 	if request.method == 'GET':
 		return render_template('recharge.html')
@@ -252,6 +252,14 @@ def recharge():
         payment.createXml()
         data = {"prepayid": payment.getPrepayId()}
         return jsonify(err_code = 'E0000', err_msg = "success", data = data )
+
+
+@app.route('/payback', methods = ['POST'])
+def paymentCallback():
+    """处理微信支付回调：请求方式POST"""
+    if request.method == "POST":
+        print request.args
+        return
 
 if __name__ == '__main__':
 	app.run()
