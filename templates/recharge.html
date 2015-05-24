@@ -8,10 +8,11 @@
 </style>
 {% endblock %}
 {% block content %}
+	<div class="alert alert-danger" role="alert"></div>
 	<div class="row">
 		<div class="input-group col-xs-offset-1 col-xs-10">
 			<span class="input-group-addon">￥</span>
-			<input type="text" class="form-control" placeholder="输入你的充值">
+			<input type="text" class="form-control" placeholder="充值的金额必须为整数">
 			<span class="input-group-addon">.00</span>
 		</div>
 	</div>
@@ -35,11 +36,12 @@
 	<script type="text/javascript">
 		var paymentSignInfo;
 		$(document).ready(function() {
+			$('.alert-danger').hide();
 			$.get("{{ url_for('getPaymentConf')}} ", function(result) {
 				if (result.err_code == "E0000") {
 					paymentSignInfo = result.data;
 					wx.config({
-						debug: true,
+						debug: false,
 						appId: paymentSignInfo.appId,
 						timestamp: paymentSignInfo.timestamp,
 						nonceStr: paymentSignInfo.nonceStr,
@@ -55,9 +57,21 @@
 			$('.form-control').val(btnValue);
 		});
 
+		$('.form-control').focusout(function() {
+			$('.alert-danger').hide();
+			var fileValue = $(this).val();
+			if (parseInt(fileValue) != Number(fileValue)) {
+				$(this).val("");
+				$('.alert-danger').html("充值的金额必须为整数");
+				$('.alert-danger').show();
+			}
+		});
+
 		$('.btn-block').click(function(event) {
 			event.preventDefault();
 			var amount = $('.form-control').val();
+			if(amount == "")
+				return
 			var data = {
 				amount : amount
 			};

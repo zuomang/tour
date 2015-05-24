@@ -89,7 +89,6 @@ class CommonUtilPub(object):
         String = self.formatBizQueryParaMap(obj, False)
         #签名步骤二：在string后加入KEY
         String = "{0}&key={1}".format(String, PaymentBaseConf.KEY)
-        print String
         #签名步骤三：MD5加密
         String = hashlib.md5(String).hexdigest()
         #签名步骤四：所有字符转为大写
@@ -136,7 +135,6 @@ class WechatConfigJsAPI(CommonUtilPub):
         """生成签名"""
         #签名步骤一：按字典序排序参数,formatBizQueryParaMap已做
         String = self.formatBizQueryParaMap(obj, False)
-        print String
         #签名步骤二：在string后加入KEY
         String = hashlib.sha1(String).hexdigest()
         return String

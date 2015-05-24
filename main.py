@@ -227,10 +227,12 @@ def activity_join():
 			user = Custormer.query.filter_by(openid = openid).first()
 			activity = Activity.query.filter_by(id = activity_id).first()
 			qun = Qun.query.filter_by(openid = openid).first()
-			amount = int(activity_number) * activity.cost
+			amount = int(activity_number) * activity.partici_fee
 			qun_building = qun.building_fund
 			if amount>qun_building:
-				return jsonify(err_code = 'E0002', err_msg = '你的群建设资金不足')
+				return jsonify(err_code = 'E0002', err_msg = '你的群建设资金不足, 请前往我的群信息页面进行充值')
+			else:
+				qun.building_fund -= amount
 			detail = ActivityDetail(activity_id, activity.name, activity_date, openid, activity.id, activity_number, amount, 0)
 			db.add(detail)
 			db.commit()
@@ -239,13 +241,13 @@ def activity_join():
 			db.rollback()
 		else:
 			if detail.id:
-				return jsonify(err_code = 'E0000', err_msg = 'success')
+				return jsonify(err_code = 'E0000', err_msg = '你已加入活动，记得准时参加')
 			else:
 				return jsonify(err_code = 'E0001', err_msg = '加入活动失败')
 
 
 @app.route('/payment/getPaymentConf', methods = ['GET', 'POST'])
-@app.route('/paymenttest/getPaymentConf', methods = ['GET', 'POST'])
+#@app.route('/paymenttest/getPaymentConf', methods = ['GET', 'POST'])
 def getPaymentConf():
 	if request.method == 'GET':
 		"""微信SDK config 验证"""
@@ -263,7 +265,7 @@ def getPaymentConf():
 
 
 @app.route('/payment/recharge', methods = ['GET', 'POST'])
-@app.route('/paymenttest/recharge', methods = ['GET', 'POST'])
+#@app.route('/paymenttest/recharge', methods = ['GET', 'POST'])
 def recharge():
 	
 	if request.method == 'GET':
@@ -273,8 +275,7 @@ def recharge():
 	if request.method == 'POST':
 		"""POST方法调用统一下单接口下单"""
 		openid = session['openid']
-		amount = float(request.json['amount'])*100 #充值金额单位为分
-
+		amount = int(request.json['amount'].encode('utf8'))*100 #充值金额单位为分
 		payment = UnfiedOrder()
 		payment.setParameter("body", "test")
 		payment.setParameter("total_fee", str(amount))
@@ -298,7 +299,7 @@ def paymentCallback():
 					call_data["result_code"], call_data["time_end"], call_data["total_fee"], call_data["trade_type"], call_data["transaction_id"])
 				db.add(order)
 				owner_qun = Qun.query.filter_by(openid = call_data["openid"]).first()
-				owner_qun.building_fund += float(call_data["total_fee"])
+				owner_qun.building_fund += float(call_data["total_fee"])/100
 				db.commit()
 			except Exception, e:
 				print "Exception: ", e
