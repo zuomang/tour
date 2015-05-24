@@ -49,10 +49,7 @@ def wechat_auth():
 		s = [timestamp, nonce, token]
 		s.sort()
 		s = ''.join(s)
-		if (hashlib.sha1(s).hexdigest() == signature):
-			return make_response(True)
-		else:
-			return make_response(False)
+		return
 
 @app.route('/info', methods=['GET'])
 def info():
@@ -219,7 +216,8 @@ def activity_join():
 				return jsonify(err_code = 'E0001', err_msg = '加入活动失败')
 
 
-@app.route('/payment/test/getPaymentConf', methods = ['GET', 'POST'])
+#@app.route('/payment/getPaymentConf', methods = ['GET', 'POST'])
+@app.route('/paymenttest/getPaymentConf', methods = ['GET', 'POST'])
 def getPaymentConf():
     if request.method == 'GET':
         jsPay = WechatConfigJsAPI()
@@ -235,7 +233,8 @@ def getPaymentConf():
         return jsonify(err_code = 'E0000', err_msg = "success", data = result)
 
 
-@app.route('/payment/test/recharge', methods = ['GET', 'POST'])
+@app.route('/payment/recharge', methods = ['GET', 'POST'])
+@app.route('/paymenttest/recharge', methods = ['GET', 'POST'])
 def recharge():
 	if request.method == 'GET':
 		return render_template('recharge.html')
@@ -254,11 +253,12 @@ def recharge():
         return jsonify(err_code = 'E0000', err_msg = "success", data = data )
 
 
-@app.route('/payback', methods = ['POST'])
+@app.route('/payback', methods = ['POST', 'GET'])
 def paymentCallback():
-    """处理微信支付回调：请求方式POST"""
     if request.method == "POST":
-        print request.args
+        print "callback"
+        print request.data
+        print request.json
         return
 
 if __name__ == '__main__':

@@ -21,7 +21,7 @@ class PaymentBaseConf(object):
     KEY = parameter.key
 
     NOTIFY_URL = "http://www.quxhuan.com/payback"
-    CURL_TIMEOUT = 30
+    CURL_TIMEOUT = 60
 
 
 class Singleton(object):
@@ -89,6 +89,7 @@ class CommonUtilPub(object):
         String = self.formatBizQueryParaMap(obj, False)
         #签名步骤二：在string后加入KEY
         String = "{0}&key={1}".format(String, PaymentBaseConf.KEY)
+        print String
         #签名步骤三：MD5加密
         String = hashlib.md5(String).hexdigest()
         #签名步骤四：所有字符转为大写
@@ -144,7 +145,8 @@ class WechatConfigJsAPI(CommonUtilPub):
         self.parameters["noncestr"] = self.createNoncestr()
         self.parameters["jsapi_ticket"] = get_jsapi_ticket()
         self.parameters["timestamp"] = get_timestamp()
-        self.parameters["url"] = "http://www.quxhuan.com/payment/test/recharge?showwxpaytitle=1"
+        #self.parameters["url"] = "http://www.quxhuan.com/payment/recharge?showwxpaytitle=1"
+        self.parameters["url"] = "http://www.quxhuan.com/paymenttest/recharge?showwxpaytitle=1"
         self.parameters["sign"] = self.getSign(self.parameters)
 
     def getResult(self):
@@ -227,7 +229,7 @@ class UnfiedOrder(WechatPaymentBase):
         self.parameters["mch_id"] = PaymentBaseConf.MCHID
         self.parameters["nonce_str"] = self.createNoncestr()
         self.parameters["out_trade_no"] = self.createTradeNo()
-        self.parameters["spbill_create_ip"] = "127.0.0.1"
+        self.parameters["spbill_create_ip"] = "182.254.158.115"
         self.parameters["notify_url"] = PaymentBaseConf.NOTIFY_URL
         self.parameters["trade_type"] = "JSAPI"
         self.parameters["sign"] = self.getSign(self.parameters)

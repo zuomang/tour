@@ -59,7 +59,7 @@
 			event.preventDefault();
 			//var amount = $('.form-control').val();
 			var data = {
-				amount : 100
+				amount : 10
 			};
 			$.ajax({
 				type: "POST",
@@ -83,7 +83,6 @@
                                     signType: "MD5",
                                     paySign: info.sign,
                                     success: function(result) {
-                                        alert("ok");
                                     }
                                 });
                             }
