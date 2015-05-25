@@ -277,7 +277,7 @@ def recharge():
 		openid = session['openid']
 		amount = int(request.json['amount'].encode('utf8'))*100 #充值金额单位为分
 		payment = UnfiedOrder()
-		payment.setParameter("body", "test")
+		payment.setParameter("body", "建设资金充值")
 		payment.setParameter("total_fee", str(amount))
 		payment.setParameter("openid", openid)
 		payment.createXml()
@@ -307,7 +307,6 @@ def paymentCallback():
 			else:
 				response = {
 					'return_code': 'SUCCESS',
-					'return_msg': ''
 				}
 		else:
 			response = {
