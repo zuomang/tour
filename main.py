@@ -230,7 +230,10 @@ def activity_join():
 			amount = int(activity_number) * activity.partici_fee
 			qun_building = qun.building_fund
 			if amount>qun_building:
-				return jsonify(err_code = 'E0002', err_msg = '你的群建设资金不足, 请前往我的群信息页面进行充值')
+				detail = ActivityDetail(activity_id, activity.name, activity_date, openid, activity.id, activity_number, amount, 0)
+				db.add(detail)
+				db.commit()
+				return jsonify(err_code = 'E0000', err_msg = '超过十人参加，有建设资金返还')
 			else:
 				qun.building_fund -= amount
 			detail = ActivityDetail(activity_id, activity.name, activity_date, openid, activity.id, activity_number, amount, 0)
@@ -267,7 +270,7 @@ def getPaymentConf():
 @app.route('/payment/recharge', methods = ['GET', 'POST'])
 #@app.route('/paymenttest/recharge', methods = ['GET', 'POST'])
 def recharge():
-	
+
 	if request.method == 'GET':
 		"""GET方法返回充值页面"""
 		return render_template('recharge.html')
