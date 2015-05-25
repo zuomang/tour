@@ -6,8 +6,12 @@
 {% endblock %}
 {% block style %}
 <style>
-	.btn-right .btn-right-b{
+	.btn-right{
 		margin-left:24%;
+		margin-right:20px;
+	}
+	.btn-right-b{
+		margin-left:10%;
 		margin-right:20px;
 	}
 </style>
@@ -30,7 +34,7 @@
 					{% if a.is_join == 'Y' %}
 					<button type="button" class="btn btn-info btn-default btn-right" data-id="{{ a.id }}">参加</button>
 					{% else %}
-					<button type="button" class="btn btn-info btn-default btn-right-b" data-id="{{ a.id }}">暂时无法参加</button>
+					<button type="button" class="btn btn-info btn-default btn-right-b" data-id="{{ a.id }}">无法参加</button>
 					{% endif %}
 					<botto type="button" class="btn btn-danger">查看详情</button>
 				</p>
