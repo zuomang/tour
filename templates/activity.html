@@ -59,12 +59,12 @@
 			</div>
 			<div class="modal-body">
 				<form class="form-horizontal" method="post" action="#">
-					<div class="form-group">
+					<!-- <div class="form-group">
 						<label for="date" class="col-xs-offset-1 col-xs-3 control-label">日期</label>
 						<div class="col-xs-7">
 							<input type="text" name="date" class="form-control" id="date" placeholder="点击输入日期">
 						</div>
-					</div>
+					</div> -->
 					<div class="form-group">
 						<label for="number" class="col-xs-offset-1 col-xs-3 control-label">人数</label>
 						<div class="col-xs-7">
@@ -192,10 +192,10 @@
 	$(document).on("click", "#join-submit", function(event) {
 		$('.add-success').hide();
 		event.preventDefault();
-		var date = $("#date").val();
+		// var date = $("#date").val();
 		var number = $("#number").val();
 		var data = {
-			date : date,
+			// date : date,
 			number : number,
 			activityId : currentActivityId
 		}

@@ -92,18 +92,18 @@ class ActivityDetail(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'))
     activity_name = db.Column(db.String(20), nullable = False)
-    activity_date = db.Column(db.String(20), nullable = False)
+    activity_date = db.Column(db.String(20), nullable = True)
     qunownr_id = db.Column(db.String(28), nullable = False)
     custormer_id = db.Column(db.String(28), nullable = False)
     accompany_count = db.Column(db.Integer, nullable = False)
     activity_pay = db.Column(db.Float, nullable = False)
     qunbuilding_return = db.Column(db.Float, nullable = False)
 
-    def __init__(self, activity_id, activity_name, activity_date, qunownr_id,
+    def __init__(self, activity_id, activity_name, qunownr_id,
             custormer_id, accompany_count, activity_pay, qunbuilding_return):
         self.activity_id = activity_id
         self.activity_name = activity_name
-        self.activity_date = activity_date
+        # self.activity_date = activity_date
         self.qunownr_id = qunownr_id
         self.custormer_id = custormer_id
         self.accompany_count = accompany_count
