@@ -74,6 +74,8 @@ class Activity(db.Model):
     description = db.Column(db.String(200))
     partici_fee = db.Column(db.Float, nullable = False)
     cost = db.Column(db.Float, nullable = False)
+    is_join = db.Column(db.String(1), nullable = False, default = 'Y')
+    datetime = db.Column(db.String(20), nullable = False)
     activity_details = db.relationship('ActivityDetail', backref = 'activity', lazy = 'dynamic')
 
     def __init__(self, name, owner, partici_fee, cost):

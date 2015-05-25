@@ -6,7 +6,7 @@
 {% endblock %}
 {% block style %}
 <style>
-	.btn-right {
+	.btn-right .btn-right-b{
 		margin-left:24%;
 		margin-right:20px;
 	}
@@ -25,8 +25,15 @@
 				<p>{{ a.description[:80] }}</p>
 				{% endif %}
 				<p>活动费用：{{ a.partici_fee }}元/人</p>
-				<p><button type="button" class="btn btn-info btn-default btn-right" data-id="{{ a.id }}">参加</button>
-					<botto type="button" class="btn btn-danger">查看详情</button></p>
+				<p>活动日期：{{ a.datetime }}</p>
+				<p>
+					{% if a.is_join == 'Y' %}
+					<button type="button" class="btn btn-info btn-default btn-right" data-id="{{ a.id }}">参加</button>
+					{% else %}
+					<button type="button" class="btn btn-info btn-default btn-right-b" data-id="{{ a.id }}">暂时无法参加</button>
+					{% endif %}
+					<botto type="button" class="btn btn-danger">查看详情</button>
+				</p>
 			</div>
 		</div>
 		{% endfor %}
@@ -112,12 +119,22 @@
 		h.appendChild(t);
 		caption.appendChild(h);
 
+		var h1 = document.createElement('p');
+		var t1 = document.createTextNode(data.datetime);
+		h1.appendChild(t1);
+		caption.appendChild(h1);
+
 		var p = document.createElement('p');
 		var btnJoin = document.createElement('button');
 		btnJoin.setAttribute('type', 'button');
-		btnJoin.setAttribute('class', 'btn btn-info btn-default btn-right');
 		btnJoin.setAttribute('data-id', data.id);
-		t = document.createTextNode("参加");
+		if (data.is_join == "Y") {
+			btnJoin.setAttribute('class', 'btn btn-info btn-default btn-right');
+			t = document.createTextNode("参加");
+		} else {
+			btnJoin.setAttribute('class', 'btn btn-info btn-default btn-right-b');
+			t = document.createTextNode("暂时无法参加");
+		}
 		btnJoin.appendChild(t);
 		p.appendChild(btnJoin);
 
