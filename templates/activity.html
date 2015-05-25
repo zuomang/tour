@@ -18,6 +18,10 @@
 {% endblock %}
 {% block content %}
 <div class="alert alert-success add-success" role="alert"></div>
+<div class="alert alert-info info" role="alert">
+	<p>十人参加活动将获得群建设资金返还</p>
+	<p>邀请十人以上可以获得首笔688元建设基金</p>
+</div>
 <div class="row">
 	{% if activitys %}
 	<div class="col-xs-12 all-activity">
@@ -195,6 +199,7 @@
 
 	$(document).on("click", "#join-submit", function(event) {
 		$('.add-success').hide();
+		$('.info').hide();
 		event.preventDefault();
 		// var date = $("#date").val();
 		var number = $("#number").val();

@@ -220,7 +220,6 @@ def activity_join():
 	if request.method == 'POST':
 		openid = session['openid']
 		activity_id = request.json['activityId']
-		activity_date = request.json['date']
 		activity_number= request.json['number']
 		db = get_db()
 		try:
@@ -230,21 +229,20 @@ def activity_join():
 			amount = int(activity_number) * activity.partici_fee
 			qun_building = qun.building_fund
 			if amount>qun_building:
-				detail = ActivityDetail(activity_id, activity.name, activity_date, openid, activity.id, activity_number, amount, 0)
-				db.add(detail)
-				db.commit()
-				return jsonify(err_code = 'E0000', err_msg = '超过十人参加，有建设资金返还')
+				return jsonify(err_code = 'E0002', err_msg = '群建设资金不足，前往充值')
 			else:
 				qun.building_fund -= amount
-			detail = ActivityDetail(activity_id, activity.name, activity_date, openid, activity.id, activity_number, amount, 0)
+			detail = ActivityDetail(activity_id, activity.name, openid, activity.id, activity_number, amount, 0)
 			db.add(detail)
 			db.commit()
 		except Exception, e:
 			print 'Exception', e
 			db.rollback()
 		else:
-			if detail.id:
-				return jsonify(err_code = 'E0000', err_msg = '你已加入活动，记得准时参加')
+			if detail.id and detail.accompany_count < 10:
+				return jsonify(err_code = 'E0000', err_msg = '你已加入活动，参加人数超过十人可享受群建设资金返还')
+			elif detail.id and detail.accompany_count >= 10:
+				return jsonify(err_code = 'E0000', err_msg = '你已加入活动，活动完毕你将会收到群建设资金返还')
 			else:
 				return jsonify(err_code = 'E0001', err_msg = '加入活动失败')
 

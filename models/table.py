@@ -92,7 +92,7 @@ class ActivityDetail(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'))
     activity_name = db.Column(db.String(20), nullable = False)
-    activity_date = db.Column(db.String(20), nullable = True)
+    activity_date = db.Column(db.String(20), nullable = True, default = " ")
     qunownr_id = db.Column(db.String(28), nullable = False)
     custormer_id = db.Column(db.String(28), nullable = False)
     accompany_count = db.Column(db.Integer, nullable = False)
