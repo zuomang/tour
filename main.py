@@ -222,10 +222,37 @@ def qun_manage_delete():
 				db.commit()
 			except Exception, e:
 				print 'Exception: ', e
+				db.rollback()
 			else:
 				return jsonify(err_code = "E0000", err_msg = "删除用户成功")
 		else:
 			return jsonify(err_code = "E0001", err_msg = "您的群没有该用户")
+
+@app.route('/qun/manage/add', methods = ['POST'])
+def qun_manage_delete():
+	if request.method == 'POST':
+		#openid = session['openid']
+		openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
+		add_id = request.json['id']
+		db = get_db()
+
+		custormer = Custormer.query.filter_by(openid = add_id).first()
+		qun = Qun.query.filter_by(openid = openid).first()
+		if len(custormer.quns) >= 8:
+			return jsonify(err_code="E0001", err_msg = "该用户已经加入了8个群")
+			
+		if custormer in qun.custormers:
+			return jsonify(err_code = "E0001", err_msg = "您的群里已有该用户")
+		else:
+			try:
+				qun.custormers.add(custormer)
+				qun.member_count += 1
+				db.commit()
+			except Exception, e:
+				print 'Exception: ', E0000
+				db.rollback()
+			else:
+				return jsonify(err_code = "E0001", err_msg = "您的群没有该用户")
 
 
 @app.route('/activity', methods = ['GET', 'POST'])
