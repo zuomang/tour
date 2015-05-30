@@ -50,7 +50,9 @@
 				</div>
 			</div>
 			<div class="row search-reuslt" style="display: none">
-				<button type="button" class="btn btn-danger btn-xs" style="float:right">删除</button>
+				<ul class="list-group search-group">
+
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -88,6 +90,26 @@
 		$('.search-result').show();
 	})
 
+	var createResult = function (openid, name, op) {
+		var li = document.createElement('li');
+		li.setAttribute('class', 'list-group-item');
+		li.setAttribute('data-id', openid);
+		li.innerHTML = name;
+
+		var btn = document.createElement('button');
+		btn.setAttribute('type', 'button');
+		if (op == "add") {
+			btn.setAttribute('class', 'btn btn-info btn-xs');
+			btn.innerHTML = '添加';
+		} else {
+			btn.setAttribute('class', 'btn btn-danger btn-xs');
+			btn.innerHTML = '删除';
+		}
+		btn.setAttribute('style', 'float:right');
+
+		li.appendChild(btn);
+	}
+
 	$(document).on('click', '.btn-default', function (event) {
 		var phone = $('#search').val();
 		var data = {
@@ -95,15 +117,17 @@
 		};
 		$.ajax({
 			type: "POST",
-			url: "{{ url_for('qun_manage_delete') }}",
+			url: "{{ url_for('qun_manage') }}",
 			data: JSON.stringify(data, null, '\t'),
 			contentType: 'application/json;charset=UTF-8',
 			success: function(result) {
 				if (result.err_code == 'E0000') {
-					currentLi.remove();
-					$('.alert-success').html(result.err_msg);
-					$('.alert-success').show();
+					var group = document.getElementsByClassName('search-group')[0];
+					group.appendChild(createResult(result.openid, result.name, result.err_msg));
+				} else {
+					$('.search-group').html('<li class="list-group-item">搜索结果不存在</li>');
 				}
+				$('.search-reuslt').show();
 			}
 		});
 	})

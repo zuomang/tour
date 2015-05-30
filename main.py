@@ -176,15 +176,30 @@ def qun_exit():
 
 @app.route('/qun/manage', methods = ['GET', 'POST'])
 def qun_manage():
-    if request.method == 'GET':
-        openid = session['openid']
-        try:
-            qun = Qun.query.filter_by(openid = openid).first()
-            members = qun.custormers
-        except Exception, e:
-            print 'Exception: ', e
-        else:
-            return render_template("members.html", members = members)
+	if request.method == 'GET':
+		openid = session['openid']
+		try:
+			qun = Qun.query.filter_by(openid = openid).first()
+			members = qun.custormers
+		except Exception, e:
+			print 'Exception: ', e
+		else:
+			return render_template("members.html", members = members)
+
+	if request.method == 'POST':
+		openid = session['openid']
+		phone = request.json['phone']
+		search_custormer = Custormer.query.filter_by(phone = phone).first()
+		qun = Qun.query.filter_by(openid = openid).first()
+
+		if search_custormer:
+			return jsonify(err_code = "E0001", err_msg = "此用户不存在")
+		else:
+			if search_custormer in qun.custormers:
+				return jsonify(err_code = "E0000", err_msg = "delete", openid = search_custormer.openid, name = search_custormer.username)
+			else:
+				return jsonify(err_code = "E0000", err_msg = "add", openid = search_custormer.openid, name = search_custormer.username)
+
 
 @app.route('/qun/manage/delete', methods = ['POST'])
 def qun_manage_delete():
