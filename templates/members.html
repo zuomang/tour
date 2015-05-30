@@ -37,6 +37,7 @@
 			</div>
 			<br>
 			<div class="row">
+				<div class="alert alert-success" role="alert" style="display: none"></div>
 				<div class="col-xs-12">
 					<ul class="list-group">
 						{% for member in members %}
@@ -56,7 +57,24 @@
 <script type="text/javascript">
 	$(document).on('click', '.badge', function (event) {
 		var memberId = $(this).parent().data('id');
-		
+		var currentLi = $(this).parent();
+		var data = {
+			"deleteId": memberId
+		};
+		console.log(data);
+		$.ajax({
+			type: "POST",
+			url: "{{ url_for('qun_manage_delete') }}",
+			data: JSON.stringify(data, null, '\t'),
+			contentType: 'application/json;charset=UTF-8',
+			success: function(result) {
+				if (result.err_code == 'E0000') {
+					currentLi.remove();
+					$('.alert-success').html(result.err_msg);
+					$('.alert-success').show();
+				}
+			}
+		});
 	})
 </script>
 {% endblock %}

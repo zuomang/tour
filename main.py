@@ -186,6 +186,27 @@ def qun_manage():
         else:
             return render_template("members.html", members = members)
 
+@app.route('/qun/manage/delete', methods = ['POST'])
+def qun_manage_delete():
+	if request.method == 'POST':
+		openid = session['openid']
+		delete_id = request.json['deleteId']
+		db = get_db()
+
+		custormer = Custormer.query.filter_by(openid = delete_id).first()
+		qun = Qun.query.filter_by(openid = openid).first()
+		if custormer in qun.custormers:
+			try:
+				qun.custormers.remove(custormer)
+				qun.member_count -= 1
+				db.commit()
+			except Exception, e:
+				print 'Exception: ', e
+			else:
+				return jsonify(err_code = "E0000", err_msg = "删除用户成功")
+		else:
+			return jsonify(err_code = "E0001", err_msg = "您的群没有该用户")
+
 
 @app.route('/activity', methods = ['GET', 'POST'])
 def activity():
