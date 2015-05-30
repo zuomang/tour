@@ -36,8 +36,8 @@
 				</div>
 			</div>
 			<br>
+			<div class="alert alert-success" role="alert" style="display: none"></div>
 			<div class="row member-list">
-				<div class="alert alert-success col-xs-offset-1 col-xs-10" role="alert" style="display: none"></div>
 				<div class="col-xs-12">
 					<ul class="list-group">
 						{% for member in members %}
@@ -50,9 +50,10 @@
 				</div>
 			</div>
 			<div class="row search-reuslt" style="display: none">
-				<ul class="list-group search-group">
-
-				</ul>
+				<div class="col-xs-12">
+					<ul class="list-group search-group">
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -85,11 +86,6 @@
 		});
 	})
 
-	$('#search').focus(function() {
-		$('.member-list').hide();
-		$('.search-result').show();
-	})
-
 	var createResult = function (openid, name, op) {
 		var li = document.createElement('li');
 		li.setAttribute('class', 'list-group-item');
@@ -108,9 +104,11 @@
 		btn.setAttribute('style', 'float:right');
 
 		li.appendChild(btn);
+		return li;
 	}
 
 	$(document).on('click', '.btn-default', function (event) {
+		$('.member-list').hide();
 		var phone = $('#search').val();
 		var data = {
 			"phone": phone
@@ -123,11 +121,36 @@
 			success: function(result) {
 				if (result.err_code == 'E0000') {
 					var group = document.getElementsByClassName('search-group')[0];
+					group.innerHTML = "";
 					group.appendChild(createResult(result.openid, result.name, result.err_msg));
 				} else {
 					$('.search-group').html('<li class="list-group-item">搜索结果不存在</li>');
 				}
 				$('.search-reuslt').show();
+			}
+		});
+	})
+
+	$(document).on('click', '.btn-info', function (event) {
+		var memberId = $(this).parent().data('id');
+		var currentLi = $(this).parent();
+		var data = {
+			"id": memberId
+		};
+		console.log(data);
+		$.ajax({
+			type: "POST",
+			url: "{{ url_for('qun_info') }}",
+			data: JSON.stringify(data, null, '\t'),
+			contentType: 'application/json;charset=UTF-8',
+			success: function(result) {
+				if (result.err_code == 'E0000') {
+					$('.alert-success').html("你成功添加该用户");
+					$('.alert-success').show();
+					setTimeout(function() {
+						$('.alert-success').hide();
+					}, 5000);
+				}
 			}
 		});
 	})

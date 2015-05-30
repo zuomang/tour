@@ -17,13 +17,13 @@ def get_db():
 		g.db_session = db.session
 	return g.db_session
 
-
+'''
 @app.before_request
 def bind(*args, **kwargs):
 	"""拦截器：验证用户是否绑定"""
 	if request.method == 'GET' and request.path != '/activity' and request.path != '/' and not util.check_bing(request):
 		return render_template('bing.html')
-
+'''
 
 @app.route('/', methods=['GET', 'POST'])
 def wechat_auth():
@@ -177,7 +177,8 @@ def qun_exit():
 @app.route('/qun/manage', methods = ['GET', 'POST'])
 def qun_manage():
 	if request.method == 'GET':
-		openid = session['openid']
+		#openid = session['openid']
+		openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
 		try:
 			qun = Qun.query.filter_by(openid = openid).first()
 			members = qun.custormers
@@ -187,24 +188,28 @@ def qun_manage():
 			return render_template("members.html", members = members)
 
 	if request.method == 'POST':
-		openid = session['openid']
-		phone = request.json['phone']
+		#openid = session['openid']
+		openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
+		phone = str(request.json['phone'])
 		search_custormer = Custormer.query.filter_by(phone = phone).first()
 		qun = Qun.query.filter_by(openid = openid).first()
 
-		if search_custormer:
+		if not search_custormer:
 			return jsonify(err_code = "E0001", err_msg = "此用户不存在")
 		else:
 			if search_custormer in qun.custormers:
+				print "用户已加入"
 				return jsonify(err_code = "E0000", err_msg = "delete", openid = search_custormer.openid, name = search_custormer.username)
 			else:
+				print "用户还没加入"
 				return jsonify(err_code = "E0000", err_msg = "add", openid = search_custormer.openid, name = search_custormer.username)
 
 
 @app.route('/qun/manage/delete', methods = ['POST'])
 def qun_manage_delete():
 	if request.method == 'POST':
-		openid = session['openid']
+		#openid = session['openid']
+		openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
 		delete_id = request.json['deleteId']
 		db = get_db()
 
