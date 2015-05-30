@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+k{% extends "base.html" %}
 {% block title %}我的信息{% endblock %}
 {% block style %}
 <style type="text/css">
@@ -35,6 +35,7 @@
 			</div>
 		<div>
 		<div class="row">
+			<div class="alert alert-success" role="alert" style="display: none"></div>
 			<ul class="list-group">
 				{% for member in members %}
 					<li class="list-group-item" data-id="{{ member.openid }}">
@@ -51,6 +52,21 @@
 <script type="text/javascript">
 	$(document).on('click', '.badge', function (event) {
 		var memberId = $(this).parent().data('id');
+		var data = {
+			"deleteId": memberId
+		}
+		$.ajax({
+			type: "POST",
+			url: "{{ url_for('qun_manage_delete') }}",
+			data: JSON.stringify(data, null, '\t'),
+			contentType: 'application/json;charset=UTF-8',
+			success: function(result) {
+				if (result.err_code == 'E0000') {
+					$(this).parent().remove();
+					$('.alert-success').html(result.err_msg);
+				}
+			}
+		})
 		
 	})
 </script>
