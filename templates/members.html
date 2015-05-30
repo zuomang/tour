@@ -145,6 +145,7 @@
 			contentType: 'application/json;charset=UTF-8',
 			success: function(result) {
 				if (result.err_code == 'E0000') {
+		            currentLi.remove();
 					$('.alert-success').html("你成功添加该用户");
 					$('.alert-success').show();
 					setTimeout(function() {
