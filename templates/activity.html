@@ -123,12 +123,12 @@
 		}
 
 		var h = document.createElement('p');
-		var t = document.createTextNode(data.partici_fee);
+		var t = document.createTextNode("活动费用：" + data.partici_fee);
 		h.appendChild(t);
 		caption.appendChild(h);
 
 		var h1 = document.createElement('p');
-		var t1 = document.createTextNode(data.datetime);
+		var t1 = document.createTextNode("活动日期：" + data.datetime);
 		h1.appendChild(t1);
 		caption.appendChild(h1);
 
@@ -141,7 +141,7 @@
 			t = document.createTextNode("参加");
 		} else {
 			btnJoin.setAttribute('class', 'btn btn-info btn-default btn-right-b');
-			t = document.createTextNode("暂时无法参加");
+			t = document.createTextNode("无法参加");
 		}
 		btnJoin.appendChild(t);
 		p.appendChild(btnJoin);

@@ -56,6 +56,8 @@ def obj_to_dict(obj):
 	pr['owner'] = obj.owner
 	pr['cost'] = obj.cost
 	pr['description'] = obj.description
+	pr['is_join'] = obj.is_join
+	pr['datetime'] = obj.datetime
 	return pr
 
 def list_and_obj(activitys):
