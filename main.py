@@ -17,13 +17,11 @@ def get_db():
 		g.db_session = db.session
 	return g.db_session
 
-'''
 @app.before_request
 def bind(*args, **kwargs):
 	"""拦截器：验证用户是否绑定"""
 	if request.method == 'GET' and request.path != '/activity' and request.path != '/' and not util.check_bing(request):
 		return render_template('bing.html')
-'''
 
 @app.route('/', methods=['GET', 'POST'])
 def wechat_auth():
@@ -177,8 +175,8 @@ def qun_exit():
 @app.route('/qun/manage', methods = ['GET', 'POST'])
 def qun_manage():
 	if request.method == 'GET':
-		#openid = session['openid']
-		openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
+		openid = session['openid']
+		#openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
 		try:
 			qun = Qun.query.filter_by(openid = openid).first()
 			members = qun.custormers
@@ -188,8 +186,8 @@ def qun_manage():
 			return render_template("members.html", members = members)
 
 	if request.method == 'POST':
-		#openid = session['openid']
-		openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
+		openid = session['openid']
+		#openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
 		phone = str(request.json['phone'])
 		search_custormer = Custormer.query.filter_by(phone = phone).first()
 		qun = Qun.query.filter_by(openid = openid).first()
@@ -208,8 +206,8 @@ def qun_manage():
 @app.route('/qun/manage/delete', methods = ['POST'])
 def qun_manage_delete():
 	if request.method == 'POST':
-		#openid = session['openid']
-		openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
+		openid = session['openid']
+		#openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
 		delete_id = request.json['deleteId']
 		db = get_db()
 
@@ -229,10 +227,10 @@ def qun_manage_delete():
 			return jsonify(err_code = "E0001", err_msg = "您的群没有该用户")
 
 @app.route('/qun/manage/add', methods = ['POST'])
-def qun_manage_delete():
+def qun_manage_add():
 	if request.method == 'POST':
-		#openid = session['openid']
-		openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
+		openid = session['openid']
+		#openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
 		add_id = request.json['id']
 		db = get_db()
 
@@ -245,11 +243,11 @@ def qun_manage_delete():
 			return jsonify(err_code = "E0001", err_msg = "您的群里已有该用户")
 		else:
 			try:
-				qun.custormers.add(custormer)
+				qun.custormers.append(custormer)
 				qun.member_count += 1
 				db.commit()
 			except Exception, e:
-				print 'Exception: ', E0000
+				print 'Exception: ', e
 				db.rollback()
 			else:
 				return jsonify(err_code = "E0001", err_msg = "您的群没有该用户")

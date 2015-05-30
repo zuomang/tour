@@ -1,20 +1,6 @@
 {% extends "base.html" %}
 {% block title %}我的信息{% endblock %}
 {% block style %}
-<style type="text/css">
-	.test {
-		margin-top: 5px;
-	}
-	p {
-		font-size:12px;
-	}
-	.qun-add{
-		margin-right: 10px;
-	}
-	.btn-xs {
-		margin-left: 20px;
-	}
-</style>
 {% endblock %}
 {% block content %}
 <div role="tabpanel">
@@ -140,7 +126,7 @@
 		console.log(data);
 		$.ajax({
 			type: "POST",
-			url: "{{ url_for('qun_info') }}",
+			url: "{{ url_for('qun_manage_add') }}",
 			data: JSON.stringify(data, null, '\t'),
 			contentType: 'application/json;charset=UTF-8',
 			success: function(result) {
