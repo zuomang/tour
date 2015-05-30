@@ -36,18 +36,21 @@
 				</div>
 			</div>
 			<br>
-			<div class="row">
-				<div class="alert alert-success" role="alert" style="display: none"></div>
+			<div class="row member-list">
+				<div class="alert alert-success col-xs-offset-1 col-xs-10" role="alert" style="display: none"></div>
 				<div class="col-xs-12">
 					<ul class="list-group">
 						{% for member in members %}
 						<li class="list-group-item" data-id="{{ member.openid }}">
 							{{ member.username }}
-							<span class="badge">删除</span>
+							<button type="button" class="btn btn-danger btn-xs" style="float:right">删除</button>
 						</li>
 						{% endfor %}
 					</ul>
 				</div>
+			</div>
+			<div class="row search-reuslt" style="display: none">
+				<button type="button" class="btn btn-danger btn-xs" style="float:right">删除</button>
 			</div>
 		</div>
 	</div>
@@ -55,13 +58,41 @@
 {% endblock %}
 {% block js %}
 <script type="text/javascript">
-	$(document).on('click', '.badge', function (event) {
+	$(document).on('click', '.btn-danger', function (event) {
 		var memberId = $(this).parent().data('id');
 		var currentLi = $(this).parent();
 		var data = {
 			"deleteId": memberId
 		};
 		console.log(data);
+		$.ajax({
+			type: "POST",
+			url: "{{ url_for('qun_manage_delete') }}",
+			data: JSON.stringify(data, null, '\t'),
+			contentType: 'application/json;charset=UTF-8',
+			success: function(result) {
+				if (result.err_code == 'E0000') {
+					currentLi.remove();
+					$('.alert-success').html(result.err_msg);
+					$('.alert-success').show();
+					setTimeout(function() {
+						$('.alert-success').hide();
+					}, 5000);
+				}
+			}
+		});
+	})
+
+	$('#search').focus(function() {
+		$('.member-list').hide();
+		$('.search-result').show();
+	})
+
+	$(document).on('click', '.btn-default', function (event) {
+		var phone = $('#search').val();
+		var data = {
+			"phone": phone
+		};
 		$.ajax({
 			type: "POST",
 			url: "{{ url_for('qun_manage_delete') }}",
