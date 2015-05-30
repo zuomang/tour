@@ -174,6 +174,18 @@ def qun_exit():
 			print 'Exception: ', e
 			db.rollback()
 
+@app.route('/qun/manage', methods = ['GET', 'POST'])
+def qun_manage():
+    if request.method == 'GET':
+        openid = session['openid']
+        try:
+            qun = Qun.query.filter_by(openid = openid).first()
+            members = qun.custormers
+        except Exception, e:
+            print 'Exception: ', e
+        else:
+            return render_template("members.html", members = members)
+
 
 @app.route('/activity', methods = ['GET', 'POST'])
 def activity():
