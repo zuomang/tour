@@ -16,13 +16,13 @@ def get_db():
 	if not hasattr(g, 'db_session'):
 		g.db_session = db.session
 	return g.db_session
-
+	
 @app.before_request
 def bind(*args, **kwargs):
 	"""拦截器：验证用户是否绑定"""
 	if request.method == 'GET' and request.path != '/activity' and request.path != '/' and not util.check_bing(request):
 		return render_template('bing.html')
-
+		
 @app.route('/', methods=['GET', 'POST'])
 def wechat_auth():
 	if request.method == 'GET':
@@ -250,7 +250,7 @@ def qun_manage_add():
 				print 'Exception: ', e
 				db.rollback()
 			else:
-				return jsonify(err_code = "E0001", err_msg = "您的群没有该用户")
+				return jsonify(err_code = "E0000", err_msg = "成功添加该用户")
 
 
 @app.route('/activity', methods = ['GET', 'POST'])
