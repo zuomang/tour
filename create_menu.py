@@ -9,6 +9,7 @@ qun = urllib.quote_plus('http://www.quxhuan.com/qun')
 qun_manage = urllib.quote_plus('http://www.quxhuan.com/qun/manage')
 my_activity = urllib.quote_plus('http://www.quxhuan.com/my_activity')
 all_activity =  urllib.quote_plus('http://www.quxhuan.com/activity')
+about = urllib.quote_plus('http://www.quxhuan.com/about')
 token = get_access_token()
 
 url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s" %token
@@ -18,6 +19,7 @@ url_qun = url_base %(parameter.appid, qun)
 url_qun_manage = url_base %(parameter.appid, qun_manage)
 url_my_activity = url_base %(parameter.appid, my_activity)
 url_all_activity = url_base %(parameter.appid, all_activity)
+url_about = url_base %(parameter.appid, about)
 
 menu = {
 	"button": [
@@ -50,7 +52,17 @@ menu = {
 					"url": url_qun_manage
 				}
 			]
-		}
+		},
+        {
+            "name": "关于",
+            "sub_button": [
+                {
+                    "type": "view",
+                    "name": "关于我",
+                    "url": url_about
+                }
+            ]
+        }
 	]
 }
 

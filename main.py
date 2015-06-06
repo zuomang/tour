@@ -16,13 +16,13 @@ def get_db():
 	if not hasattr(g, 'db_session'):
 		g.db_session = db.session
 	return g.db_session
-	
+
 @app.before_request
 def bind(*args, **kwargs):
 	"""拦截器：验证用户是否绑定"""
 	if request.method == 'GET' and request.path != '/activity' and request.path != '/' and not util.check_bing(request):
 		return render_template('bing.html')
-		
+
 @app.route('/', methods=['GET', 'POST'])
 def wechat_auth():
 	if request.method == 'GET':
@@ -238,7 +238,7 @@ def qun_manage_add():
 		qun = Qun.query.filter_by(openid = openid).first()
 		if len(custormer.quns) >= 8:
 			return jsonify(err_code="E0001", err_msg = "该用户已经加入了8个群")
-			
+
 		if custormer in qun.custormers:
 			return jsonify(err_code = "E0001", err_msg = "您的群里已有该用户")
 		else:
@@ -395,6 +395,10 @@ def paymentCallback():
 		xmlResponse = util.arrayToXml(response)
 		return Response(xmlResponse, mimetype='text/xml;charset=UTF-8')
 
+@app.route('/about', methods = ['GET'])
+def about():
+    if request.method == 'GET':
+        return render_template('about.html')
 
 if __name__ == '__main__':
 	app.run()
