@@ -325,6 +325,15 @@ def activity_join():
 				return jsonify(err_code = 'E0001', err_msg = '加入活动失败')
 
 
+@app.route('/activity/detail/<int:activity_id>', methods = ['GET'])
+def activity_detail(activity_id):
+	"""活动详情页面"""
+	if request.method == 'GET':
+		openid = session.get('openid')
+		activity = Activity.query.filter_by(id = activity_id).first()
+		return render_template('activity_detail.html', activity = activity)
+
+
 @app.route('/payment/getPaymentConf', methods = ['GET', 'POST'])
 #@app.route('/paymenttest/getPaymentConf', methods = ['GET', 'POST'])
 def getPaymentConf():
