@@ -23,6 +23,16 @@ url_about = url_base %(parameter.appid, about)
 
 menu = {
 	"button": [
+        {
+            "name": "关于",
+            "sub_button": [
+                {
+                    "type": "view",
+                    "name": "关于我们",
+                    "url": url_about
+                }
+            ]
+        },
 			{
 			"name": "活动",
 			"sub_button": [
@@ -53,16 +63,6 @@ menu = {
 				}
 			]
 		},
-        {
-            "name": "关于",
-            "sub_button": [
-                {
-                    "type": "view",
-                    "name": "关于我",
-                    "url": url_about
-                }
-            ]
-        }
 	]
 }
 

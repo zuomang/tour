@@ -1,9 +1,5 @@
 {% extends "base.html" %}
 {% block title %}全部活动{% endblock %}
-{% block jqueryPlugin %}
-<link rel="stylesheet" type="text/css" href="../static/css/bootstrap-datetimepicker.min.css">
-<script type="text/javascript" src="../static/js/bootstrap-datetimepicker.min.js"></script>
-{% endblock %}
 {% block style %}
 <style>
 	.btn-right{
@@ -22,8 +18,8 @@
 	<p>十人参加活动将获得群建设资金返还</p>
 	<p>邀请十人以上可以获得首笔688元建设基金</p>
 </div>
+{% if activitys %}
 <div class="row">
-	{% if activitys %}
 	<div class="col-xs-12 all-activity">
 		{% for a in activitys %}
 		<div class="thumbnail">
@@ -53,10 +49,10 @@
 			{% endif %}
 		</ul>
 	</nav>
-	{% else %}
-	<div class="alert alert-info" role="alert">目前还没有发布任何活动</div>
-	{% endif %}
 </div>
+{% else %}
+<div class="alert alert-info" role="alert">目前还没有发布任何活动</div>
+{% endif %}
 
 <div class="modal fade" id="create" tabindex="-8" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -67,12 +63,6 @@
 			</div>
 			<div class="modal-body">
 				<form class="form-horizontal" method="post" action="#">
-					<!-- <div class="form-group">
-						<label for="date" class="col-xs-offset-1 col-xs-3 control-label">日期</label>
-						<div class="col-xs-7">
-							<input type="text" name="date" class="form-control" id="date" placeholder="点击输入日期">
-						</div>
-					</div> -->
 					<div class="form-group">
 						<label for="number" class="col-xs-offset-1 col-xs-3 control-label">人数</label>
 						<div class="col-xs-7">
