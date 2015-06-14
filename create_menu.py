@@ -7,7 +7,7 @@ import requests, json, parameter, urllib
 info = urllib.quote_plus('http://www.quxhuan.com/info')
 qun = urllib.quote_plus('http://www.quxhuan.com/qun')
 qun_manage = urllib.quote_plus('http://www.quxhuan.com/qun/manage')
-my_activity = urllib.quote_plus('http://www.quxhuan.com/my_activity')
+new_activity = urllib.quote_plus('http://www.quxhuan.com/new_activity')
 all_activity =  urllib.quote_plus('http://www.quxhuan.com/activity')
 about = urllib.quote_plus('http://www.quxhuan.com/about')
 token = get_access_token()
@@ -17,7 +17,7 @@ url_base = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirec
 url_info = url_base %(parameter.appid, info)
 url_qun = url_base %(parameter.appid, qun)
 url_qun_manage = url_base %(parameter.appid, qun_manage)
-url_my_activity = url_base %(parameter.appid, my_activity)
+url_new_activity = url_base %(parameter.appid, new_activity)
 url_all_activity = url_base %(parameter.appid, all_activity)
 url_about = url_base %(parameter.appid, about)
 
@@ -40,7 +40,12 @@ menu = {
 					"type": "view",
 					"name": "全部信息",
 					"url": url_all_activity
-				}
+				},
+                {
+                   "type": "view",
+                    "name": "最新活动",
+                    "url": url_new_activity
+                }
 			]
 		},
 		{

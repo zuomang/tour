@@ -334,6 +334,13 @@ def activity_detail(activity_id):
 		return render_template('activity_detail.html', activity = activity)
 
 
+@app.route('/new_activiy', methods = ['GET'])
+def new_activity():
+	"""最新活动页面"""
+	if request.method == 'GET':
+		activitys = Activity.query.order_by(Activity.create_time).limit(5)
+		return render_template('activity.html', activitys = activitys, count = 5)
+
 @app.route('/payment/getPaymentConf', methods = ['GET', 'POST'])
 #@app.route('/paymenttest/getPaymentConf', methods = ['GET', 'POST'])
 def getPaymentConf():
@@ -406,8 +413,8 @@ def paymentCallback():
 
 @app.route('/about', methods = ['GET'])
 def about():
-    if request.method == 'GET':
-        return render_template('about.html')
+	if request.method == 'GET':
+		return render_template('about.html')
 
 if __name__ == '__main__':
 	app.run()
