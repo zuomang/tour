@@ -2,29 +2,29 @@
 {% block title %}我的信息{% endblock %}
 {% block content %}
 	<h4>基本信息</h4>
-	<table class="table">
+	<table class="table table-striped">
 		<tbody>
 			<tr>
-				<td class="text-primary"><strong>昵称</strong></td>
+				<th scope="row"><strong>昵称</strong></th>
 				<td>{{ user.username }}</td>
 			</tr>
 			<tr>
-				<td class="text-primary"><strong>手机号码</strong></td>
+				<th scope="row"><strong>手机号码</strong></th>
 				<td>{{ user.phone }}</td>
 			</tr>
 			<tr>
-				<td class="text-primary"><strong>等级</strong></td>
+				<th scope="row"><strong>等级</strong></th>
 				<td>{{ user.rank }}</td>
 			</tr>
 		</tbody>
 	</table>
 	<h4>我的群</h4>
 	{% if members %}
-	<table class="table">
+	<table class="table table-striped">
 		<tbody>
 			{% for member in members %}
 			<tr>
-				<td>{{ member.id }}</td>
+				<th scope="row">{{ member.id }}</th>
 				<td>{{ member.name }}</td>
 			</tr>
 			{% endfor %}

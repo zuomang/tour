@@ -334,7 +334,7 @@ def activity_detail(activity_id):
 		return render_template('activity_detail.html', activity = activity)
 
 
-@app.route('/new_activiy', methods = ['GET'])
+@app.route('/new_activity', methods = ['GET'])
 def new_activity():
 	"""最新活动页面"""
 	if request.method == 'GET':
