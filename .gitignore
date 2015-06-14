@@ -1,6 +1,7 @@
 *.pyc
 *.sh
 test.py
+templates/debug.html
 debug.html
 tour.conf
 *.log
