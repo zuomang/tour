@@ -6,7 +6,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:zmyjy1314@localhost/tour'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:lawson0418@localhost/tour'
 db = SQLAlchemy(app)
 
 member = db.Table('member',
@@ -78,6 +78,7 @@ class Activity(db.Model):
     datetime = db.Column(db.String(20), nullable = False)
     activity_details = db.relationship('ActivityDetail', backref = 'activity', lazy = 'dynamic')
     create_time = db.Column(db.DateTime, nullable = False)
+    link = db.Column(db.String(600), nullable = False)
 
     def __init__(self, name, owner, partici_fee, cost):
         self.name = name

@@ -36,7 +36,7 @@
 					{% else %}
 					<button type="button" class="btn btn-info btn-default btn-right-b" data-id="{{ a.id }}">无法参加</button>
 					{% endif %}
-					<a href="{{ url_for('activity_detail', activity_id = a.id) }}" class="btn btn-danger active" role="button">详情</a>
+					<a href="{{ a.link }}" class="btn btn-danger active" role="button">详情</a>
 				</p>
 			</div>
 		</div>
