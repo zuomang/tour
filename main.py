@@ -285,15 +285,19 @@ def activity_check():
 	if request.method == 'POST':
 		"""check是否是群主"""
 		openid = session.get('openid')
-		try:
-			qun = Qun.query.filter_by(openid = openid).first()
-		except Exception, e:
-			print 'Exception', e
-		else:
-			if qun:
-				return jsonify(err_code = 'E0000', err_msg = 'success')
+		if openid:
+			try:
+				qun = Qun.query.filter_by(openid = openid).first()
+			except Exception, e:
+				print 'Exception', e
 			else:
-				return jsonify(err_code = 'E0001', err_msg = '你还没有属于自己的群')
+				if qun:
+					return jsonify(err_code = 'E0000', err_msg = 'success')
+				else:
+					return jsonify(err_code = 'E0001', err_msg = '你还没有属于自己的群')
+		else:
+			print 'not bangding'
+			return redirect(url_for('bing'))
 
 
 @app.route('/activity/join', methods = ['POST'])
