@@ -22,11 +22,10 @@ def get_db():
 def bind(*args, **kwargs):
 	"""拦截器：验证用户是否绑定"""
 	if request.method == 'GET' and request.path != '/' and not util.check_bing(request):
-		pattern = re.compile(r'^\\activity.*')
+		pattern = re.compile(r'^/activity.*')
 		match = pattern.match(request.path)
-		if match:
-			continue
-		return render_template('bing.html')
+		if not match:
+			return render_template('bing.html')
 
 @app.route('/', methods=['GET', 'POST'])
 def wechat_auth():
