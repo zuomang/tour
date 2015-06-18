@@ -284,7 +284,8 @@ def activity_check():
 	if request.method == 'POST':
 		"""check是否是群主"""
 		openid = session.get('openid')
-		if openid:
+		custormer = Custormer.query.filter_by(openid = openid).first()
+		if custormer:
 			try:
 				qun = Qun.query.filter_by(openid = openid).first()
 			except Exception, e:
@@ -303,35 +304,31 @@ def activity_check():
 def activity_join():
 	if request.method == 'POST':
 		openid = session.get('openid')
-		if openid:
-			activity_id = request.json['activityId']
-			activity_number= request.json['number']
-			db = get_db()
-			try:
-				activity = Activity.query.filter_by(id = activity_id).first()
-				qun = Qun.query.filter_by(openid = openid).first()
-				amount = int(activity_number) * activity.partici_fee
-				qun_building = qun.building_fund
-				if amount>qun_building:
-					return jsonify(err_code = 'E0002', err_msg = '群建设资金不足，前往充值')
-				else:
-					qun.building_fund -= amount
-				detail = ActivityDetail(activity_id, activity.name, openid, activity.id, activity_number, amount, 0)
-				db.add(detail)
-				db.commit()
-			except Exception, e:
-				print 'Exception', e
-				db.rollback()
+		activity_id = request.json['activityId']
+		activity_number= request.json['number']
+		db = get_db()
+		try:
+			activity = Activity.query.filter_by(id = activity_id).first()
+			qun = Qun.query.filter_by(openid = openid).first()
+			amount = int(activity_number) * activity.partici_fee
+			qun_building = qun.building_fund
+			if amount>qun_building:
+				return jsonify(err_code = 'E0002', err_msg = '群建设资金不足，前往充值')
 			else:
-				if detail.id and detail.accompany_count < 10:
-					return jsonify(err_code = 'E0000', err_msg = '你已加入活动，参加人数超过十人可享受群建设资金返还')
-				elif detail.id and detail.accompany_count >= 10:
-					return jsonify(err_code = 'E0000', err_msg = '你已加入活动，活动完毕你将会收到群建设资金返还')
-				else:
-					return jsonify(err_code = 'E0001', err_msg = '加入活动失败')
+				qun.building_fund -= amount
+			detail = ActivityDetail(activity_id, activity.name, openid, activity.id, activity_number, amount, 0)
+			db.add(detail)
+			db.commit()
+		except Exception, e:
+			print 'Exception', e
+			db.rollback()
 		else:
-			print 'not bangding'
-			return redirect(url_for('bing'))
+			if detail.id and detail.accompany_count < 10:
+				return jsonify(err_code = 'E0000', err_msg = '你已加入活动，参加人数超过十人可享受群建设资金返还')
+			elif detail.id and detail.accompany_count >= 10:
+				return jsonify(err_code = 'E0000', err_msg = '你已加入活动，活动完毕你将会收到群建设资金返还')
+			else:
+				return jsonify(err_code = 'E0001', err_msg = '加入活动失败')
 
 
 @app.route('/activity/detail/<int:activity_id>', methods = ['GET'])
