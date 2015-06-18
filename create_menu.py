@@ -7,7 +7,7 @@ import requests, json, parameter, urllib
 info = urllib.quote_plus('http://www.quxhuan.com/info')
 qun = urllib.quote_plus('http://www.quxhuan.com/qun')
 qun_manage = urllib.quote_plus('http://www.quxhuan.com/qun/manage')
-new_activity = urllib.quote_plus('http://www.quxhuan.com/new_activity')
+new_activity = urllib.quote_plus('http://www.quxhuan.com/activity/new')
 all_activity =  urllib.quote_plus('http://www.quxhuan.com/activity')
 about = urllib.quote_plus('http://www.quxhuan.com/about')
 token = get_access_token()

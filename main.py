@@ -7,6 +7,7 @@ from payment import UnfiedOrder, WechatConfigJsAPI, WechatJsPayment
 
 import hashlib
 import util
+import re
 
 app = Flask(__name__)
 app.config.from_envvar('FLASK_PRODUCT_SETTINGS')
@@ -20,7 +21,11 @@ def get_db():
 @app.before_request
 def bind(*args, **kwargs):
 	"""拦截器：验证用户是否绑定"""
-	if request.method == 'GET' and request.path != '/activity' and request.path != '/' and not util.check_bing(request):
+	if request.method == 'GET' and request.path != '/' and not util.check_bing(request):
+		pattern = re.compile(r'^\\activity.*')
+		match = pattern.match(request.path)
+		if match:
+			continue
 		return render_template('bing.html')
 
 @app.route('/', methods=['GET', 'POST'])
@@ -64,7 +69,7 @@ def wechat_auth():
 def info():
 	if request.method == 'GET':
 		"""个人信息页面"""
-		openid = session['openid']
+		openid = session.get('openid')
 		user = Custormer.query.filter_by(openid = openid).first()
 		members = user.quns
 		return render_template('info.html', user = user, members = members)
@@ -74,7 +79,7 @@ def info():
 def bing():
 	if request.method == 'POST':
 		"""微信用户绑定"""
-		openid = session['openid']
+		openid = session.get('openid')
 		username = request.form['username']
 		phone = request.form['phone']
 		db = get_db()
@@ -95,7 +100,7 @@ def bing():
 def qun():
 	if request.method == 'GET':
 		"""群消息展示"""
-		openid = session['openid']
+		openid = session.get('openid')
 		try:
 			user = Custormer.query.filter_by(openid = openid).first()
 			my_qun = Qun.query.filter_by(openid = openid).first()
@@ -111,7 +116,7 @@ def qun():
 def create():
 	if request.method == 'POST':
 		"""创建群"""
-		openid = session['openid']
+		openid = session.get('openid')
 		name = request.form['name']
 		db = get_db()
 		try:
@@ -133,7 +138,7 @@ def create():
 def qun_info():
 	if request.method == 'POST':
 		qun_id = request.json['id']
-		openid = session['openid']
+		openid = session.get('openid')
 		db = get_db()
 		try:
 			user = Custormer.query.filter_by(openid = openid).first()
@@ -155,7 +160,7 @@ def qun_info():
 @app.route('/qun/exit', methods = ['POST'])
 def qun_exit():
 	if request.method == 'POST':
-		openid = session['openid']
+		openid = session.get('openid')
 		qun_id = request.json['id']
 		db = get_db()
 		try:
@@ -175,7 +180,7 @@ def qun_exit():
 @app.route('/qun/manage', methods = ['GET', 'POST'])
 def qun_manage():
 	if request.method == 'GET':
-		openid = session['openid']
+		openid = session.get('openid')
 		#openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
 		try:
 			qun = Qun.query.filter_by(openid = openid).first()
@@ -186,7 +191,7 @@ def qun_manage():
 			return render_template("members.html", members = members)
 
 	if request.method == 'POST':
-		openid = session['openid']
+		openid = session.get('openid')
 		#openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
 		phone = str(request.json['phone'])
 		search_custormer = Custormer.query.filter_by(phone = phone).first()
@@ -206,7 +211,7 @@ def qun_manage():
 @app.route('/qun/manage/delete', methods = ['POST'])
 def qun_manage_delete():
 	if request.method == 'POST':
-		openid = session['openid']
+		openid = session.get('openid')
 		#openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
 		delete_id = request.json['deleteId']
 		db = get_db()
@@ -229,7 +234,7 @@ def qun_manage_delete():
 @app.route('/qun/manage/add', methods = ['POST'])
 def qun_manage_add():
 	if request.method == 'POST':
-		openid = session['openid']
+		openid = session.get('openid')
 		#openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
 		add_id = request.json['id']
 		db = get_db()
@@ -279,10 +284,8 @@ def activity():
 def activity_check():
 	if request.method == 'POST':
 		"""check是否是群主"""
-		openid = session['openid']
-		activity_id = request.json['activityId']
+		openid = session.get('openid')
 		try:
-			user = Custormer.query.filter_by(openid = openid).first()
 			qun = Qun.query.filter_by(openid = openid).first()
 		except Exception, e:
 			print 'Exception', e
@@ -296,7 +299,7 @@ def activity_check():
 @app.route('/activity/join', methods = ['POST'])
 def activity_join():
 	if request.method == 'POST':
-		openid = session['openid']
+		openid = session.get('openid')
 		activity_id = request.json['activityId']
 		activity_number= request.json['number']
 		db = get_db()
@@ -329,12 +332,11 @@ def activity_join():
 def activity_detail(activity_id):
 	"""活动详情页面"""
 	if request.method == 'GET':
-		openid = session.get('openid')
 		activity = Activity.query.filter_by(id = activity_id).first()
 		return render_template('activity_detail.html', activity = activity)
 
 
-@app.route('/new_activity', methods = ['GET'])
+@app.route('/activity/new', methods = ['GET'])
 def new_activity():
 	"""最新活动页面"""
 	if request.method == 'GET':
@@ -342,7 +344,6 @@ def new_activity():
 		return render_template('activity.html', activitys = activitys, count = 5)
 
 @app.route('/payment/getPaymentConf', methods = ['GET', 'POST'])
-#@app.route('/paymenttest/getPaymentConf', methods = ['GET', 'POST'])
 def getPaymentConf():
 	if request.method == 'GET':
 		"""微信SDK config 验证"""
@@ -360,7 +361,6 @@ def getPaymentConf():
 
 
 @app.route('/payment/recharge', methods = ['GET', 'POST'])
-#@app.route('/paymenttest/recharge', methods = ['GET', 'POST'])
 def recharge():
 
 	if request.method == 'GET':
@@ -369,7 +369,7 @@ def recharge():
 
 	if request.method == 'POST':
 		"""POST方法调用统一下单接口下单"""
-		openid = session['openid']
+		openid = session.get('openid')
 		amount = int(request.json['amount'].encode('utf8'))*100 #充值金额单位为分
 		payment = UnfiedOrder()
 		payment.setParameter("body", "建设资金充值")
