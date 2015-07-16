@@ -74,8 +74,10 @@ def info():
 		return render_template('info.html', user = user, members = members)
 
 
-@app.route('/bing', methods=['POST'])
+@app.route('/bing', methods=['GET', 'POST'])
 def bing():
+	if request.method == 'GET':
+		return render_template('bing.html')
 	if request.method == 'POST':
 		"""微信用户绑定"""
 		openid = session.get('openid')
@@ -296,8 +298,7 @@ def activity_check():
 				else:
 					return jsonify(err_code = 'E0001', err_msg = '你还没有属于自己的群')
 		else:
-			print 'not bangding'
-			return redirect(url_for('bing'))
+			return jsonify(err_code = 'E0002', err_msg = '<a href="http://quxhuan.com/bing">点击绑定</a>')
 
 
 @app.route('/activity/join', methods = ['POST'])
