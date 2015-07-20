@@ -15,8 +15,8 @@
 {% block content %}
 <div class="alert alert-success add-success" role="alert"></div>
 <div class="alert alert-info info" role="alert">
-	<p>十人参加活动将获得群建设资金返还</p>
-	<p>邀请十人以上可以获得首笔688元建设基金</p>
+	<p>清凉一夏 尾单来袭!!!</p>
+	<p>邀请三人以上并加入你的群成员 可享撒欢价！</p>
 </div>
 {% if activitys %}
 <div class="row">
@@ -28,15 +28,17 @@
 				{% if a.description %}
 				<p>{{ a.description[:80] }}</p>
 				{% endif %}
-				<p>活动费用：{{ a.partici_fee }}元/人</p>
-				<p>活动日期：{{ a.datetime }}</p>
+			<!--	<p>活动费用：{{ a.partici_fee }}元/人</p>-->
+			<!--	<p>活动日期：{{ a.datetime }}</p>-->
 				<p>
-					{% if a.is_join == 'Y' %}
-					<button type="button" class="btn btn-info btn-default btn-right" data-id="{{ a.id }}">参加</button>
-					{% else %}
-					<button type="button" class="btn btn-info btn-default btn-right-b" data-id="{{ a.id }}">无法参加</button>
-					{% endif %}
+		<!--		{% if a.is_join == 'Y' %}  -->
+		<!--		<button type="button" class="btn btn-info btn-default btn-right" data-id="{{ a.id }}">参加</button> -->
+		<!--		{% else %}  -->
+		<!--		<button type="button" class="btn btn-info btn-default btn-right-b" data-id="{{ a.id }}">无法参加</button> -->
+		<!--		{% endif %} -->
 					<a href="{{ a.link }}" class="btn btn-danger active" role="button">详情</a>
+					&nbsp&nbsp&nbsp	
+					<a href="http://www.quxhuan.com/payment/recharge?showwxpaytitle=1" class="btn btn-danger active" role="button">购买</a>
 				</p>
 			</div>
 		</div>
