@@ -237,6 +237,7 @@ def qun_manage_add():
 	if request.method == 'POST':
 		openid = session.get('openid')
 		#openid = 'okPmMs8zQGo2440Z5WzRImozRjI4'
+		#test
 		add_id = request.json['id']
 		db = get_db()
 
